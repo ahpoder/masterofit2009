@@ -14,7 +14,7 @@ public class EntryPoint {
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
 		TouchSensor ts = new TouchSensor(SensorPort.S1);
-		SensorPort.S1.addSensorPortListener(new myTouchSensorListener(ts));
+		SensorPort.S1.addSensorPortListener(new TouchSensorListener(ts));
 		Button.ESCAPE.waitForPressAndRelease();
 	}
 
