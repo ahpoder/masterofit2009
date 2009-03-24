@@ -44,9 +44,37 @@ We may also need to recalibrate when the light in the room changes. This could b
 \end{itemize}
 
 \subsection{Analysis}
-The analysis consists of writing a set of small test programs and creating some test-setups to shed some light on the LightSensor, with respect to the issues mentioned above. 
+The analysis consists of writing a set of small test programs and creating some test-setups to shed some light (no pun intended) on the LightSensor, with respect to the issues mentioned above. 
+
+In Figure ~\ref{fig:lightsensor_analysis} and Table may be seen a hyphothetical test-setup, including "all" the parameters of interest. 
+
 \begin{figure}[jpg]
 \centering
 \includegraphics{lightsensor_analysis}
-\caption{LightSensor analysis setup}\label{fig:lightsensor_analysis}
-\end{figure}\end{document}
+\caption{LightSensor analysis setup}
+\label{fig:lightsensor_analysis_setup}
+\end{figure}
+
+\begin{table}[ht]
+\caption{LightSensor analysis setup description}
+\centering
+\begin{tabular}{c c}
+\hline\hline
+ID & Description \\ [0.5ex]
+\hline
+A & The distance from the LightSensor to the object it is sensing. \\* This is important to measure in order to determine the optimal \\* location of the LightSensor relative to the objects on the conveyer-belt, \\* so as to achieve the most accurate readings. This may be tested by moving \\* the LightSensor relative to the object and logging the reading-accuracy \\
+B & The speed of the conveyer-belt. This is very important, \\* as the sampling frequency and the response-time of the LightSensor is directly\\* related to the maximum speed of the conveyer-belt. To determine the response-time,\\* a simple program samling at maximum speed may be written,\\* and the speed of the conveyer-belt increased until sampling fails \\* (either due to sampling frequency insufficient or response-time issues) \\
+C & The light in the room may have profound effect on the \\* LightSensors accuracy, and this may be tested by running identical tests, \\* but with different external light levels. (no sampling should be done \\* during the level change). \\
+D & The change in lighting may also affect the accuracy of the \\* readings. This can be determined by sampling while the lighting is being \\* turned up or down. \\
+E & The location of the external light source relative to the \\* object being sensed and the LightSensor is also important. This may be \\* measured by moving the light source while sampling. \\
+F & Whether the flood-light of the LightSensor is on may \\* affect the accuracy of the readings \\
+G & The calibration of the LightSensor will affect the \\* readings, and testing for the best configuration is very important, as well \\* as determining configuration drift during operation and the possibility \\* of re-calibrating. \\
+H & The sampling frequency is also important, as it may \\* be that the response-time of the sensor is faster than the max sample-rate, \\* making the sample-rate the important configuration or vice versa. It \\* should be determined what sampling frequency can be achieved, also under \\* the condition of servicing other peripherals. \\ [1ex]
+\hline
+\end{tabular}
+\label{table:lightsensor_analysis_setup_description}
+\end{table}
+As the test programs are relatively simple, the builk of the work is in the test-setup. As most of the 
+Moving C, D, E together
+\end{document}
+
