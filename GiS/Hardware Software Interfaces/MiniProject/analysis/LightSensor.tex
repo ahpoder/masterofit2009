@@ -74,7 +74,54 @@ H & The sampling frequency is also important, as it may \\* be that the response
 \end{tabular}
 \label{table:lightsensor_analysis_setup_description}
 \end{table}
-As the test programs are relatively simple, the builk of the work is in the test-setup. As most of the 
-Moving C, D, E together
+As the test programs are relatively simple, the builk of the work is in the test-setup. Naturally we do not have the necesarry laboratory equipment for a propper test, e.g. LUX controlled lights, dark-rooms, strobe-lights, high-precision motors for movement-test, we will have to settle for the "good-enough" analysis.
+We will run four tests, designed to shown the effects of calibration, the reaction-time vs. sampling time, the sensitivity of the sensor to external lighting and the affect of using the flood-light.
+\subsection{Testing calibration}
+\begin{enumerate}
+\item In a rome with a fixed external light place the light-sensor facing an monotone wall.
+\item Run program "ConfiguraionTest".
+\item Move a solid dark object in front of the sensor.
+\item Move a solid light object in front of the sensor.
+\item Move a semi-transluscent object in front of the sensor.
+\item Move a transparent object in front of the sensor.
+\item Press button 1 on MindStorm control while nothing is in front of the sensor.
+\item Repeat 3 - 6 (with calibration) and compare the results of the two run.
+\end{enumerate}
+
+\subsection{Testing reaction-time}
+\begin{enumerate}
+\item In a rome with a fixed external light place the liht-sensor facing an monotone wall.
+\item Run program "SpeedExtLightingTest".
+\item Use a camera with a flash to create three single short sharp bursts of light about 30 seconds apart.
+\item Move a solid dark object rapidly past the sensor. Repeat three times about 30 seconds apart.
+\item Analysis read-out and determine if all three flashes and the fast motion was caught - this will indicate a high reaction-time. Sampling time can be read on the display.
+\end{enumerate}
+
+\subsection{Testing external light influence}
+\begin{enumerate}
+\item In a rome with a movable and dimmable external light place the liht-sensor facing an monotone wall.
+\item Run program "SpeedExtLightingTest".
+\item Turn the external light up and down and move it around the room.
+\item Analyse the results to determine sensibility.
+\end{enumerate}
+
+\subsection{Testing flood-lights}
+\begin{enumerate}
+\item In a rome with a fixed external light place the light-sensor facing an monotone wall.
+\item Run program "FloodLightTest".
+\item Move a solid dark object in front of the sensor.
+\item Move a solid light object in front of the sensor.
+\item Move a semi-transluscent object in front of the sensor.
+\item Move a transparent object in front of the sensor.
+\item Press button 1 on MindStorm control while nothing is in front of the sensor.
+\item Repeat 3 - 6 (flood-light and calibration) and compare the results of the two run.
+\item Compare results with results of testing calibration.
+\end{enumerate}
+
+Naturally this is a set of very simple tests, and we have as much as possible only modified one parameter at a time. We believe it is sufficient for this analysis.
+
+\subsection{Results}
+
+
 \end{document}
 
