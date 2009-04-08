@@ -9,78 +9,170 @@ public class LightSensorMeasurements {
 		mSensor.setFloodlight(false);
 	}
 
-	public void runLinearityTest()
-	{
-		calibrateAndTest60W15cm();
-		testRawNorm("30cm", "60W");
-		testRawNorm("45cm", "60W");
-		testRawNorm("60cm", "60W");
-		testRawNorm("15cm", "15W");
-		testRawNorm("15cm", "45W");
-		testRawNorm("30cm", "15W");
-		testRawNorm("30cm", "45W");
-		testRawNorm("45cm", "15W");
-		testRawNorm("45cm", "45W");
-		testRawNorm("60cm", "15W");
-		testRawNorm("60cm", "45W");
+	public static void main(String[] args) {
+		LightSensor ls = new LightSensor(SensorPort.S1);
+		LightSensorMeasurements lsm = new LightSensorMeasurements(ls);
+		lsm.runTestMenu();
 	}
 
-	private void calibrateAndTest60W15cm()
+	public void runTestMenu()
+	{
+		boolean terminate = false;
+		int selection = 2;
+		while (!terminate)
+		{
+			LCD.clear();
+			LCD.drawString("Test menu: ", 0, 0);
+			LCD.drawString("Linearity", 1, 2);
+			LCD.drawString("Sensitivity", 1, 3);
+			LCD.drawString("Reaction time", 1, 4);
+			LCD.drawString("Terminate app", 1, 5);
+			LCD.drawString(">", 0, selection);
+			Button.waitForPress();
+			if(Button.LEFT.isPressed())
+			{
+				--selection;
+				if (selection < 2)
+				{
+					selection = 5;
+				}
+			}
+			else if (Button.RIGHT.isPressed())
+			{
+				++selection;
+				if (selection > 5)
+				{
+					selection = 2;
+				}
+			}
+			else if (Button.ENTER.isPressed())
+			{
+				switch (selection)
+				{
+				case 2:
+					runSampleTest("Linearity");
+					break;
+				case 3:
+					runSampleTest("Sensitivity");
+					break;
+				case 4:
+					runReactionTimeTest();
+					break;
+				case 5:
+					terminate = true;
+					break;
+				}
+			}
+		}		
+	}
+	
+	private void runSampleTest(String testType)
+	{
+		boolean terminate = false;
+		int selection = 2;
+		while (!terminate)
+		{
+			LCD.clear();
+			LCD.drawString(testType + " test: ", 0, 0);
+			LCD.drawString("Calibrate", 1, 2);
+			LCD.drawString("Sample", 1, 3);
+			LCD.drawString("Done", 1, 4);
+			LCD.drawString(">", 0, selection);
+			Button.waitForPress();
+			if(Button.LEFT.isPressed())
+			{
+				--selection;
+				if (selection < 2)
+				{
+					selection = 4;
+				}
+			}
+			else if (Button.RIGHT.isPressed())
+			{
+				++selection;
+				if (selection > 4)
+				{
+					selection = 2;
+				}
+			}
+			else if (Button.ENTER.isPressed())
+			{
+				switch (selection)
+				{
+				case 2:
+					calibrate();
+					break;
+				case 3:
+					testRawNorm();
+					break;
+				case 4:
+					terminate = true;
+					break;
+				}
+			}
+		}		
+	}
+
+	private void calibrate()
 	{
 		LCD.clear();
-		LCD.drawString("Linearity test: ", 0, 0);
-		LCD.drawString("* 15cm tube", 2, 2);
-	    LCD.drawString("+ 60W light", 4, 3);
-		LCD.drawString("Press any key", 0, 5);
-		LCD.drawString("when ready", 0, 6);
+		LCD.drawString("Calibration: ", 0, 0);
+		LCD.drawString("* Min light", 2, 2);
+		LCD.drawString("Press any key", 0, 4);
+		LCD.drawString("when ready", 0, 5);
 		Button.waitForPress();
 		LCD.clear();
-		LCD.drawString("Linearity test: ", 0, 0);
+		LCD.drawString("Calibration: ", 0, 0);
 		LCD.drawString("Calibra. low", 2, 2);
 		mSensor.calibrateLow();
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 		}
-		int dark = mSensor.readNormalizedValue();
+		int Ndark = mSensor.readNormalizedValue();
+		int dark = mSensor.getLow();
 		LCD.clear();
-		LCD.drawString("Linearity test: ", 0, 0);
-		LCD.drawString("* turn on 60W", 2, 2);
+		LCD.drawString("Calibration: ", 0, 0);
+		LCD.drawString("* Max light", 2, 2);
 		LCD.drawString("Press any key", 0, 4);
 		LCD.drawString("when ready", 0, 5);
 		Button.waitForPress();
 		LCD.clear();
-		LCD.drawString("Linearity test: ", 0, 0);
+		LCD.drawString("Calibration: ", 0, 0);
 		LCD.drawString("Calibra. high", 2, 2);
 		mSensor.calibrateHigh();
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 		}
-		int light = mSensor.readNormalizedValue();
+		int Nlight = mSensor.readNormalizedValue();
+		int light = mSensor.getHigh();
 		LCD.clear();
-		LCD.drawString("Linearity test: ", 0, 0);
-		LCD.drawString("N dark: ", 2, 2);
+		LCD.drawString("Calibration: ", 0, 0);
+		LCD.drawString("Raw low: ", 2, 2);
 		LCD.drawInt(dark, 12, 2);
-		LCD.drawString("N light: ", 2, 3);
-		LCD.drawInt(light, 12, 3);
-		LCD.drawString("Press any key", 0, 5);
+		LCD.drawString("N low: ", 2, 3);
+		LCD.drawInt(Ndark, 12, 3);
+		LCD.drawString("Raw high: ", 2, 4);
+		LCD.drawInt(light, 12, 4);
+		LCD.drawString("N high: ", 2, 5);
+		LCD.drawInt(Nlight, 12, 5);
+		LCD.drawString("Press any key", 0, 7);
 		Button.waitForPress();
 	}
 	
-	private void testRawNorm(String length, String lightbulb)
+	private void testRawNorm()
 	{
 		LCD.clear();
-		LCD.drawString("Linearity test: ", 0, 0);
-		LCD.drawString("* " + length + " tube", 2, 2);
-	    LCD.drawString("+ " + lightbulb + " light", 4, 3);
-		LCD.drawString("* turn on " + lightbulb, 2, 4);
-		LCD.drawString("Press any key", 0, 6);
-		LCD.drawString("when ready", 0, 7);
+		LCD.drawString("Sampling: ", 0, 0);
+		LCD.drawString("* prepare", 2, 2);
+	    LCD.drawString("setup", 4, 3);
+		LCD.drawString("Press any key", 0, 5);
+		LCD.drawString("when ready", 0, 6);
 		int light = mSensor.readNormalizedValue();
 		int raw = mSensor.readValue();
 		LCD.clear();
-		LCD.drawString("Linearity test: ", 0, 0);
+		LCD.drawString("Sampling: ", 0, 0);
 		LCD.drawString("Norm: ", 2, 2);
 		LCD.drawInt(light, 8, 2);
 		LCD.drawString("Raw: ", 2, 3);
@@ -90,11 +182,11 @@ public class LightSensorMeasurements {
 	}
 
 
-	public void runReactionTimeTest()
+	private void runReactionTimeTest()
 	{
 		LCD.clear();
-		LCD.drawString("Reaction test", 0, 0);
-		LCD.drawString("* Enable farst", 2, 2);
+		LCD.drawString("Reaction test:", 0, 0);
+		LCD.drawString("* Enable rapid", 2, 2);
 	    LCD.drawString("changing", 4, 3);
 	    LCD.drawString("light", 4, 4);
 		LCD.drawString("Press any key", 0, 6);
@@ -133,52 +225,6 @@ public class LightSensorMeasurements {
 		LCD.drawString("1 sample: ", 2, 7);
 		LCD.drawInt(identical[0], 12, 7);
 		Button.waitForPress();
-	}
-
-	public void testSensitivity(String lightbulb, String object)
-	{
-		LCD.clear();
-		LCD.drawString("Sensitivity test", 0, 0);
-		LCD.drawString("* " + lightbulb + " light", 2, 2);
-		LCD.drawString("+ " + object + " object", 4, 3);
-		LCD.drawString("Press any key", 0, 5);
-		LCD.drawString("when ready", 0, 6);
-		Button.waitForPress();
-		
-		int value1 = mSensor.readNormalizedValue();
-		
-		LCD.clear();
-		LCD.drawString("Sensitivity test", 0, 0);
-		LCD.drawString("* change ", 2, 2);
-		LCD.drawString("external", 4, 3);
-		LCD.drawString("light", 4, 4);
-		LCD.drawString("Press any key", 0, 6);
-		LCD.drawString("when ready", 0, 7);
-		Button.waitForPress();
-
-		int value2 = mSensor.readNormalizedValue();
-		
-		LCD.clear();
-		LCD.drawString("Sensitivity test", 0, 0);
-		LCD.drawString("Sample 1: ", 2, 2);
-		LCD.drawInt(value1, 12, 2);
-		LCD.drawString("Sample 2: ", 2, 3);
-		LCD.drawInt(value2, 12, 3);
-		LCD.drawString("Press any key", 0, 5);
-		Button.waitForPress();
-	}
-	
-	public void runSensitivityTest()
-	{
-		testSensitivity("60W", "no");
-		testSensitivity("45W", "no");
-		testSensitivity("15W", "no");
-		testSensitivity("60W", "dark");
-		testSensitivity("45W", "dark");
-		testSensitivity("15W", "dark");
-		testSensitivity("60W", "light");
-		testSensitivity("45W", "light");
-		testSensitivity("15W", "light");
 	}
 	private LightSensor mSensor;
 }
