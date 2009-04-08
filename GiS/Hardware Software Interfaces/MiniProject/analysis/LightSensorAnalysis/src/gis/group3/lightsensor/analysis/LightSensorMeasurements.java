@@ -15,6 +15,11 @@ public class LightSensorMeasurements {
 		lsm.runTestMenu();
 	}
 
+	private static final int OK_BUTTON = 0x01;
+	private static final int LEFT_BUTTON = 0x02;
+	private static final int RIGHT_BUTTON = 0x04;
+	private static final int ESCAPE_BUTTON = 0x08;
+	
 	public void runTestMenu()
 	{
 		boolean terminate = false;
@@ -28,8 +33,8 @@ public class LightSensorMeasurements {
 			LCD.drawString("Reaction time", 1, 4);
 			LCD.drawString("Terminate app", 1, 5);
 			LCD.drawString(">", 0, selection);
-			Button.waitForPress();
-			if(Button.LEFT.isPressed())
+			int button = Button.waitForPress();
+			if(button == LEFT_BUTTON)
 			{
 				--selection;
 				if (selection < 2)
@@ -37,7 +42,7 @@ public class LightSensorMeasurements {
 					selection = 5;
 				}
 			}
-			else if (Button.RIGHT.isPressed())
+			else if (button == RIGHT_BUTTON)
 			{
 				++selection;
 				if (selection > 5)
@@ -45,7 +50,7 @@ public class LightSensorMeasurements {
 					selection = 2;
 				}
 			}
-			else if (Button.ENTER.isPressed())
+			else if (button == OK_BUTTON)
 			{
 				switch (selection)
 				{
@@ -78,8 +83,8 @@ public class LightSensorMeasurements {
 			LCD.drawString("Sample", 1, 3);
 			LCD.drawString("Done", 1, 4);
 			LCD.drawString(">", 0, selection);
-			Button.waitForPress();
-			if(Button.LEFT.isPressed())
+			int button = Button.waitForPress();
+			if(button == LEFT_BUTTON)
 			{
 				--selection;
 				if (selection < 2)
@@ -87,7 +92,7 @@ public class LightSensorMeasurements {
 					selection = 4;
 				}
 			}
-			else if (Button.RIGHT.isPressed())
+			else if (button == RIGHT_BUTTON)
 			{
 				++selection;
 				if (selection > 4)
@@ -95,7 +100,7 @@ public class LightSensorMeasurements {
 					selection = 2;
 				}
 			}
-			else if (Button.ENTER.isPressed())
+			else if (button == OK_BUTTON)
 			{
 				switch (selection)
 				{
