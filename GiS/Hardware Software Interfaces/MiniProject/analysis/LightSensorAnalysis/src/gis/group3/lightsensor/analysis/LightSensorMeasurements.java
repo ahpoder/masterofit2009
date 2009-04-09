@@ -30,8 +30,9 @@ public class LightSensorMeasurements {
 			LCD.drawString("Test menu: ", 0, 0);
 			LCD.drawString("Linearity", 1, 2);
 			LCD.drawString("Sensitivity", 1, 3);
-			LCD.drawString("Reaction time", 1, 4);
-			LCD.drawString("Terminate app", 1, 5);
+			LCD.drawString("Stability", 1, 4);
+			LCD.drawString("Reaction time", 1, 5);
+			LCD.drawString("Terminate app", 1, 6);
 			LCD.drawString(">", 0, selection);
 			int button = Button.waitForPress();
 			if(button == LEFT_BUTTON)
@@ -39,13 +40,13 @@ public class LightSensorMeasurements {
 				--selection;
 				if (selection < 2)
 				{
-					selection = 5;
+					selection = 6;
 				}
 			}
 			else if (button == RIGHT_BUTTON)
 			{
 				++selection;
-				if (selection > 5)
+				if (selection > 6)
 				{
 					selection = 2;
 				}
@@ -61,16 +62,18 @@ public class LightSensorMeasurements {
 					runSampleTest("Sensitivity");
 					break;
 				case 4:
-					runReactionTimeTest();
+					runVariansTest("Reaction");
 					break;
 				case 5:
+					runVariansTest("Stability");
+				case 6:
 					terminate = true;
 					break;
 				}
 			}
 		}		
 	}
-	
+
 	private void runSampleTest(String testType)
 	{
 		boolean terminate = false;
@@ -231,5 +234,98 @@ public class LightSensorMeasurements {
 		LCD.drawInt(identical[0], 12, 7);
 		Button.waitForPress();
 	}
+	
+	private void runVariansTest(String test) {
+		LCD.clear();
+		LCD.drawString(test + " test:", 0, 0);
+		LCD.drawString("* setup in", 2, 2);
+	    LCD.drawString("unchanging", 4, 3);
+	    LCD.drawString("environment", 4, 4);
+		LCD.drawString("Press any key", 0, 6);
+		LCD.drawString("when ready", 0, 7);
+		Button.waitForPress();
+		
+		long start = System.currentTimeMillis();
+		int[] samples = new int[10000]; 
+		for (int i = 0; i < 10000; ++i)
+		{
+			samples[i] = mSensor.readNormalizedValue();
+		}
+		long done = System.currentTimeMillis();
+
+		// Identify the samples with matching neighbours
+		int[] identical = new int[10];
+		for (int i2 = 10; i2 < 10000; ++i2)
+		{
+			for (int i3 = 1; i3 <= 10; ++i3)
+			{
+				if (samples[i2] != samples[i2 - i3])
+				{
+					break;
+				}
+				++identical[i3 - 1];
+			}
+		}
+		// Sort the samples
+		for (int i2 = 1; i2 < 10000; ++i2)
+		{
+			for (int i3 = 0; i3 < i2; ++i3)
+			{
+				if (samples[i3] > samples[i2])
+				{
+					int temp = samples[i3];
+					samples[i3] = samples[i2];
+					samples[i2] = temp;
+					break;
+				}
+			}
+		}
+		
+		// find the average
+		long average = 0;
+		for (int i2 = 1; i2 < 10000; ++i2)
+		{
+			average += samples[i2];
+		}
+		average /= 10000;
+		
+		LCD.clear();
+		LCD.drawString(test + " test", 0, 0);
+		LCD.drawString("Measured 10000", 2, 2);
+		LCD.drawString("samples", 2, 3);
+		LCD.drawString("in ", 2, 4);
+		LCD.drawInt((int)(done - start), 6, 4);
+		LCD.drawString("ms", 9, 4);
+		LCD.drawString("Press any key", 0, 6);
+		Button.waitForPress();
+		
+		LCD.drawString(test + " test", 0, 0);
+		LCD.drawString("High val: ", 2, 2);
+		LCD.drawInt(samples[9999], 12, 2);		
+		LCD.drawString("Low val: ", 2, 3);
+		LCD.drawInt(samples[0], 12, 3);		
+		LCD.drawString("Average: ", 2, 4);
+		LCD.drawInt((int)average, 12, 4);		
+		LCD.drawString("Press any key", 0, 6);
+		Button.waitForPress();
+		
+		LCD.drawString(test + " test", 0, 0);
+		LCD.drawString("Varians: ", 2, 2);
+		
+		
+		LCD.drawString("Clusters:", 2, 3);
+		LCD.drawString("5 sample: ", 2, 3);
+		LCD.drawInt(identical[4], 12, 3);		
+		LCD.drawString("4 sample: ", 2, 4);
+		LCD.drawInt(identical[3], 12, 4);		
+		LCD.drawString("3 sample: ", 2, 5);
+		LCD.drawInt(identical[2], 12, 5);		
+		LCD.drawString("2 sample: ", 2, 6);
+		LCD.drawInt(identical[1], 12, 6);		
+		LCD.drawString("1 sample: ", 2, 7);
+		LCD.drawInt(identical[0], 12, 7);
+		Button.waitForPress();
+	}
+
 	private LightSensor mSensor;
 }
