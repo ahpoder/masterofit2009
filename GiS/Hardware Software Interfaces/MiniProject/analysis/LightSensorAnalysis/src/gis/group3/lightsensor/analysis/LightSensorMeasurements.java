@@ -28,10 +28,10 @@ public class LightSensorMeasurements {
 		{
 			LCD.clear();
 			LCD.drawString("Test menu: ", 0, 0);
-			LCD.drawString("Linearity", 1, 2);
-			LCD.drawString("Sensitivity", 1, 3);
-			LCD.drawString("Stability", 1, 4);
-			LCD.drawString("Reaction time", 1, 5);
+			LCD.drawString("Configure", 1, 2);
+			LCD.drawString("Reaction time", 1, 3);
+			LCD.drawString("Sample", 1, 4);
+			LCD.drawString("Stability", 1, 5);
 			LCD.drawString("Terminate app", 1, 6);
 			LCD.drawString(">", 0, selection);
 			int button = Button.waitForPress();
