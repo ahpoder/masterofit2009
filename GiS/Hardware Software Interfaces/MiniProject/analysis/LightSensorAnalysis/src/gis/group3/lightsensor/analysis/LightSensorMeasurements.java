@@ -30,10 +30,9 @@ public class LightSensorMeasurements {
 			LCD.drawString("Test menu: ", 0, 0);
 			LCD.drawString("Configure", 1, 2);
 			LCD.drawString("Reaction time", 1, 3);
-			LCD.drawString("Transfer func", 1, 4);
-			LCD.drawString("Sensitivity", 1, 5);
-			LCD.drawString("Stability", 1, 6);
-			LCD.drawString("Terminate app", 1, 7);
+			LCD.drawString("Sampling", 1, 4);
+			LCD.drawString("Stability", 1, 5);
+			LCD.drawString("Terminate app", 1, 6);
 			LCD.drawString(">", 0, selection);
 			int button = Button.waitForPress();
 			if(button == LEFT_BUTTON)
@@ -41,13 +40,13 @@ public class LightSensorMeasurements {
 				--selection;
 				if (selection < 2)
 				{
-					selection = 7;
+					selection = 6;
 				}
 			}
 			else if (button == RIGHT_BUTTON)
 			{
 				++selection;
-				if (selection > 7)
+				if (selection > 6)
 				{
 					selection = 2;
 				}
@@ -64,15 +63,12 @@ public class LightSensorMeasurements {
 					runVariansTest("Reaction");
 					break;
 				case 4:
-					runSampleTest("Transfer");
+					runSampleTest("Sampling");
 					break;
 				case 5:
-					runVariansTest("Sensitivity");
-					break;
-				case 6:
 					runVariansTest("Stability");
 					break;
-				case 7:
+				case 6:
 					terminate = true;
 					break;
 				}
