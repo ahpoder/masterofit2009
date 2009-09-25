@@ -1,0 +1,9 @@
+Kommentarer:
+
+1. Vi bør lige nævne at en anden ofte anvendt model af DC-motoren indeholder spole-induktans, men at vi ser bort fra den.
+2. Vi bør prøve at få vores lining til at passe med den i eksemplet.
+3. Alt det gamle tekst skal slettes og erstattes med det fra eksemplet (.pdf)
+4. Ny eq. 15 som er eq. 14 med Kc = a2/b1 og Ac = a1/b1
+
+Designing the regulator:
+
