@@ -4,6 +4,45 @@ Kommentarer:
 2. Vi bør prøve at få vores lining til at passe med den i eksemplet.
 3. Alt det gamle tekst skal slettes og erstattes med det fra eksemplet (.pdf)
 4. Ny eq. 15 som er eq. 14 med Kc = a2/b1 og Ac = a1/b1
+5. Choosing constants for the car model
+
+Comments of the model:
+
+The ADC and DAC is seen as ideal with no delay and a perfect zero-order-hold and reconstruction filter (which is no practically possible). The same is true for the sensor, which instantly return the exact same value as the actual value.
 
 Designing the regulator:
+
+We need to choose a regulator that can meet our requirements. Ideally we want to keep the distance perfectly, but that is theoretically impossible, even with perfect acceleration. 
+
+Even if we figure that there are no delay between the actual distance of the lead car and the regultor (this can be made small with a good sensor and fast sampling with good accuracy). And even if we choose a first order system with no delay (only dependent on the measured distance, not on the change) and have a perfect theoretical DAC. Then it is not possible to follow the lead car perfectly because the acceleration of the following car cannot be infinite, which would be required. We can however realise that it is a requirement that the maximum acceleration of the lead car must be smaller than the minimum acceleration of the follow-me vehicle. 
+
+This will allow us to catch up to the lead vehicle no matter how fast it accelerates (both negative and positive (breaking - so we also need better breaks)). 
+
+Assuming this is true then our job is to reduce the response time of the regulator as much as possible. Unfortunately this comes at a cost. If we want to quickly react to changes in the other cars velocity (and thereby its distance to us), we must quickly accelerate to catch up, and then, when we have caught up, decelerate, so we can keep the right distance. This is naturally possible, but would not make for very pleasent driving, as we would either be accellerating as much as possible or decellerating as much as possible - if you have ever tried to drive with an unexperienced driver who is afreid of the speeder, or one who mixes up the speeder and break, you know how that feels. 
+
+Another matter is one of safety. If we are to follow at 3m distance, then it is not good if we overshoot this distance by e.g. 4 meters, as this means we have hit the lead wehicle. Based on this we can set a requirement thatwe must never have an overshoot of more than the reference distance (1).
+
+To make this more specific an overshoot of 30% (leaving some for inaccuracies in the model, cooeficients and sampling) would be a good maximum value. 
+
+Requirement 1: Maximum overshoot 30%
+
+Another important aspect is stability. Stability of a first order system can be directly seen on a bode plot, where it is important that we have a phase-margin above 0 (i.e. less than -180 degrees). A good rule of thumb is to keep a phase-margin of at least 45%, which also leave some for inaccuracies in the model, cooeficients and sampling, and we will use this rule of thumb.
+
+Requirement 2: Minimum phase margin 45 degrees.
+
+Then there is the aspect of keeping the distance to the lead car accurate when the lead car is not making changes to its speed. This is called Steady-state error, and can be directly read from the regulators response to a unit step.
+
+A unit step is defined as the value changing from 0 to 1 instantaniously, and then maintaining the 1. Even if the lead car makes multiple changes to its speed, but eventually remains at one speed, it will have the same steady-state error. 
+
+For some systems it is not required to meet the desired value exactly, but we make this requirement.
+
+Requirement 3: Steady-state error in response to a step = 0.
+
+There is a very simple way of assuring this, and that is to make the system a type 1 system. Other systems are type 0 (a P system - a simple feedback with amplification), which do not have a 0 steady state error, and type 2, which has a steady-state error of 0 for both step and ramp. We have, however, no reason to have a steady-state error of 0 for a ramp, as it does not matter if we lag or lead a little when the lead car accilerate or decillerate, as long as we find the right distance eventually (and it is always better to choose as simple a system as possible).
+
+This can be  realised with many different regulators, but keeping to the three main-stream regulators; P, PI and PID, we can see that we cannot use a P-regulator, as it is a type 0 system (it has a steady-state error != 0). We will however, for experiments sake, show how it could be used to implement the regulator, even if it will not be able to meet the stead-state error.
+
+<<<Insert pure gain regulator simulation>>>
+
+In order to get a type 1 regulator we need an integrator in the regulator. This is represented at 1/s in laplace, and unfortunately has the concequence that the phase-response is moved down 90 degrees, reeking havock on our phase margin. To counter-act this effect we can add a zero in the equation, as this will move the pase-response up 90 degrees. Naturally these 90 degrees up or down are not in the entire phase-band, but only for a certain interval. Here an important stability rule comes in; if the highest frequency where the gain is 1 is higher than -180 degrees the system is stable. Even if there are lower frequencies where the pahse-margin is negative and the gain is > 1 - this may seem counter-intuitive, but it is true none the less.
 

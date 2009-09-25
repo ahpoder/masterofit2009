@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.6"
+    ComputedModelVersion    "1.7"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -45,9 +45,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "ahp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Sep 25 07:34:24 2009"
+  LastModifiedDate	  "Fri Sep 25 09:10:11 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:6>"
+  ModelVersionFormat	  "1.%<AutoIncrement:7>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -503,28 +503,6 @@ Model {
   }
   BlockParameterDefaults {
     Block {
-      BlockType		      Gain
-      Gain		      "1"
-      Multiplication	      "Element-wise(K.*u)"
-      ParamMin		      "[]"
-      ParamMax		      "[]"
-      ParameterDataTypeMode   "Same as input"
-      ParameterDataType	      "fixdt(1,16,0)"
-      ParameterScalingMode    "Best Precision: Matrix-wise"
-      ParameterScaling	      "[]"
-      ParamDataTypeStr	      "Inherit: Same as input"
-      OutMin		      "[]"
-      OutMax		      "[]"
-      OutDataTypeMode	      "Same as input"
-      OutDataType	      "fixdt(1,16,0)"
-      OutScaling	      "[]"
-      OutDataTypeStr	      "Inherit: Same as input"
-      LockScale		      off
-      RndMeth		      "Floor"
-      SaturateOnIntegerOverflow	on
-      SampleTime	      "-1"
-    }
-    Block {
       BlockType		      Integrator
       ExternalReset	      "none"
       InitialConditionSource  "internal"
@@ -632,7 +610,7 @@ Model {
   }
   System {
     Name		    "modele"
-    Location		    [89, 218, 838, 575]
+    Location		    [89, 218, 909, 575]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -647,26 +625,18 @@ Model {
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
     Block {
-      BlockType		      Gain
+      BlockType		      TransferFcn
       Name		      "ADC"
-      Position		      [305, 230, 335, 260]
+      Position		      [265, 227, 325, 263]
       Orientation	      "left"
       NamePlacement	      "alternate"
-      ParameterDataTypeMode   "Inherit via internal rule"
-      ParameterDataType	      "sfix(16)"
-      ParameterScaling	      "2^0"
-      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
-      OutDataTypeMode	      "Inherit via internal rule"
-      OutDataType	      "sfix(16)"
-      OutScaling	      "2^0"
-      OutDataTypeStr	      "Inherit: Inherit via internal rule"
-      SaturateOnIntegerOverflow	off
+      Denominator	      "[1]"
     }
     Block {
       BlockType		      Scope
       Name		      "Actual distance"
       Ports		      [1]
-      Position		      [650, 119, 680, 151]
+      Position		      [700, 119, 730, 151]
       Floating		      off
       Location		      [1, 52, 1025, 737]
       Open		      off
@@ -681,36 +651,28 @@ Model {
     Block {
       BlockType		      TransferFcn
       Name		      "Car model"
-      Position		      [375, 117, 435, 153]
+      Position		      [425, 117, 485, 153]
       NamePlacement	      "alternate"
       Numerator		      "[Kc]"
       Denominator	      "[1 Ac]"
     }
     Block {
-      BlockType		      Gain
+      BlockType		      TransferFcn
       Name		      "DAC"
-      Position		      [305, 120, 335, 150]
-      ParameterDataTypeMode   "Inherit via internal rule"
-      ParameterDataType	      "sfix(16)"
-      ParameterScaling	      "2^0"
-      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
-      OutDataTypeMode	      "Inherit via internal rule"
-      OutDataType	      "sfix(16)"
-      OutScaling	      "2^0"
-      OutDataTypeStr	      "Inherit: Inherit via internal rule"
-      SaturateOnIntegerOverflow	off
+      Position		      [265, 117, 325, 153]
+      Denominator	      "[1]"
     }
     Block {
       BlockType		      Integrator
       Name		      "Integrator"
       Ports		      [1, 1]
-      Position		      [530, 120, 560, 150]
+      Position		      [580, 120, 610, 150]
     }
     Block {
       BlockType		      Sin
       Name		      "Lead car speed"
       Ports		      [0, 1]
-      Position		      [475, 40, 505, 70]
+      Position		      [525, 40, 555, 70]
       Orientation	      "down"
       NamePlacement	      "alternate"
       SampleTime	      "0"
@@ -731,6 +693,14 @@ Model {
       Denominator	      "[1 Ar]"
     }
     Block {
+      BlockType		      TransferFcn
+      Name		      "Sensor"
+      Position		      [425, 227, 485, 263]
+      Orientation	      "left"
+      NamePlacement	      "alternate"
+      Denominator	      "[1]"
+    }
+    Block {
       BlockType		      Sum
       Name		      "Sum"
       Ports		      [2, 1]
@@ -749,7 +719,7 @@ Model {
       BlockType		      Sum
       Name		      "Sum1"
       Ports		      [2, 1]
-      Position		      [480, 125, 500, 145]
+      Position		      [530, 125, 550, 145]
       ShowName		      off
       IconShape		      "round"
       Inputs		      "+-|"
@@ -800,14 +770,14 @@ Model {
       }
       Branch {
 	Points			[0, 110]
-	DstBlock		"ADC"
+	DstBlock		"Sensor"
 	DstPort			1
       }
     }
     Line {
       SrcBlock		      "ADC"
       SrcPort		      1
-      Points		      [-180, 0]
+      Points		      [-140, 0]
       DstBlock		      "Sum"
       DstPort		      2
     }
@@ -821,6 +791,12 @@ Model {
       SrcBlock		      "DAC"
       SrcPort		      1
       DstBlock		      "Car model"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Sensor"
+      SrcPort		      1
+      DstBlock		      "ADC"
       DstPort		      1
     }
   }
