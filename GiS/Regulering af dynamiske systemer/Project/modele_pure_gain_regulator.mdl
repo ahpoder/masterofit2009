@@ -1,12 +1,12 @@
 Model {
-  Name			  "modele"
+  Name			  "modele_pure_gain_regulator"
   Version		  7.1
   MdlSubVersion		  0
   GraphicalInterface {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.9"
+    ComputedModelVersion    "1.8"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -45,9 +45,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "ahp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sat Sep 26 13:14:54 2009"
+  LastModifiedDate	  "Sat Sep 26 13:12:34 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:9>"
+  ModelVersionFormat	  "1.%<AutoIncrement:8>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -503,6 +503,43 @@ Model {
   }
   BlockParameterDefaults {
     Block {
+      BlockType		      Gain
+      Gain		      "1"
+      Multiplication	      "Element-wise(K.*u)"
+      ParamMin		      "[]"
+      ParamMax		      "[]"
+      ParameterDataTypeMode   "Same as input"
+      ParameterDataType	      "fixdt(1,16,0)"
+      ParameterScalingMode    "Best Precision: Matrix-wise"
+      ParameterScaling	      "[]"
+      ParamDataTypeStr	      "Inherit: Same as input"
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeMode	      "Same as input"
+      OutDataType	      "fixdt(1,16,0)"
+      OutScaling	      "[]"
+      OutDataTypeStr	      "Inherit: Same as input"
+      LockScale		      off
+      RndMeth		      "Floor"
+      SaturateOnIntegerOverflow	on
+      SampleTime	      "-1"
+    }
+    Block {
+      BlockType		      Integrator
+      ExternalReset	      "none"
+      InitialConditionSource  "internal"
+      InitialCondition	      "0"
+      LimitOutput	      off
+      UpperSaturationLimit    "inf"
+      LowerSaturationLimit    "-inf"
+      ShowSaturationPort      off
+      ShowStatePort	      off
+      AbsoluteTolerance	      "auto"
+      IgnoreLimit	      off
+      ZeroCross		      on
+      ContinuousStateAttributes	"''"
+    }
+    Block {
       BlockType		      Scope
       ModelBased	      off
       TickLabels	      "OneTimeTick"
@@ -520,13 +557,23 @@ Model {
       SampleTime	      "-1"
     }
     Block {
-      BlockType		      Step
-      Time		      "1"
-      Before		      "0"
-      After		      "1"
+      BlockType		      Sum
+      IconShape		      "rectangular"
+      Inputs		      "++"
+      CollapseMode	      "All dimensions"
+      CollapseDim	      "1"
+      InputSameDT	      on
+      AccumDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeMode	      "Same as first input"
+      OutDataType	      "fixdt(1,16,0)"
+      OutScaling	      "[]"
+      OutDataTypeStr	      "Inherit: Same as first input"
+      LockScale		      off
+      RndMeth		      "Floor"
+      SaturateOnIntegerOverflow	on
       SampleTime	      "-1"
-      VectorParams1D	      on
-      ZeroCross		      on
     }
     Block {
       BlockType		      TransferFcn
@@ -535,6 +582,34 @@ Model {
       AbsoluteTolerance	      "auto"
       ContinuousStateAttributes	"''"
       Realization	      "auto"
+    }
+    Block {
+      BlockType		      Constant
+      Value		      "1"
+      VectorParams1D	      on
+      SamplingMode	      "Sample based"
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeMode	      "Inherit from 'Constant value'"
+      OutDataType	      "fixdt(1,16,0)"
+      ConRadixGroup	      "Use specified scaling"
+      OutScaling	      "[]"
+      OutDataTypeStr	      "Inherit: Inherit from 'Constant value'"
+      SampleTime	      "inf"
+      FramePeriod	      "inf"
+    }
+    Block {
+      BlockType		      Sin
+      SineType		      "Time based"
+      TimeSource	      "Use simulation time"
+      Amplitude		      "1"
+      Bias		      "0"
+      Frequency		      "1"
+      Phase		      "0"
+      Samples		      "10"
+      Offset		      "0"
+      SampleTime	      "-1"
+      VectorParams1D	      on
     }
   }
   AnnotationDefaults {
@@ -556,7 +631,7 @@ Model {
     FontAngle		    "normal"
   }
   System {
-    Name		    "modele"
+    Name		    "modele_pure_gain_regulator"
     Location		    [89, 218, 909, 575]
     Open		    on
     ModelBrowserVisibility  off
@@ -572,10 +647,18 @@ Model {
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
     Block {
+      BlockType		      TransferFcn
+      Name		      "ADC"
+      Position		      [265, 227, 325, 263]
+      Orientation	      "left"
+      NamePlacement	      "alternate"
+      Denominator	      "[1]"
+    }
+    Block {
       BlockType		      Scope
       Name		      "Actual distance"
       Ports		      [1]
-      Position		      [415, 99, 445, 131]
+      Position		      [700, 119, 730, 151]
       Floating		      off
       Location		      [1, 52, 1025, 737]
       Open		      off
@@ -590,27 +673,159 @@ Model {
     Block {
       BlockType		      TransferFcn
       Name		      "Car model"
-      Position		      [280, 97, 340, 133]
+      Position		      [425, 117, 485, 153]
       NamePlacement	      "alternate"
       Numerator		      "[Kc]"
       Denominator	      "[1 Ac]"
     }
     Block {
-      BlockType		      Step
-      Name		      "Step"
-      Position		      [180, 100, 210, 130]
+      BlockType		      TransferFcn
+      Name		      "DAC"
+      Position		      [265, 117, 325, 153]
+      Denominator	      "[1]"
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Gain"
+      Position		      [175, 120, 205, 150]
+      ParameterDataTypeMode   "Inherit via internal rule"
+      ParameterDataType	      "sfix(16)"
+      ParameterScaling	      "2^0"
+      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Integrator
+      Name		      "Integrator"
+      Ports		      [1, 1]
+      Position		      [580, 120, 610, 150]
+    }
+    Block {
+      BlockType		      Sin
+      Name		      "Lead car speed"
+      Ports		      [0, 1]
+      Position		      [525, 40, 555, 70]
+      Orientation	      "down"
+      NamePlacement	      "alternate"
       SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "Reference distance"
+      Position		      [40, 120, 70, 150]
+      Value		      "3"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+    }
+    Block {
+      BlockType		      TransferFcn
+      Name		      "Sensor"
+      Position		      [425, 227, 485, 263]
+      Orientation	      "left"
+      NamePlacement	      "alternate"
+      Denominator	      "[1]"
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Sum"
+      Ports		      [2, 1]
+      Position		      [110, 125, 130, 145]
+      ShowName		      off
+      IconShape		      "round"
+      Inputs		      "|+-"
+      InputSameDT	      off
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Sum1"
+      Ports		      [2, 1]
+      Position		      [530, 125, 550, 145]
+      ShowName		      off
+      IconShape		      "round"
+      Inputs		      "+-|"
+      InputSameDT	      off
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Line {
+      SrcBlock		      "Reference distance"
+      SrcPort		      1
+      DstBlock		      "Sum"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Sum"
+      SrcPort		      1
+      DstBlock		      "Gain"
+      DstPort		      1
     }
     Line {
       SrcBlock		      "Car model"
       SrcPort		      1
-      DstBlock		      "Actual distance"
+      DstBlock		      "Sum1"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Lead car speed"
+      SrcPort		      1
+      DstBlock		      "Sum1"
       DstPort		      1
     }
     Line {
-      SrcBlock		      "Step"
+      SrcBlock		      "Sum1"
+      SrcPort		      1
+      DstBlock		      "Integrator"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Integrator"
+      SrcPort		      1
+      Points		      [30, 0]
+      Branch {
+	DstBlock		"Actual distance"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, 110]
+	DstBlock		"Sensor"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "ADC"
+      SrcPort		      1
+      Points		      [-140, 0]
+      DstBlock		      "Sum"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Gain"
+      SrcPort		      1
+      DstBlock		      "DAC"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "DAC"
       SrcPort		      1
       DstBlock		      "Car model"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Sensor"
+      SrcPort		      1
+      DstBlock		      "ADC"
       DstPort		      1
     }
   }

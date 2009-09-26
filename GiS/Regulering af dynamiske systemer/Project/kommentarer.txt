@@ -5,6 +5,16 @@ Kommentarer:
 3. Alt det gamle tekst skal slettes og erstattes med det fra eksemplet (.pdf)
 4. Ny eq. 15 som er eq. 14 med Kc = a2/b1 og Ac = a1/b1
 5. Choosing constants for the car model
+6. The direction of the arrow in the torque-diagram has to be turned so the Fm and torque is in opposite directions.
+
+J = mass of car * (wheel radius)^2
+
+k_ebsilon = k_tau
+
+<horse power> * 714 = <effect> [W]. 
+90 horse power = 7kW.
+
+V * I = R, and if we need to get 7000 W to the endian at 12V, R has to be very small.
 
 Comments of the model:
 
@@ -44,5 +54,7 @@ This can be  realised with many different regulators, but keeping to the three m
 
 <<<Insert pure gain regulator simulation>>>
 
-In order to get a type 1 regulator we need an integrator in the regulator. This is represented at 1/s in laplace, and unfortunately has the concequence that the phase-response is moved down 90 degrees, reeking havock on our phase margin. To counter-act this effect we can add a zero in the equation, as this will move the pase-response up 90 degrees. Naturally these 90 degrees up or down are not in the entire phase-band, but only for a certain interval. Here an important stability rule comes in; if the highest frequency where the gain is 1 is higher than -180 degrees the system is stable. Even if there are lower frequencies where the pahse-margin is negative and the gain is > 1 - this may seem counter-intuitive, but it is true none the less.
+In order to get a type 1 regulator we need an integrator in the regulator. This is represented as 1/s in laplace, and unfortunately has the concequence that the phase-response is moved down 90 degrees, reeking havock on our phase margin. To counter-act this effect we can add a zero in the equation, as this will move the pase-response up 90 degrees. Naturally these 90 degrees up or down are not in the entire phase-band, but only for a certain interval. Here an important stability rule comes in; if the highest frequency where the gain is 1 is higher than -180 degrees the system is stable. Even if there are lower frequencies where the pahse-margin is negative and the gain is > 1 - this may seem counter-intuitive, but it is true none the less.
+
+In order to choose the 
 
