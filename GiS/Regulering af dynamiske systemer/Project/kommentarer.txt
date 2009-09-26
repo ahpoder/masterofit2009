@@ -40,6 +40,8 @@ Another important aspect is stability. Stability of a first order system can be 
 
 Requirement 2: Minimum phase margin 45 degrees.
 
+As the overshot is closely related to the pahse margin it may not be possible to meet both of these requirements or one may infer the other. We will not know this until we begin the design.
+
 Then there is the aspect of keeping the distance to the lead car accurate when the lead car is not making changes to its speed. This is called Steady-state error, and can be directly read from the regulators response to a unit step.
 
 A unit step is defined as the value changing from 0 to 1 instantaniously, and then maintaining the 1. Even if the lead car makes multiple changes to its speed, but eventually remains at one speed, it will have the same steady-state error. 
@@ -56,5 +58,32 @@ This can be  realised with many different regulators, but keeping to the three m
 
 In order to get a type 1 regulator we need an integrator in the regulator. This is represented as 1/s in laplace, and unfortunately has the concequence that the phase-response is moved down 90 degrees, reeking havock on our phase margin. To counter-act this effect we can add a zero in the equation, as this will move the pase-response up 90 degrees. Naturally these 90 degrees up or down are not in the entire phase-band, but only for a certain interval. Here an important stability rule comes in; if the highest frequency where the gain is 1 is higher than -180 degrees the system is stable. Even if there are lower frequencies where the pahse-margin is negative and the gain is > 1 - this may seem counter-intuitive, but it is true none the less.
 
-In order to choose the 
+In order to choose the cooeficients of the regulator, under the constraints above, and with a fourth requirement
+
+Requirement 4: As fast a risetime (i.e. response time) as possible
+
+we have to follow the below steps:
+
+1. Realise that in order to have a steady-state error of zero we require to have a type 1 system, and that means having an integrator in the regulator. See figure of pure P-regulator for proof.
+2. Having a pure integrator in the system will lower the phase-margin to a level where it is not possible to achieve the min 45 degree phase margin.
+3. Adding a zero will lift the frequency response by 90 degrees in a "bubble", and as long as this "bubble" has the cross-over-frequency and it is above -135 degrees (required for 45 degrees phase-margin), then the system is stable.
+4. We can now choose the highest possible P that will ensure a max. 30% overshot and have the best possible rise-time. This means choosing the P as high as possible, i.e. exactly where the 30% is just met.
+
+This results in the following regulator:
+
+<<<< insert regulator and calculations and picture >>>>>>
+
+As it may be seen this does not have a very good ability to keep up when the other car changes speed. It will quickly fall far behind, or come dangerously close, to the other car, so even though it will eventually get to the right distance, it will feel strange to the driver. Lets just say, he or she is sure to say: "I can follow better than this if I was driving my self".
+
+The problem is that the system do not take the lead car's change in speed into account. If the lead car changes speed fast, we should accelerate fast to catch up, and if it only slowly changes speed, we should also only alter our speed slightly in order not to over-shoot too much.
+
+This may be resolved by ading a D (Differentiator). Doing so changes the regulator to the following:
+
+<<<<< insert regulator and calculation and picture >>>>
+
+which shows a great improvement over the pure PI regulator. The distadvantage of the D is that it becomes highly sensitive to rapid changes in speed. Naturally a car is not capable of changing speed as a step, or having samples jump many km/h from one to the other. However, this may happen in case of an error.
+
+This problem of error tollerance may be resolved by adding in a low-pass filter. As we know the lead-cars maximum acceleration, we also know the maximum angle of the velosity-ramp that this would generate. Based on this we can determine the frequency content of this ramp, which will give up the highest possible frequency that may realisticly be part of the system. If any frequency above this is found in the sampled distance, then it must be an error. To imagine this think of a step. In order to create a theoretical step you must include all frequencies up at infinity. The more vertivcal a curve, the higer the frequencies it contain. 
+
+Removing these errors are done simply by adding a low-pass filter after the ADC, which will insure that any incorrect values will be removed. This filter is easy to design, but will not be shown here.
 
