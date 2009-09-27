@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.8"
+    ComputedModelVersion    "1.24"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -45,9 +45,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "ahp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sat Sep 26 13:12:34 2009"
+  LastModifiedDate	  "Sun Sep 27 20:18:47 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:8>"
+  ModelVersionFormat	  "1.%<AutoIncrement:24>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -106,7 +106,7 @@ Model {
 	  $ObjectID		  2
 	  Version		  "1.4.0"
 	  StartTime		  "0.0"
-	  StopTime		  "2"
+	  StopTime		  "10"
 	  AbsTol		  "auto"
 	  FixedStep		  "auto"
 	  InitialStep		  "auto"
@@ -557,6 +557,15 @@ Model {
       SampleTime	      "-1"
     }
     Block {
+      BlockType		      Step
+      Time		      "1"
+      Before		      "0"
+      After		      "1"
+      SampleTime	      "-1"
+      VectorParams1D	      on
+      ZeroCross		      on
+    }
+    Block {
       BlockType		      Sum
       IconShape		      "rectangular"
       Inputs		      "++"
@@ -598,19 +607,6 @@ Model {
       SampleTime	      "inf"
       FramePeriod	      "inf"
     }
-    Block {
-      BlockType		      Sin
-      SineType		      "Time based"
-      TimeSource	      "Use simulation time"
-      Amplitude		      "1"
-      Bias		      "0"
-      Frequency		      "1"
-      Phase		      "0"
-      Samples		      "10"
-      Offset		      "0"
-      SampleTime	      "-1"
-      VectorParams1D	      on
-    }
   }
   AnnotationDefaults {
     HorizontalAlignment	    "center"
@@ -635,7 +631,7 @@ Model {
     Location		    [89, 218, 909, 575]
     Open		    on
     ModelBrowserVisibility  off
-    ModelBrowserWidth	    200
+    ModelBrowserWidth	    212
     ScreenColor		    "white"
     PaperOrientation	    "landscape"
     PaperPositionMode	    "auto"
@@ -660,7 +656,7 @@ Model {
       Ports		      [1]
       Position		      [700, 119, 730, 151]
       Floating		      off
-      Location		      [1, 52, 1025, 737]
+      Location		      [5, 52, 1029, 737]
       Open		      off
       NumInputPorts	      "1"
       List {
@@ -675,8 +671,8 @@ Model {
       Name		      "Car model"
       Position		      [425, 117, 485, 153]
       NamePlacement	      "alternate"
-      Numerator		      "[Kc]"
-      Denominator	      "[1 Ac]"
+      Numerator		      "[0.06068]"
+      Denominator	      "[1 1.1]"
     }
     Block {
       BlockType		      TransferFcn
@@ -685,29 +681,14 @@ Model {
       Denominator	      "[1]"
     }
     Block {
-      BlockType		      Gain
-      Name		      "Gain"
-      Position		      [175, 120, 205, 150]
-      ParameterDataTypeMode   "Inherit via internal rule"
-      ParameterDataType	      "sfix(16)"
-      ParameterScaling	      "2^0"
-      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
-      OutDataTypeMode	      "Inherit via internal rule"
-      OutDataType	      "sfix(16)"
-      OutScaling	      "2^0"
-      OutDataTypeStr	      "Inherit: Inherit via internal rule"
-      SaturateOnIntegerOverflow	off
-    }
-    Block {
       BlockType		      Integrator
       Name		      "Integrator"
       Ports		      [1, 1]
       Position		      [580, 120, 610, 150]
     }
     Block {
-      BlockType		      Sin
+      BlockType		      Step
       Name		      "Lead car speed"
-      Ports		      [0, 1]
       Position		      [525, 40, 555, 70]
       Orientation	      "down"
       NamePlacement	      "alternate"
@@ -717,9 +698,25 @@ Model {
       BlockType		      Constant
       Name		      "Reference distance"
       Position		      [40, 120, 70, 150]
+      NamePlacement	      "alternate"
       Value		      "3"
       OutDataType	      "sfix(16)"
       OutScaling	      "2^0"
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Regulator"
+      Position		      [160, 115, 205, 155]
+      Gain		      "-30"
+      ParameterDataTypeMode   "Inherit via internal rule"
+      ParameterDataType	      "sfix(16)"
+      ParameterScaling	      "2^0"
+      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
     }
     Block {
       BlockType		      TransferFcn
@@ -768,7 +765,7 @@ Model {
     Line {
       SrcBlock		      "Sum"
       SrcPort		      1
-      DstBlock		      "Gain"
+      DstBlock		      "Regulator"
       DstPort		      1
     }
     Line {
@@ -811,7 +808,7 @@ Model {
       DstPort		      2
     }
     Line {
-      SrcBlock		      "Gain"
+      SrcBlock		      "Regulator"
       SrcPort		      1
       DstBlock		      "DAC"
       DstPort		      1

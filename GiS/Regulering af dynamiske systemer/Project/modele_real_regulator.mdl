@@ -1,12 +1,12 @@
 Model {
-  Name			  "modele"
+  Name			  "modele_real_regulator"
   Version		  7.1
   MdlSubVersion		  0
   GraphicalInterface {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.7"
+    ComputedModelVersion    "1.9"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -45,9 +45,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "ahp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Sep 25 09:10:11 2009"
+  LastModifiedDate	  "Sun Sep 27 20:57:39 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:7>"
+  ModelVersionFormat	  "1.%<AutoIncrement:9>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -106,7 +106,7 @@ Model {
 	  $ObjectID		  2
 	  Version		  "1.4.0"
 	  StartTime		  "0.0"
-	  StopTime		  "2"
+	  StopTime		  "1000"
 	  AbsTol		  "auto"
 	  FixedStep		  "auto"
 	  InitialStep		  "auto"
@@ -535,6 +535,15 @@ Model {
       SampleTime	      "-1"
     }
     Block {
+      BlockType		      Step
+      Time		      "1"
+      Before		      "0"
+      After		      "1"
+      SampleTime	      "-1"
+      VectorParams1D	      on
+      ZeroCross		      on
+    }
+    Block {
       BlockType		      Sum
       IconShape		      "rectangular"
       Inputs		      "++"
@@ -576,19 +585,6 @@ Model {
       SampleTime	      "inf"
       FramePeriod	      "inf"
     }
-    Block {
-      BlockType		      Sin
-      SineType		      "Time based"
-      TimeSource	      "Use simulation time"
-      Amplitude		      "1"
-      Bias		      "0"
-      Frequency		      "1"
-      Phase		      "0"
-      Samples		      "10"
-      Offset		      "0"
-      SampleTime	      "-1"
-      VectorParams1D	      on
-    }
   }
   AnnotationDefaults {
     HorizontalAlignment	    "center"
@@ -609,7 +605,7 @@ Model {
     FontAngle		    "normal"
   }
   System {
-    Name		    "modele"
+    Name		    "modele_real_regulator"
     Location		    [89, 218, 909, 575]
     Open		    on
     ModelBrowserVisibility  off
@@ -638,8 +634,8 @@ Model {
       Ports		      [1]
       Position		      [700, 119, 730, 151]
       Floating		      off
-      Location		      [1, 52, 1025, 737]
-      Open		      off
+      Location		      [5, 52, 1029, 737]
+      Open		      on
       NumInputPorts	      "1"
       List {
 	ListType		AxesTitles
@@ -653,8 +649,8 @@ Model {
       Name		      "Car model"
       Position		      [425, 117, 485, 153]
       NamePlacement	      "alternate"
-      Numerator		      "[Kc]"
-      Denominator	      "[1 Ac]"
+      Numerator		      "[0.06068]"
+      Denominator	      "[1 1.1]"
     }
     Block {
       BlockType		      TransferFcn
@@ -669,9 +665,8 @@ Model {
       Position		      [580, 120, 610, 150]
     }
     Block {
-      BlockType		      Sin
-      Name		      "Lead car speed"
-      Ports		      [0, 1]
+      BlockType		      Step
+      Name		      "Lead car"
       Position		      [525, 40, 555, 70]
       Orientation	      "down"
       NamePlacement	      "alternate"
@@ -689,8 +684,7 @@ Model {
       BlockType		      TransferFcn
       Name		      "Regulator"
       Position		      [170, 117, 230, 153]
-      Numerator		      "[Kr]"
-      Denominator	      "[1 Ar]"
+      Denominator	      "[1 0]"
     }
     Block {
       BlockType		      TransferFcn
@@ -749,7 +743,7 @@ Model {
       DstPort		      2
     }
     Line {
-      SrcBlock		      "Lead car speed"
+      SrcBlock		      "Lead car"
       SrcPort		      1
       DstBlock		      "Sum1"
       DstPort		      1

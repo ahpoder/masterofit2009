@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.9"
+    ComputedModelVersion    "1.12"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -45,9 +45,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "ahp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sat Sep 26 13:14:54 2009"
+  LastModifiedDate	  "Sun Sep 27 20:01:21 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:9>"
+  ModelVersionFormat	  "1.%<AutoIncrement:12>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -106,7 +106,7 @@ Model {
 	  $ObjectID		  2
 	  Version		  "1.4.0"
 	  StartTime		  "0.0"
-	  StopTime		  "2"
+	  StopTime		  "10"
 	  AbsTol		  "auto"
 	  FixedStep		  "auto"
 	  InitialStep		  "auto"
@@ -557,7 +557,7 @@ Model {
   }
   System {
     Name		    "modele"
-    Location		    [89, 218, 909, 575]
+    Location		    [102, 273, 922, 630]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -577,13 +577,14 @@ Model {
       Ports		      [1]
       Position		      [415, 99, 445, 131]
       Floating		      off
-      Location		      [1, 52, 1025, 737]
+      Location		      [5, 52, 1029, 737]
       Open		      off
       NumInputPorts	      "1"
       List {
 	ListType		AxesTitles
 	axes1			"%<SignalLabel>"
       }
+      TimeRange		      "10"
       DataFormat	      "StructureWithTime"
       SampleTime	      "0"
     }
@@ -592,13 +593,14 @@ Model {
       Name		      "Car model"
       Position		      [280, 97, 340, 133]
       NamePlacement	      "alternate"
-      Numerator		      "[Kc]"
-      Denominator	      "[1 Ac]"
+      Numerator		      "[0.06068]"
+      Denominator	      "[1 1.1]"
     }
     Block {
       BlockType		      Step
       Name		      "Step"
       Position		      [180, 100, 210, 130]
+      Time		      "0"
       SampleTime	      "0"
     }
     Line {

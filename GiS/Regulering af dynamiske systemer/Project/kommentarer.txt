@@ -56,6 +56,10 @@ This can be  realised with many different regulators, but keeping to the three m
 
 <<<Insert pure gain regulator simulation>>>
 
+Many different gain's was attempted. The first thing we notice is that a negative gain is required for the system to be stable. This is due to the system itself: "If we are too far away we must try and reduce the distance". We then attempted to change the value of the gain, and the higher the gain the faster the system reached its steady-state, and the close it was to the correct value, but the higher overshot it had. At Gain = -1 it took about 80 seconds to reach steady-state and with no overshot, but a final value of approx. 22, or a steady-state error of 22 - 3 = 19 meter or 533%. At a gain of -10 it took only about 10 seconds to reach steady-state and we have an overshot of about 7%, and a steady-state error of 1.75. Since we allowed 30% overshot, we can have a gain of approximately -30, which gives us an overshot of 30% and a setling time of about 7 seconds with a steady.state error of 0.6. This is shown below.
+
+<< insert diagram of pure gain regulator >>
+
 In order to get a type 1 regulator we need an integrator in the regulator. This is represented as 1/s in laplace, and unfortunately has the concequence that the phase-response is moved down 90 degrees, reeking havock on our phase margin. To counter-act this effect we can add a zero in the equation, as this will move the pase-response up 90 degrees. Naturally these 90 degrees up or down are not in the entire phase-band, but only for a certain interval. Here an important stability rule comes in; if the highest frequency where the gain is 1 is higher than -180 degrees the system is stable. Even if there are lower frequencies where the pahse-margin is negative and the gain is > 1 - this may seem counter-intuitive, but it is true none the less.
 
 In order to choose the cooeficients of the regulator, under the constraints above, and with a fourth requirement
@@ -68,6 +72,12 @@ we have to follow the below steps:
 2. Having a pure integrator in the system will lower the phase-margin to a level where it is not possible to achieve the min 45 degree phase margin.
 3. Adding a zero will lift the frequency response by 90 degrees in a "bubble", and as long as this "bubble" has the cross-over-frequency and it is above -135 degrees (required for 45 degrees phase-margin), then the system is stable.
 4. We can now choose the highest possible P that will ensure a max. 30% overshot and have the best possible rise-time. This means choosing the P as high as possible, i.e. exactly where the 30% is just met.
+
+First we add the pure integrator. Then we create a bode-plot of the open-loop system (simply multiple the transfer functions in the forward and feedback path). This gives the following polt.
+
+<<< insert bode-plot of system >>>
+
+Here it may be seen that the ......
 
 This results in the following regulator:
 
