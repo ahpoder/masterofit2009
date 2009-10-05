@@ -73,15 +73,19 @@ we have to follow the below steps:
 3. Adding a zero will lift the frequency response by 90 degrees in a "bubble", and as long as this "bubble" has the cross-over-frequency and it is above -135 degrees (required for 45 degrees phase-margin), then the system is stable.
 4. We can now choose the highest possible P that will ensure a max. 30% overshot and have the best possible rise-time. This means choosing the P as high as possible, i.e. exactly where the 30% is just met.
 
-First we add the pure integrator. Then we create a bode-plot of the open-loop system (simply multiple the transfer functions in the forward and feedback path). This gives the following polt.
+First we add the pure integrator. Then we create a bode-plot of the open-loop system. This is done by simply multiple the transfer functions in the forward and feedback path and ignore any references or disturbances. "ignore" means remove the summation-point entirely, not set them to 0. This gives the following plot.
 
 <<< insert bode-plot of system >>>
 
-Here it may be seen that the ......
+Here it may be seen that the open-loop system as a phase margin of -19, which is clearly unstable. It also show that increasing the phase margin by 90 degrees is sufficient to make the system stable. Increasing the phse can be echieved by adding a zero. We can also determine the lowest frequency where this zero may be placed, by determining the frequency at which a 90 degree increase in phase will give the desired 45 degree phase margin, or a phase of -135. This turns out to be at 0,11 rad/sec where the pahse is -225, so our zero mut be to the right of this point, but at the same time also greater than 0 (otherwise the system starts behaving funny), i.e. ]0;0,11].
 
-This results in the following regulator:
+<<< todo something is wrong, it is in 1,1 not 0,11 >>>
 
-<<<< insert regulator and calculations and picture >>>>>>
+Since we can control the gain we can naturally create a 45 degree phase margin anywhere in this interval. Secondly we can choose to look at the cross-over frequency, as we want this to be as high as possible. Unfortunately the cross-over frequencies for different values of the zero is almost identical, so for this reason we choose based on the gain. We want the zero that creates the highest gain, as this will help supress noise in the system. Noise is supressed by a factor of 1 + the open loop gain.
+
+This gives us a zero in approximately 0.11 rad/s. We place this in the model and attempt to modify the gain to achieve an overshot of max. 30%. We realize that this is not possible, as we do not accilerate fast enough to keep up with the lead car's step speed (infinite accileration), which is also unrealistic. We therefore only look at the second loop in the figure - how much the distance swings under the curve. This gives us a gain of -150 (we remember from earlier that the gain has to be negative). The actual overshot will be smaller, as it is not possible for the lead car to accilerate as a step, only as a ramp:
+
+<< insert regulator and calculations and picture, see model >>>
 
 As it may be seen this does not have a very good ability to keep up when the other car changes speed. It will quickly fall far behind, or come dangerously close, to the other car, so even though it will eventually get to the right distance, it will feel strange to the driver. Lets just say, he or she is sure to say: "I can follow better than this if I was driving my self".
 
