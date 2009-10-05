@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.60"
+    ComputedModelVersion    "1.68"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -45,9 +45,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "ahp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Oct 05 09:55:44 2009"
+  LastModifiedDate	  "Mon Oct 05 10:22:44 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:60>"
+  ModelVersionFormat	  "1.%<AutoIncrement:68>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -105,8 +105,8 @@ Model {
 	Simulink.SolverCC {
 	  $ObjectID		  2
 	  Version		  "1.4.0"
-	  StartTime		  "0.0"
-	  StopTime		  "2200"
+	  StartTime		  "1750"
+	  StopTime		  "2250"
 	  AbsTol		  "auto"
 	  FixedStep		  "auto"
 	  InitialStep		  "auto"
@@ -725,7 +725,7 @@ Model {
       Position		      [805, 459, 835, 491]
       Floating		      off
       Location		      [6, 56, 1022, 733]
-      Open		      off
+      Open		      on
       NumInputPorts	      "1"
       List {
 	ListType		AxesTitles
@@ -828,7 +828,7 @@ Model {
       BlockType		      Gain
       Name		      "Gain"
       Position		      [155, 457, 200, 493]
-      Gain		      "-350"
+      Gain		      "-250"
       ParameterDataTypeMode   "Inherit via internal rule"
       ParameterDataType	      "sfix(16)"
       ParameterScaling	      "2^0"
@@ -843,6 +843,7 @@ Model {
       BlockType		      Gain
       Name		      "Gain1"
       Position		      [240, 370, 270, 400]
+      Gain		      "10"
       ParameterDataTypeMode   "Inherit via internal rule"
       ParameterDataType	      "sfix(16)"
       ParameterScaling	      "2^0"
@@ -885,7 +886,7 @@ Model {
       BlockType		      Constant
       Name		      "Reference distance"
       Position		      [45, 460, 75, 490]
-      Value		      "3"
+      Value		      "30"
       OutDataType	      "sfix(16)"
       OutScaling	      "2^0"
     }
