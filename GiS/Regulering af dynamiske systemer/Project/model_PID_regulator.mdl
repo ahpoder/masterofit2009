@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.32"
+    ComputedModelVersion    "1.46"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -45,9 +45,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "ahp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Oct 05 07:12:01 2009"
+  LastModifiedDate	  "Mon Oct 05 09:10:27 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:32>"
+  ModelVersionFormat	  "1.%<AutoIncrement:46>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -503,6 +503,28 @@ Model {
   }
   BlockParameterDefaults {
     Block {
+      BlockType		      Gain
+      Gain		      "1"
+      Multiplication	      "Element-wise(K.*u)"
+      ParamMin		      "[]"
+      ParamMax		      "[]"
+      ParameterDataTypeMode   "Same as input"
+      ParameterDataType	      "fixdt(1,16,0)"
+      ParameterScalingMode    "Best Precision: Matrix-wise"
+      ParameterScaling	      "[]"
+      ParamDataTypeStr	      "Inherit: Same as input"
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeMode	      "Same as input"
+      OutDataType	      "fixdt(1,16,0)"
+      OutScaling	      "[]"
+      OutDataTypeStr	      "Inherit: Same as input"
+      LockScale		      off
+      RndMeth		      "Floor"
+      SaturateOnIntegerOverflow	on
+      SampleTime	      "-1"
+    }
+    Block {
       BlockType		      Integrator
       ExternalReset	      "none"
       InitialConditionSource  "internal"
@@ -606,7 +628,7 @@ Model {
   }
   System {
     Name		    "model_PID_regulator"
-    Location		    [2, 78, 1022, 718]
+    Location		    [2, 82, 1022, 722]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -634,13 +656,14 @@ Model {
       Ports		      [1]
       Position		      [800, 254, 830, 286]
       Floating		      off
-      Location		      [5, 56, 1021, 733]
-      Open		      off
+      Location		      [6, 56, 1022, 733]
+      Open		      on
       NumInputPorts	      "1"
       List {
 	ListType		AxesTitles
 	axes1			"%<SignalLabel>"
       }
+      TimeRange		      "20"
       YMin		      "2"
       YMax		      "4"
       DataFormat	      "StructureWithTime"
@@ -657,8 +680,45 @@ Model {
     Block {
       BlockType		      TransferFcn
       Name		      "DAC"
-      Position		      [365, 252, 425, 288]
+      Position		      [415, 252, 475, 288]
       Denominator	      "[1]"
+    }
+    Block {
+      BlockType		      TransferFcn
+      Name		      "Differentiator"
+      Position		      [290, 158, 345, 202]
+      Numerator		      "[1 0]"
+      Denominator	      "[1 10]"
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Gain"
+      Position		      [150, 252, 195, 288]
+      Gain		      "-350"
+      ParameterDataTypeMode   "Inherit via internal rule"
+      ParameterDataType	      "sfix(16)"
+      ParameterScaling	      "2^0"
+      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Gain1"
+      Position		      [235, 165, 265, 195]
+      Gain		      "10"
+      ParameterDataTypeMode   "Inherit via internal rule"
+      ParameterDataType	      "sfix(16)"
+      ParameterScaling	      "2^0"
+      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
     }
     Block {
       BlockType		      Integrator
@@ -686,9 +746,9 @@ Model {
     Block {
       BlockType		      TransferFcn
       Name		      "Regulator"
-      Position		      [160, 238, 310, 302]
-      Numerator		      "[-149 -1517 -165]"
-      Denominator	      "[1 10 0 ]"
+      Position		      [245, 248, 300, 292]
+      Numerator		      "[1 0.11]"
+      Denominator	      "[1 0]"
     }
     Block {
       BlockType		      TransferFcn
@@ -721,6 +781,21 @@ Model {
       ShowName		      off
       IconShape		      "round"
       Inputs		      "+-|"
+      InputSameDT	      off
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Sum2"
+      Ports		      [2, 1]
+      Position		      [345, 260, 365, 280]
+      ShowName		      off
+      IconShape		      "round"
+      Inputs		      "++|"
       InputSameDT	      off
       OutDataTypeMode	      "Inherit via internal rule"
       OutDataType	      "sfix(16)"
@@ -774,12 +849,6 @@ Model {
       DstPort		      2
     }
     Line {
-      SrcBlock		      "Regulator"
-      SrcPort		      1
-      DstBlock		      "DAC"
-      DstPort		      1
-    }
-    Line {
       SrcBlock		      "DAC"
       SrcPort		      1
       DstBlock		      "Car model"
@@ -792,9 +861,48 @@ Model {
       DstPort		      1
     }
     Line {
+      SrcBlock		      "Sum2"
+      SrcPort		      1
+      DstBlock		      "DAC"
+      DstPort		      1
+    }
+    Line {
       SrcBlock		      "Sum"
       SrcPort		      1
-      DstBlock		      "Regulator"
+      DstBlock		      "Gain"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Gain"
+      SrcPort		      1
+      Points		      [15, 0]
+      Branch {
+	DstBlock		"Regulator"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, -90]
+	DstBlock		"Gain1"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Regulator"
+      SrcPort		      1
+      DstBlock		      "Sum2"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Differentiator"
+      SrcPort		      1
+      Points		      [5, 0]
+      DstBlock		      "Sum2"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Gain1"
+      SrcPort		      1
+      DstBlock		      "Differentiator"
       DstPort		      1
     }
   }
