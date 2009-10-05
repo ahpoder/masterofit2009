@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.32"
+    ComputedModelVersion    "1.33"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -45,9 +45,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "ahp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Oct 05 09:44:51 2009"
+  LastModifiedDate	  "Mon Oct 05 10:24:52 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:32>"
+  ModelVersionFormat	  "1.%<AutoIncrement:33>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -725,7 +725,7 @@ Model {
       Position		      [810, 429, 840, 461]
       Floating		      off
       Location		      [6, 52, 1030, 737]
-      Open		      off
+      Open		      on
       NumInputPorts	      "1"
       List {
 	ListType		AxesTitles
@@ -848,7 +848,7 @@ Model {
       BlockType		      Constant
       Name		      "Reference distance"
       Position		      [50, 430, 80, 460]
-      Value		      "3"
+      Value		      "30"
       OutDataType	      "sfix(16)"
       OutScaling	      "2^0"
     }
