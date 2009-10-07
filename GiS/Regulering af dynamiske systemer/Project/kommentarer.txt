@@ -73,17 +73,50 @@ we have to follow the below steps:
 3. Adding a zero will lift the frequency response by 90 degrees in a "bubble", and as long as this "bubble" has the cross-over-frequency and it is above -135 degrees (required for 45 degrees phase-margin), then the system is stable.
 4. We can now choose the highest possible P that will ensure a max. 30% overshot and have the best possible rise-time. This means choosing the P as high as possible, i.e. exactly where the 30% is just met.
 
-First we add the pure integrator. Then we create a bode-plot of the open-loop system. This is done by simply multiple the transfer functions in the forward and feedback path and ignore any references or disturbances. "ignore" means remove the summation-point entirely, not set them to 0. This gives the following plot.
+----------- new --------------
 
-<<< insert bode-plot of system >>>
+First we add the pure integrator (Ki*1/s). Then we create a bode-plot of the open-loop system. This is done by first realizing that Ki must be negative, i.e. larger distance must result in increased power to the endien and not reduced, as is the "raw" functionality of the system. However open-loop transfer functions use a positive proportional gain, so we must use a P = -Ki. Second we must set the reference and disturbances to 0 and then multiply the transfer functions in the forward and feed-back path, giving us:
 
-Here it may be seen that the open-loop system as a phase margin of -19, which is clearly unstable. It also show that increasing the phase margin by 90 degrees is sufficient to make the system stable. Increasing the phse can be echieved by adding a zero. We can also determine the lowest frequency where this zero may be placed, by determining the frequency at which a 90 degree increase in phase will give the desired 45 degree phase margin, or a phase of -135. This turns out to be at 0,11 rad/sec where the pahse is -225, so our zero mut be to the right of this point, but at the same time also greater than 0 (otherwise the system starts behaving funny), i.e. ]0;0,11].
+(Vfor) (regulator)         (model)         (integrator)   (feed-back path)
+( 0   - (-P*1/s     *  0,06068/(s+1,1)) *     1/s      *        1
 
-<<< todo something is wrong, it is in 1,1 not 0,11 >>>
+or 
 
-Since we can control the gain we can naturally create a 45 degree phase margin anywhere in this interval. Secondly we can choose to look at the cross-over frequency, as we want this to be as high as possible. Unfortunately the cross-over frequencies for different values of the zero is almost identical, so for this reason we choose based on the gain. We want the zero that creates the highest gain, as this will help supress noise in the system. Noise is supressed by a factor of 1 + the open loop gain.
+P*(0,06068/(s^3+1,1s^2))
 
-This gives us a zero in approximately 0.11 rad/s. We place this in the model and attempt to modify the gain to achieve an overshot of max. 30%. We realize that this is not possible, as we do not accilerate fast enough to keep up with the lead car's step speed (infinite accileration), which is also unrealistic. We therefore only look at the second loop in the figure - how much the distance swings under the curve. This gives us a gain of -150 (we remember from earlier that the gain has to be negative). The actual overshot will be smaller, as it is not possible for the lead car to accilerate as a step, only as a ramp:
+This can also be seen in the below diagram
+
+<<< insert system from model_open_loop_integrator_regulator.mdl (new) >>>
+
+This is possible as -P can then be written as -1 * P, and superposition allows us to interchange the multiplication terma. We realize that designing with integration and stability the value of P is of little importance in the beginning as we focus solely on the phase-carrecteristic, which is independent of P. We therefore choose a P of 1. This gives the following plot.
+
+<<< insert open_loop_gain_integrator.fig (same as before) >>>
+
+Here it may be seen that the open-loop system as a phase margin of -19, which is clearly unstable. It can further be seen that the system never reach a phase > -180 degrees, so the system wil be unstable for any value of P. It can furthermore be seen that increasing the phase margin by 90 degrees is sufficient to make the system stable. Increasing the phase can be echieved by adding a zero. 
+
+Here it is important to realize that a zero do not increase the phase by 90 degrees over the whole frequency span, it will decreae with lower frequencies. In fact where we place the zero this decrease will be exactly 50%, or a phase increase of 45 degrees. 
+
+With this knowledge we can determine the lowest possible frequency at which the zero may be placed. We know it must have a phase margin of at least 0 degrees in order to be stable (the 45 degree requirement comes later), i.e. a phase of -180 degrees. We also know that at the zero we will achieve a 45 degree phase lift, so we need to find the location where a 45 degree increase will give -180 degrees, or a current phase of -225. 
+
+In the bode plot we can determine this to be at 1,1 rad/s. This naturally do not meet our 45 degree phase margin requirement, but finding the highest possible value of a that does meet this requirements is not so so easy - actually the calculations have a level of complexity that makes it benificial to use educated guessing and tweaking. We do however know that it must be less than 1,1 rad/s.
+
+Before we begin determining the highest value of the zero we will just pause a little on the subject of ehy we want to do that. Since we can control the gain we can naturally create a 45 degree phase margin anywhere in the valid interval that we determine in a minute. Secondly we can choose to look at the cross-over frequency, as we want this to be as high as possible. Unfortunately the cross-over frequencies for different values of the zero is almost identical, so for this reason we choose based on the gain. We want the zero that creates the highest gain, as this will help supress changes in the system (response time). Changes (noise) is supressed by a factor of 1 + the open loop gain, and this happens to be the zero with the lowest possible frequency (highest possible value).
+
+Now, to determine this value we have to try different value for the zero. We begin by an educated guess of a zero 1 factor 10 below the minimum zero stability-frequency found above of 1,1 rad/s, so we begin in 0,11 rad/s.
+
+Using the sistool it is possible to graphically (drag and drop) modify the location of the zero and then see the effects of the frequency response. This makes it easier to determine the "highest possible" value of the zero. We also have to remember that it does not have to be the highest, as the lower values work just fine, they may just not be as good at keeping up, but as good can be a very small difference if we are talking about two zero values that are close together - there is such a thing as a "good enough" zero.
+
+Using this tool we determine the zero to be at 0,19 rad/s, meaning that for any value inthe interval ]0;0,19] it is possible to have a P that gives us a phase margin of 45 degrees - for the reasons mentioned above we choose 0,19 rad/s as our zero, giving us the open-loop transfer funtion
+
+P*((0,06068 + 0,01153)/(s^3+1,1s^2))
+
+From this we can determine the P required to achieve a 45 degree phase margin, and this turns out to be P = 8. Putting this into the transfer funtion the new bode plot becomes
+
+<<< insert open_loop_gain_PI_regulator.fig (new) >>>
+
+We place this in the model and attempt to modify the gain to achieve an overshot of max. 30%. We realize that this is not possible, as we do not accilerate fast enough to keep up with the lead car's step speed (infinite accileration), which is also unrealistic. We therefore only look at the second loop in the figure - how much the distance swings under the curve. This gives us a gain of -150 (we remember from earlier that the gain has to be negative). The actual overshot will be smaller, as it is not possible for the lead car to accilerate as a step, only as a ramp:
+
+------------- end of new ------------------
 
 << insert regulator and calculations and picture, see model >>>
 

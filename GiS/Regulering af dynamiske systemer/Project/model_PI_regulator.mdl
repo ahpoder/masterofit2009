@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.30"
+    ComputedModelVersion    "1.32"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -45,9 +45,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "ahp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Oct 05 07:17:13 2009"
+  LastModifiedDate	  "Wed Oct 07 20:46:48 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:30>"
+  ModelVersionFormat	  "1.%<AutoIncrement:32>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -628,7 +628,7 @@ Model {
   }
   System {
     Name		    "model_PI_regulator"
-    Location		    [2, 78, 1022, 718]
+    Location		    [6, 82, 1018, 714]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -656,7 +656,7 @@ Model {
       Ports		      [1]
       Position		      [800, 254, 830, 286]
       Floating		      off
-      Location		      [1, 52, 1025, 737]
+      Location		      [51, 116, 1014, 720]
       Open		      off
       NumInputPorts	      "1"
       List {
@@ -709,7 +709,7 @@ Model {
       BlockType		      TransferFcn
       Name		      "Regulator"
       Position		      [235, 252, 295, 288]
-      Numerator		      "[1 0.11]"
+      Numerator		      "[1 0.19]"
       Denominator	      "[1 0]"
     }
     Block {

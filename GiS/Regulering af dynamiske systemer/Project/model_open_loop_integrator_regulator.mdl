@@ -1,12 +1,12 @@
 Model {
-  Name			  "model_open_loop_real_regulator"
+  Name			  "model_open_loop_integrator_regulator"
   Version		  7.1
   MdlSubVersion		  0
   GraphicalInterface {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.13"
+    ComputedModelVersion    "1.14"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -45,9 +45,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "ahp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Oct 01 09:44:03 2009"
+  LastModifiedDate	  "Wed Oct 07 08:31:19 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:13>"
+  ModelVersionFormat	  "1.%<AutoIncrement:14>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -503,6 +503,28 @@ Model {
   }
   BlockParameterDefaults {
     Block {
+      BlockType		      Gain
+      Gain		      "1"
+      Multiplication	      "Element-wise(K.*u)"
+      ParamMin		      "[]"
+      ParamMax		      "[]"
+      ParameterDataTypeMode   "Same as input"
+      ParameterDataType	      "fixdt(1,16,0)"
+      ParameterScalingMode    "Best Precision: Matrix-wise"
+      ParameterScaling	      "[]"
+      ParamDataTypeStr	      "Inherit: Same as input"
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeMode	      "Same as input"
+      OutDataType	      "fixdt(1,16,0)"
+      OutScaling	      "[]"
+      OutDataTypeStr	      "Inherit: Same as input"
+      LockScale		      off
+      RndMeth		      "Floor"
+      SaturateOnIntegerOverflow	on
+      SampleTime	      "-1"
+    }
+    Block {
       BlockType		      Integrator
       ExternalReset	      "none"
       InitialConditionSource  "internal"
@@ -518,12 +540,46 @@ Model {
       ContinuousStateAttributes	"''"
     }
     Block {
+      BlockType		      Sum
+      IconShape		      "rectangular"
+      Inputs		      "++"
+      CollapseMode	      "All dimensions"
+      CollapseDim	      "1"
+      InputSameDT	      on
+      AccumDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeMode	      "Same as first input"
+      OutDataType	      "fixdt(1,16,0)"
+      OutScaling	      "[]"
+      OutDataTypeStr	      "Inherit: Same as first input"
+      LockScale		      off
+      RndMeth		      "Floor"
+      SaturateOnIntegerOverflow	on
+      SampleTime	      "-1"
+    }
+    Block {
       BlockType		      TransferFcn
       Numerator		      "[1]"
       Denominator	      "[1 2 1]"
       AbsoluteTolerance	      "auto"
       ContinuousStateAttributes	"''"
       Realization	      "auto"
+    }
+    Block {
+      BlockType		      Constant
+      Value		      "1"
+      VectorParams1D	      on
+      SamplingMode	      "Sample based"
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeMode	      "Inherit from 'Constant value'"
+      OutDataType	      "fixdt(1,16,0)"
+      ConRadixGroup	      "Use specified scaling"
+      OutScaling	      "[]"
+      OutDataTypeStr	      "Inherit: Inherit from 'Constant value'"
+      SampleTime	      "inf"
+      FramePeriod	      "inf"
     }
   }
   AnnotationDefaults {
@@ -545,8 +601,8 @@ Model {
     FontAngle		    "normal"
   }
   System {
-    Name		    "model_open_loop_real_regulator"
-    Location		    [85, 144, 905, 501]
+    Name		    "model_open_loop_integrator_regulator"
+    Location		    [154, 178, 1702, 796]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -563,13 +619,21 @@ Model {
     Block {
       BlockType		      TransferFcn
       Name		      "ADC"
-      Position		      [585, 117, 645, 153]
+      Position		      [695, 87, 755, 123]
       Denominator	      "[1]"
     }
     Block {
       BlockType		      TransferFcn
       Name		      "Car model"
-      Position		      [275, 117, 335, 153]
+      Position		      [325, 87, 385, 123]
+      NamePlacement	      "alternate"
+      Numerator		      "[0.06068]"
+      Denominator	      "[1 1.1]"
+    }
+    Block {
+      BlockType		      TransferFcn
+      Name		      "Car model1"
+      Position		      [335, 192, 395, 228]
       NamePlacement	      "alternate"
       Numerator		      "[0.06068]"
       Denominator	      "[1 1.1]"
@@ -577,31 +641,113 @@ Model {
     Block {
       BlockType		      TransferFcn
       Name		      "DAC"
-      Position		      [165, 117, 225, 153]
+      Position		      [215, 87, 275, 123]
       Denominator	      "[1]"
     }
     Block {
       BlockType		      Integrator
       Name		      "Integrator"
       Ports		      [1, 1]
-      Position		      [390, 120, 420, 150]
+      Position		      [500, 90, 530, 120]
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Integrator gain"
+      Position		      [40, 90, 70, 120]
+      Gain		      "Ki"
+      ParameterDataTypeMode   "Inherit via internal rule"
+      ParameterDataType	      "sfix(16)"
+      ParameterScaling	      "2^0"
+      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Integrator
+      Name		      "Integrator1"
+      Ports		      [1, 1]
+      Position		      [460, 195, 490, 225]
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Proportional gain"
+      Position		      [140, 195, 170, 225]
+      Gain		      "-P"
+      ParameterDataTypeMode   "Inherit via internal rule"
+      ParameterDataType	      "sfix(16)"
+      ParameterScaling	      "2^0"
+      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Proportional gain1"
+      Position		      [250, 315, 280, 345]
+      Gain		      "P"
+      ParameterDataTypeMode   "Inherit via internal rule"
+      ParameterDataType	      "sfix(16)"
+      ParameterScaling	      "2^0"
+      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
     }
     Block {
       BlockType		      TransferFcn
       Name		      "Regulator"
-      Position		      [70, 117, 130, 153]
+      Position		      [120, 87, 180, 123]
+      Denominator	      "[1 0]"
+    }
+    Block {
+      BlockType		      TransferFcn
+      Name		      "Regulator1"
+      Position		      [225, 192, 285, 228]
       Denominator	      "[1 0]"
     }
     Block {
       BlockType		      TransferFcn
       Name		      "Sensor"
-      Position		      [470, 117, 530, 153]
+      Position		      [580, 87, 640, 123]
       Denominator	      "[1]"
+    }
+    Block {
+      BlockType		      Sum
+      Name		      "Sum"
+      Ports		      [2, 1]
+      Position		      [435, 95, 455, 115]
+      ShowName		      off
+      IconShape		      "round"
+      Inputs		      "+-|"
+      InputSameDT	      off
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "Vfor"
+      Position		      [430, 15, 460, 45]
+      Orientation	      "down"
+      NamePlacement	      "alternate"
+      Value		      "0"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
     }
     Block {
       BlockType		      TransferFcn
       Name		      "open loop system model"
-      Position		      [280, 242, 340, 278]
+      Position		      [330, 312, 390, 348]
       NamePlacement	      "alternate"
       Numerator		      "[0.06068]"
       Denominator	      "[1 1.1 0 0]"
@@ -609,8 +755,8 @@ Model {
     Line {
       SrcBlock		      "Car model"
       SrcPort		      1
-      DstBlock		      "Integrator"
-      DstPort		      1
+      DstBlock		      "Sum"
+      DstPort		      2
     }
     Line {
       SrcBlock		      "Regulator"
@@ -634,6 +780,48 @@ Model {
       SrcBlock		      "Sensor"
       SrcPort		      1
       DstBlock		      "ADC"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Integrator gain"
+      SrcPort		      1
+      DstBlock		      "Regulator"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Vfor"
+      SrcPort		      1
+      DstBlock		      "Sum"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Sum"
+      SrcPort		      1
+      DstBlock		      "Integrator"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Regulator1"
+      SrcPort		      1
+      DstBlock		      "Car model1"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Proportional gain"
+      SrcPort		      1
+      DstBlock		      "Regulator1"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Car model1"
+      SrcPort		      1
+      DstBlock		      "Integrator1"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Proportional gain1"
+      SrcPort		      1
+      DstBlock		      "open loop system model"
       DstPort		      1
     }
   }
