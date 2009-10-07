@@ -92,7 +92,7 @@ This is possible as -P can then be written as -1 * P, and superposition allows u
 
 <<< insert open_loop_gain_integrator.fig (same as before) >>>
 
-Here it may be seen that the open-loop system as a phase margin of -19, which is clearly unstable. It can further be seen that the system never reach a phase > -180 degrees, so the system wil be unstable for any value of P. It can furthermore be seen that increasing the phase margin by 90 degrees is sufficient to make the system stable. Increasing the phase can be echieved by adding a zero. 
+Here it may be seen that the open-loop system as a phase margin of -12, which is clearly unstable. It can further be seen that the system never reach a phase > -180 degrees, so the system wil be unstable for any value of P. It can furthermore be seen that increasing the phase margin by 90 degrees is sufficient to make the system stable. Increasing the phase can be echieved by adding a zero. 
 
 Here it is important to realize that a zero do not increase the phase by 90 degrees over the whole frequency span, it will decreae with lower frequencies. In fact where we place the zero this decrease will be exactly 50%, or a phase increase of 45 degrees. 
 
