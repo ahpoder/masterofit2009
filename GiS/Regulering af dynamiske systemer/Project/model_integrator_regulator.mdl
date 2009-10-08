@@ -1,12 +1,12 @@
 Model {
-  Name			  "modele_real_regulator"
+  Name			  "model_integrator_regulator"
   Version		  7.1
   MdlSubVersion		  0
   GraphicalInterface {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.9"
+    ComputedModelVersion    "1.10"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -45,9 +45,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "ahp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sun Sep 27 20:57:39 2009"
+  LastModifiedDate	  "Thu Oct 08 07:05:16 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:9>"
+  ModelVersionFormat	  "1.%<AutoIncrement:10>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -503,6 +503,28 @@ Model {
   }
   BlockParameterDefaults {
     Block {
+      BlockType		      Gain
+      Gain		      "1"
+      Multiplication	      "Element-wise(K.*u)"
+      ParamMin		      "[]"
+      ParamMax		      "[]"
+      ParameterDataTypeMode   "Same as input"
+      ParameterDataType	      "fixdt(1,16,0)"
+      ParameterScalingMode    "Best Precision: Matrix-wise"
+      ParameterScaling	      "[]"
+      ParamDataTypeStr	      "Inherit: Same as input"
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeMode	      "Same as input"
+      OutDataType	      "fixdt(1,16,0)"
+      OutScaling	      "[]"
+      OutDataTypeStr	      "Inherit: Same as input"
+      LockScale		      off
+      RndMeth		      "Floor"
+      SaturateOnIntegerOverflow	on
+      SampleTime	      "-1"
+    }
+    Block {
       BlockType		      Integrator
       ExternalReset	      "none"
       InitialConditionSource  "internal"
@@ -605,8 +627,8 @@ Model {
     FontAngle		    "normal"
   }
   System {
-    Name		    "modele_real_regulator"
-    Location		    [89, 218, 909, 575]
+    Name		    "model_integrator_regulator"
+    Location		    [89, 218, 956, 575]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -623,7 +645,7 @@ Model {
     Block {
       BlockType		      TransferFcn
       Name		      "ADC"
-      Position		      [265, 227, 325, 263]
+      Position		      [355, 227, 415, 263]
       Orientation	      "left"
       NamePlacement	      "alternate"
       Denominator	      "[1]"
@@ -632,10 +654,10 @@ Model {
       BlockType		      Scope
       Name		      "Actual distance"
       Ports		      [1]
-      Position		      [700, 119, 730, 151]
+      Position		      [790, 119, 820, 151]
       Floating		      off
       Location		      [5, 52, 1029, 737]
-      Open		      on
+      Open		      off
       NumInputPorts	      "1"
       List {
 	ListType		AxesTitles
@@ -647,7 +669,7 @@ Model {
     Block {
       BlockType		      TransferFcn
       Name		      "Car model"
-      Position		      [425, 117, 485, 153]
+      Position		      [515, 117, 575, 153]
       NamePlacement	      "alternate"
       Numerator		      "[0.06068]"
       Denominator	      "[1 1.1]"
@@ -655,19 +677,19 @@ Model {
     Block {
       BlockType		      TransferFcn
       Name		      "DAC"
-      Position		      [265, 117, 325, 153]
+      Position		      [355, 117, 415, 153]
       Denominator	      "[1]"
     }
     Block {
       BlockType		      Integrator
       Name		      "Integrator"
       Ports		      [1, 1]
-      Position		      [580, 120, 610, 150]
+      Position		      [670, 120, 700, 150]
     }
     Block {
       BlockType		      Step
       Name		      "Lead car"
-      Position		      [525, 40, 555, 70]
+      Position		      [615, 40, 645, 70]
       Orientation	      "down"
       NamePlacement	      "alternate"
       SampleTime	      "0"
@@ -675,7 +697,7 @@ Model {
     Block {
       BlockType		      Constant
       Name		      "Reference distance"
-      Position		      [40, 120, 70, 150]
+      Position		      [60, 120, 90, 150]
       Value		      "3"
       OutDataType	      "sfix(16)"
       OutScaling	      "2^0"
@@ -683,13 +705,29 @@ Model {
     Block {
       BlockType		      TransferFcn
       Name		      "Regulator"
-      Position		      [170, 117, 230, 153]
+      Position		      [260, 117, 320, 153]
       Denominator	      "[1 0]"
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Regulator_constant"
+      Position		      [205, 120, 235, 150]
+      NamePlacement	      "alternate"
+      Gain		      "Ki"
+      ParameterDataTypeMode   "Inherit via internal rule"
+      ParameterDataType	      "sfix(16)"
+      ParameterScaling	      "2^0"
+      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutDataTypeMode	      "Inherit via internal rule"
+      OutDataType	      "sfix(16)"
+      OutScaling	      "2^0"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
     }
     Block {
       BlockType		      TransferFcn
       Name		      "Sensor"
-      Position		      [425, 227, 485, 263]
+      Position		      [515, 227, 575, 263]
       Orientation	      "left"
       NamePlacement	      "alternate"
       Denominator	      "[1]"
@@ -698,7 +736,7 @@ Model {
       BlockType		      Sum
       Name		      "Sum"
       Ports		      [2, 1]
-      Position		      [110, 125, 130, 145]
+      Position		      [130, 125, 150, 145]
       ShowName		      off
       IconShape		      "round"
       Inputs		      "|+-"
@@ -713,7 +751,7 @@ Model {
       BlockType		      Sum
       Name		      "Sum1"
       Ports		      [2, 1]
-      Position		      [530, 125, 550, 145]
+      Position		      [620, 125, 640, 145]
       ShowName		      off
       IconShape		      "round"
       Inputs		      "+-|"
@@ -733,7 +771,7 @@ Model {
     Line {
       SrcBlock		      "Sum"
       SrcPort		      1
-      DstBlock		      "Regulator"
+      DstBlock		      "Regulator_constant"
       DstPort		      1
     }
     Line {
@@ -771,7 +809,7 @@ Model {
     Line {
       SrcBlock		      "ADC"
       SrcPort		      1
-      Points		      [-140, 0]
+      Points		      [-210, 0]
       DstBlock		      "Sum"
       DstPort		      2
     }
@@ -791,6 +829,12 @@ Model {
       SrcBlock		      "Sensor"
       SrcPort		      1
       DstBlock		      "ADC"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Regulator_constant"
+      SrcPort		      1
+      DstBlock		      "Regulator"
       DstPort		      1
     }
   }
