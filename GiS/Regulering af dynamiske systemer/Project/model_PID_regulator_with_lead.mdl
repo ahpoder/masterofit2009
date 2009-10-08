@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.74"
+    ComputedModelVersion    "1.75"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -45,9 +45,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "ahp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Oct 08 14:28:04 2009"
+  LastModifiedDate	  "Thu Oct 08 16:29:26 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:74>"
+  ModelVersionFormat	  "1.%<AutoIncrement:75>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -105,8 +105,8 @@ Model {
 	Simulink.SolverCC {
 	  $ObjectID		  2
 	  Version		  "1.4.0"
-	  StartTime		  "0"
-	  StopTime		  "100"
+	  StartTime		  "1950"
+	  StopTime		  "2050"
 	  AbsTol		  "auto"
 	  FixedStep		  "auto"
 	  InitialStep		  "auto"
@@ -696,7 +696,7 @@ Model {
   }
   System {
     Name		    "model_PID_regulator_with_lead"
-    Location		    [9, 100, 1021, 740]
+    Location		    [6, 82, 1018, 714]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
