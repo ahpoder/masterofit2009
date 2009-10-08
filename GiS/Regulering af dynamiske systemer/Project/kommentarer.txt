@@ -136,7 +136,7 @@ Here we have already assigned values for Kp, Td and Ti, so we better devote a li
 
 Using the rule of thumb this makes Td = 5,263 * 20 = 105,26
 
-When we simulate the unit step we can see a massive improvement in response time and overshot. The rise-time is almost halved and there is no osscillation at all, only an initial overshot way below the 30%. The distadvantage of the D is that it becomes highly sensitive to rapid changes in speed. Naturally a car is not capable of changing speed as a step, or having samples jump many km/h from one to the other. However, this may happen in case of an error.
+When we simulate the unit step we can see a massive improvement in response time and overshot, as can be seen in figure mm. The rise-time is almost halved and there is no osscillation at all, only an initial overshot way below the 30%. The distadvantage of the D is that it becomes highly sensitive to rapid changes in speed. Naturally a car is not capable of changing speed as a step, or having samples jump many km/h from one to the other. However, this may happen in case of an error.
 
 This problem of error tollerance may be resolved by adding in a low-pass filter. As we know the lead-cars maximum acceleration, we also know the maximum angle of the velosity-ramp that this would generate. Based on this we can determine the frequency content of this ramp, which will give up the highest possible frequency that may realisticly be part of the system. If any frequency above this is found in the sampled distance, then it must be an error. To imagine this think of a step. In order to create a theoretical step you must include all frequencies up at infinity. The more vertivcal a curve, the higer the frequencies it contain. 
 

@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.73"
+    ComputedModelVersion    "1.74"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -45,9 +45,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "ahp"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Oct 08 11:37:12 2009"
+  LastModifiedDate	  "Thu Oct 08 14:28:04 2009"
   RTWModifiedTimeStamp	  0
-  ModelVersionFormat	  "1.%<AutoIncrement:73>"
+  ModelVersionFormat	  "1.%<AutoIncrement:74>"
   ConfigurationManager	  "None"
   SimulationMode	  "normal"
   LinearizationMsg	  "none"
@@ -696,7 +696,7 @@ Model {
   }
   System {
     Name		    "model_PID_regulator_with_lead"
-    Location		    [266, 401, 1286, 1041]
+    Location		    [9, 100, 1021, 740]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -1020,10 +1020,10 @@ Model {
     Block {
       BlockType		      Gain
       Name		      "km/t to m/s"
-      Position		      [730, 190, 760, 220]
+      Position		      [722, 190, 768, 230]
       Orientation	      "down"
       NamePlacement	      "alternate"
-      Gain		      "3.6"
+      Gain		      "1/3.6"
       ParameterDataTypeMode   "Inherit via internal rule"
       ParameterDataType	      "sfix(16)"
       ParameterScaling	      "2^0"
