@@ -114,23 +114,53 @@ From this we can determine the P required to achieve a 45 degree phase margin, a
 
 <<< insert open_loop_gain_PI_regulator.fig (new) >>>
 
-We place this in the model and attempt to modify the gain to achieve an overshot of max. 30%. We realize that this is not possible, as we do not accilerate fast enough to keep up with the lead car's step speed (infinite accileration), which is also unrealistic. We therefore only look at the second loop in the figure - how much the distance swings under the curve. This gives us a gain of -150 (we remember from earlier that the gain has to be negative). The actual overshot will be smaller, as it is not possible for the lead car to accilerate as a step, only as a ramp:
+We place this in the model and attempt to modify the gain to achieve an overshot of max. 30%. We realize that this is not possible, as we do not accilerate fast enough to keep up with the lead car's step speed (infinite accileration), which is also unrealistic. We therefore only look at the second loop in the figure - how much the distance swings under the curve. This gives us a gain of -150 (we remember from earlier that the gain has to be negative). The actual overshot will be smaller, as it is not possible for the lead car to accilerate as a step, only as a ramp.
 
 ------------- end of new ------------------
 
-<< insert regulator and calculations and picture, see model >>>
+------------- new PID ---------------------
 
-As it may be seen this does not have a very good ability to keep up when the other car changes speed. It will quickly fall far behind, or come dangerously close, to the other car, so even though it will eventually get to the right distance, it will feel strange to the driver. Lets just say, he or she is sure to say: "I can follow better than this if I was driving my self".
+This regulator actually follow the lead car quite well, but you may be thinking: "I can follow just as well as the regulator". 
 
 The problem is that the system do not take the lead car's change in speed into account. If the lead car changes speed fast, we should accelerate fast to catch up, and if it only slowly changes speed, we should also only alter our speed slightly in order not to over-shoot too much.
 
-This may be resolved by ading a D (Differentiator). Doing so changes the regulator to the following:
+This may be resolved by ading a D (Differentiator). In order to do this we are going to reqrite the regulator to show the individual parts P, I and D. Furthermore Simulink do not permit a transfer funtion with more zeros than poles, so we have to give the differentiator a pole somewhere where it will not do any damage - we chose a pole in 100 rad/s. The resulting regulator may be seen in figure nn.
 
-<<<<< insert regulator and calculation and picture >>>>
+<<< insert figure nn : model_PID_regulator.mdl >>>
 
-which shows a great improvement over the pure PI regulator. The distadvantage of the D is that it becomes highly sensitive to rapid changes in speed. Naturally a car is not capable of changing speed as a step, or having samples jump many km/h from one to the other. However, this may happen in case of an error.
+Here we have already assigned values for Kp, Td and Ti, so we better devote a little time to how we got these values. A rule of thumb is to ignore the differentiator (set Td to 0) and tune the regulator, and then Td can be found as 20 times Ti. Luckily we have already tuned the PI regulator, so we can just use the values from there. Here we have to remember that we rewrote the layout of the regulator, so we have to change the format of 
+
+-150 * (s+0,19)/s to the form of Kp * (1 + 1/Ti * 1/s). This is done simply by multiplying:
+
+(-150s -28,5)/s => -150s/s + -28,5/s => -150 + (-28,5)*s => -150 + (-28,5) * 1/s => -150 * (1 + 0,19 * 1/s) => -150 * (1 + 1/5,26316 * 1/s), i.e. Kp = -150 and Ti = 5,263
+
+Using the rule of thumb this makes Td = 5,263 * 20 = 105,26
+
+When we simulate the unit step we can see a massive improvement in response time and overshot. The rise-time is almost halved and there is no osscillation at all, only an initial overshot way below the 30%. The distadvantage of the D is that it becomes highly sensitive to rapid changes in speed. Naturally a car is not capable of changing speed as a step, or having samples jump many km/h from one to the other. However, this may happen in case of an error.
 
 This problem of error tollerance may be resolved by adding in a low-pass filter. As we know the lead-cars maximum acceleration, we also know the maximum angle of the velosity-ramp that this would generate. Based on this we can determine the frequency content of this ramp, which will give up the highest possible frequency that may realisticly be part of the system. If any frequency above this is found in the sampled distance, then it must be an error. To imagine this think of a step. In order to create a theoretical step you must include all frequencies up at infinity. The more vertivcal a curve, the higer the frequencies it contain. 
 
 Removing these errors are done simply by adding a low-pass filter after the ADC, which will insure that any incorrect values will be removed. This filter is easy to design, but will not be shown here.
 
+Conclusion
+
+When we simulate our PI regulated system with the lead-car supplied, see figure bb, we get the distance-chart shown in figure mm. If we can see that we generally follow the lead car quite well (once we catch up. The lead car starts at 80km/h and we start at 0, so it is kind of unfair to the regulator). 
+
+<<< Figure mm. PI regulator with lead full 2200 seconds >>>
+
+If we zoome in on the different parts where a change happens:
+
+* 0s (we start at 80 km/h)
+* 300s (we accilerate as a ramp)
+* 500s (we stop accilerating and maintain a speed of 90km/h)
+* 1000s (we instantly change to a speed of 80km/h)
+* 2000s (an incorrect reading of 72km/h is supplied)
+* 2010s (an incorrect reading of 88km/h is supplied)
+
+<<< TODO should we show these figures??? >>>
+
+we can see that ....
+
+Using the PID regulator we have a bit of a problem. Simulink will not allow us to simulate the full 2200 or so seconds in one go. It just results in garbage. This makes the simulation difficult, as we can only look at 100s at a time. We are not going to show all of these sub-plots, but merely show the initial 0 - 100s plot, so it is possibelt o compare to the PI-regulator. This is shown in Figure nn
+
+<<Figure nn. PID regulator with lead car first 100s>>>
