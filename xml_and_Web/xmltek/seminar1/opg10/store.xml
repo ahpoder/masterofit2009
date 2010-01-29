@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE store SYSTEM "store.dtd">
+<store>
+	<division code="division"/>
+	<location sector="s1">
+	jglfdjgfd
+	</location>
+	<product id="R123" code="dret ljsa">
+		<name>
+		produktnavn
+		</name>
+		<description>
+		Her er en produktbeskrivelse
+		<br/>
+		<em>hej</em>
+		</description>
+		<quantity>
+		5
+		</quantity>
+	</product>
+</store>

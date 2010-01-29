@@ -1,0 +1,21 @@
+<!ENTITY % Code "CDATA">
+<!ENTITY % Misc "br|em">
+
+<!ELEMENT store (division,location?,product*)>
+
+<!ELEMENT division EMPTY>
+<!ATTLIST division code %Code; #REQUIRED>
+
+<!ELEMENT location (#PCDATA)>
+<!ATTLIST location sector (s1|s2|s3) #IMPLIED>
+
+<!ELEMENT product (name,description,quantity)>
+<!ATTLIST product code %Code; #REQUIRED
+                  id   ID     #REQUIRED>
+
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT description (#PCDATA|%Misc;)*>
+<!ELEMENT quantity (#PCDATA)>
+
+<!ELEMENT br EMPTY>
+<!ELEMENT em (#PCDATA|%Misc;)*>
