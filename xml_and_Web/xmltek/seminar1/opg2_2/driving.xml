@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<route>
+	<start>W Mahoning St, Punxsutawney, PA 15767, US</start>
+	<end>1600 Pennsylvania Ave Nw, Washington, DC, US</end>
+	<duration>
+		<hours>4</hours>
+		<minutes>33</minutes>
+	</duration>
+	<distance unit="miles">246.68</distance>
+	<etape ID="1">
+		<description></description>
+		<distance unit="miles" prefix="lt">0.1</distance>
+	</etape>
+</route>
