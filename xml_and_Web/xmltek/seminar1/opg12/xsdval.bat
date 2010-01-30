@@ -1,0 +1,1 @@
+java -classpath jdom.jar;. ValidateXMLSchema %1

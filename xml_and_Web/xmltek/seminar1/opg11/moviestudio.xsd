@@ -2,12 +2,12 @@
         xmlns:m="http://moviesstudio.org"
         targetNamespace="http://moviesstudio.org">
 
-	<element name="movie" type="MovieType"/>
+	<element name="movie" type="m:MovieType"/>
 	<element name="title" type="string"/>
-	<element name="part" type="PartType"/>
-	<element name="cut" type="CutType"/>
-	<element name="film" type="FilmType"/>
-	<element name="time" type="dateTime"/>
+	<element name="part" type="m:PartType"/>
+	<element name="cut" type="m:CutType"/>
+	<element name="film" type="m:FilmType"/>
+	<element name="time" type="time"/>
 	<element name="duration" type="duration"/>
 	<attribute name="number" type="NCName"/>
 
@@ -37,6 +37,6 @@
     </complexType>
 	
 	<complexType name="FilmType">
-      <atribute ref="number"/>
+      <attribute ref="m:number"/>
     </complexType>
 </schema>
