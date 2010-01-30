@@ -1,0 +1,71 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:m="http://movies.example"
+        targetNamespace="http://movies.example"
+        elementFormDefault="qualified">
+
+  <element name="movies">
+    <complexType>
+      <sequence>
+        <element ref="m:movie" minOccurs="0" maxOccurs="unbounded"/>
+        <element ref="m:person" minOccurs="0" maxOccurs="unbounded"/>
+      </sequence>
+    </complexType>
+    <unique name="movies-unique">
+      <selector xpath="m:movie"/>
+      <field xpath="m:title"/>
+      <field xpath="m:year"/>
+    </unique>
+    <key name="cast-key">
+      <selector xpath="m:person|m:star"/>
+      <field xpath="@id"/>
+    </key>
+    <keyref refer="m:cast-key" name="cast-keyref">
+      <selector xpath=".//m:role"/>
+      <field xpath="@ref"/>
+    </keyref>
+  </element>
+
+  <element name="movie">
+    <complexType>
+      <sequence>
+        <element name="title" type="string"/>
+        <element name="length" type="nonNegativeInteger"/>
+        <element name="year" type="gYear"/>
+        <element name="cast">
+          <complexType>
+            <sequence maxOccurs="unbounded">
+              <element name="role">
+                <complexType mixed="true">
+                  <attribute name="ref" type="NCName"/>
+                </complexType>
+              </element>
+            </sequence>
+          </complexType>
+        </element>
+      </sequence>
+    </complexType>
+  </element>
+
+  <element name="person" type="m:personType"/>
+
+  <complexType name="personType">
+    <sequence>
+      <element name="name" type="string"/>
+      <element name="birth" type="date"/>
+    </sequence>
+    <attribute name="id" type="NCName"/>
+  </complexType>
+
+  <element name="star" substitutionGroup="m:person">
+    <complexType>
+      <complexContent>
+        <extension base="m:personType">
+          <sequence maxOccurs="unbounded">
+            <element name="award" type="string"/>
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+</schema>

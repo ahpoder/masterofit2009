@@ -1,0 +1,42 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:m="http://moviesstudio.org"
+        targetNamespace="http://moviesstudio.org">
+
+	<element name="movie" type="MovieType"/>
+	<element name="title" type="string"/>
+	<element name="part" type="PartType"/>
+	<element name="cut" type="CutType"/>
+	<element name="film" type="FilmType"/>
+	<element name="time" type="dateTime"/>
+	<element name="duration" type="duration"/>
+	<attribute name="number" type="NCName"/>
+
+	<complexType name="MovieType">
+      <sequence>
+        <element ref="m:title"/>
+        <element ref="m:part" minOccurs="0" maxOccurs="unbounded"/>
+      </sequence>
+    </complexType>
+
+	<complexType name="PartType">
+      <sequence>
+        <element ref="m:title"/>
+        <choice>
+			<element ref="m:part" minOccurs="1" maxOccurs="unbounded"/>
+			<element ref="m:cut"/>
+		</choice>
+      </sequence>
+    </complexType>
+	
+	<complexType name="CutType">
+      <sequence>
+        <element ref="m:film"/>
+        <element ref="m:time"/>
+        <element ref="m:duration"/>
+      </sequence>
+    </complexType>
+	
+	<complexType name="FilmType">
+      <atribute ref="number"/>
+    </complexType>
+</schema>

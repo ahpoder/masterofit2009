@@ -1,0 +1,13 @@
+<!ELEMENT movie (title,part*)>
+
+<!ELEMENT title (#PCDATA)>
+
+<!ELEMENT part (title,(part+|cut))>
+
+<!ELEMENT cut (film,time,duration)>
+
+<!ELEMENT film EMPTY>
+<!ATTLIST film number NMTOKEN #REQUIRED>
+
+<!ELEMENT time (#PCDATA)>
+<!ELEMENT duration (#PCDATA)>
