@@ -1,0 +1,8 @@
+Forklar ganske kort hvordan du har løst opgaven
+
+
+Hvad var svært at skrive i DTD?
+
+
+Hvilke af kravene kan ikke valideres med DTD?
+

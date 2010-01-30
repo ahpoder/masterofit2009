@@ -1,0 +1,11 @@
+<!-- 
+  If viewing this in Internet Explorer, be sure to use 'View Source'.
+  (Internet Explorer doesn't respect HTTP Content-Type headers...)
+-->
+
+<a:foo qux="A" xmlns:a="B" xmlns:b="C">
+  <b:bar a:quux="D" xmlns="E"/>
+  <xmlns xmlns:a="F" xmlns="G">
+    <baz a:corge="H" xmlns:baz="I" xmlns=""/>
+  </xmlns>
+</a:foo>
