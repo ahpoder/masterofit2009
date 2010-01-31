@@ -5,25 +5,54 @@
 
 <!-- Requirement 2. This ensures that the root element is wiki -->
 <!-- Requirement 3. This ensures that the wiki element can contain the required sub elements -->
-<!ELEMENT wiki (image*, wikilink*, link*, italics*, )>
+<!ELEMENT wiki ((image | wikilink | link | italics | tt | bold | header | rule | character | list | br | text | ws)*)>
 
 <!-- Requirement 4. This defines the image element and its attribute. !!! No validation that url is actually a vaild URL -->
 <!ELEMENT image EMPTY>
-<!ATTLIST image url #PCDATA #REQUIRED>
+<!ATTLIST image url CDATA #REQUIRED>
 
 <!-- Requirement 5. This defines the wikilink element and its attributes. !!! No validation of wiki being a valid reference to a Wiki metaserver -->
 <!ELEMENT wikilink EMPTY>
-<!ATTLIST wikilink word #PCDATA #REQUIRED
-                   wiki #PCDATA #IMPLIED>
+<!ATTLIST wikilink word CDATA #REQUIRED
+                   wiki CDATA #IMPLIED>
 
 <!-- Requirement 6. This defines the link link element and its attributes. !!! No validation of url being a valid URL -->
 <!ELEMENT link EMPTY>
 <!-- Requirement 7. This defines the word attribute. !!! Unfortunately more than just a-zA-Z_ is allowd -->
-<!ATTLIST link word #PCDATA #REQUIRED
-               url #PCDATA #REQUIRED>
+<!ATTLIST link word CDATA #REQUIRED
+               url CDATA #REQUIRED>
 
-<!-- Requirement 8. This defines italics. -->
-<!ELEMENT italics ()> Copy all elements from wiki list except italics
+<!-- Requirement 8. This defines the italics element -->
+<!ELEMENT italics ((image | wikilink | link | tt | bold | header | rule | character | list | br | text | ws)*)> <!-- all elements from wiki list except italics -->
 
-<!-- Requirement 8. This defines italics. -->
-<!ELEMENT italics ()> Copy all elements from wiki list except italics
+<!-- Requirement 9. This defines the tt element. -->
+<!ELEMENT tt ((image | wikilink | link | italics | bold | header | rule | character | list | br | text | ws)*)> <!-- all elements from wiki list except tt -->
+
+<!-- Requirement 10. This defines the bold element. -->
+<!ELEMENT bold ((image | wikilink | link | italics | tt | header | rule | character | list | br | text | ws)*)> <!-- all elements from wiki list except bold -->
+
+<!-- Requirement 11. This defines the header element. -->
+<!ELEMENT header ((image | wikilink | link | italics | tt | bold | character | br | text | ws)*)> <!-- all elements from wiki list except header, list, rule -->
+
+<!-- Requirement 12. This defines the rule element. -->
+<!ELEMENT rule EMPTY>
+
+<!-- Requirement 13. This defines the character element. -->
+<!ELEMENT character EMPTY>
+<!ATTLIST character entity CDATA #REQUIRED>
+
+<!-- Requirement 14. This defines the list and item elements. -->
+<!ELEMENT list (item*)>
+<!ELEMENT item ((image | wikilink | link | italics | tt | bold | character | br | text | ws)*)> <!-- all elements from wiki list except header, list, rule -->
+
+<!-- Requirement 15. This defines the br element. -->
+<!ELEMENT br EMPTY>
+
+<!-- Requirement 16. This defines the text element. !!! Unfortunately any char is allowed -->
+<!ELEMENT text (#PCDATA)>
+
+<!-- Requirement 17. This defines the ws element. -->
+<!ELEMENT ws EMPTY>
+
+<!-- Requirement 18. !!! Cannot be expressed in DTD -->
+<!-- Requirement 19. !!! Cannot be expressed in DTD -->
