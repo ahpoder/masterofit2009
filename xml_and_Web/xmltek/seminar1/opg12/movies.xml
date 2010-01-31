@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<movies xmlns="http://movies.example" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="movies.xsd">
+	<movie>
+        <title>Example movie</movie>
+        <length>125</length>
+        <year>2005</year>
+        <cast>
+			<role ref="r1"/>
+			<role ref="r2"/>
+			<role ref="r3"/>
+		</cast>
+	</movie>
+	<movie>
+        <title>Other example movie</movie>
+        <length>126</length>
+        <year>1999</year>
+        <cast>
+			<role ref="r4"/>
+			<role ref="r5"/>
+			<role ref="r2"/>
+		</cast>
+	</movie>
+	<person id="r1">
+      <name>Actor 1</name>
+      <birth>1975-12-26</birth>
+	</person>
+	<star id="r2">
+      <name>Actor 2</name>
+      <birth>1973-11-21</birth>
+	  <award>Oscar 1</award>
+	  <award>Golden Globe 1</award>
+	</star>
+	<person id="r3">
+      <name>Actor 3</name>
+      <birth>1980-10-17</birth>
+	</person>
+	<person id="r4">
+      <name>Actor 4</name>
+      <birth>1981-9-10</birth>
+	</person>
+	<person id="r5">
+      <name>Actor 5</name>
+      <birth>1982-8-5</birth>
+	</person>
+</movies>
