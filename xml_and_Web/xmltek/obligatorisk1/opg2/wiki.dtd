@@ -1,0 +1,29 @@
+<!-- Please search for !!! for all descriptions of non-compliance -->
+
+<!-- Requirement 1. This ensures that the namespace is what it should be -->
+<!ATTLIST wiki xmlns CDATA #FIXED "http://cs.au.dk/~schwarz/XMLTek">
+
+<!-- Requirement 2. This ensures that the root element is wiki -->
+<!-- Requirement 3. This ensures that the wiki element can contain the required sub elements -->
+<!ELEMENT wiki (image*, wikilink*, link*, italics*, )>
+
+<!-- Requirement 4. This defines the image element and its attribute. !!! No validation that url is actually a vaild URL -->
+<!ELEMENT image EMPTY>
+<!ATTLIST image url #PCDATA #REQUIRED>
+
+<!-- Requirement 5. This defines the wikilink element and its attributes. !!! No validation of wiki being a valid reference to a Wiki metaserver -->
+<!ELEMENT wikilink EMPTY>
+<!ATTLIST wikilink word #PCDATA #REQUIRED
+                   wiki #PCDATA #IMPLIED>
+
+<!-- Requirement 6. This defines the link link element and its attributes. !!! No validation of url being a valid URL -->
+<!ELEMENT link EMPTY>
+<!-- Requirement 7. This defines the word attribute. !!! Unfortunately more than just a-zA-Z_ is allowd -->
+<!ATTLIST link word #PCDATA #REQUIRED
+               url #PCDATA #REQUIRED>
+
+<!-- Requirement 8. This defines italics. -->
+<!ELEMENT italics ()> Copy all elements from wiki list except italics
+
+<!-- Requirement 8. This defines italics. -->
+<!ELEMENT italics ()> Copy all elements from wiki list except italics
