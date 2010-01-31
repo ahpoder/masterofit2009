@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<movies xmlns="http://movies.example" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="movies.xsd">
+<movies xmlns="http://movies.example" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://movies.example movies.xsd">
 	<movie>
-        <title>Example movie</movie>
+        <title>Example movie</title>
         <length>125</length>
         <year>2005</year>
         <cast>
@@ -11,7 +11,7 @@
 		</cast>
 	</movie>
 	<movie>
-        <title>Other example movie</movie>
+        <title>Other example movie</title>
         <length>126</length>
         <year>1999</year>
         <cast>
@@ -36,10 +36,10 @@
 	</person>
 	<person id="r4">
       <name>Actor 4</name>
-      <birth>1981-9-10</birth>
+      <birth>1981-09-10</birth>
 	</person>
 	<person id="r5">
       <name>Actor 5</name>
-      <birth>1982-8-5</birth>
+      <birth>1982-08-05</birth>
 	</person>
 </movies>

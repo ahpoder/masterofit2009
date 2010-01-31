@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--DOCTYPE movie SYSTEM "moviestudio.dtd"-->
-<movie xmlns="http://moviesstudio.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="moviestudio.xsd">
+<!--movie-->
+<movie xmlns="http://moviesstudio.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://moviesstudio.org moviestudio.xsd">
 	<title>Example movie</title>
 	<part>
 		<title>Example part</title>
@@ -9,7 +10,7 @@
 			<cut>
 				<film number="r1"/>
 				<time>16:29:00</time>
-				<duration>T1H30M</duration>
+				<duration>P0Y0M0DT1H30M</duration>
 			</cut>
 		</part>
 	</part>

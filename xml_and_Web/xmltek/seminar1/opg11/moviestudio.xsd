@@ -37,6 +37,7 @@
     </complexType>
 	
 	<complexType name="FilmType">
-      <attribute ref="m:number"/>
+		<attribute name="number" type="NCName"/>
+		<!--attribute ref="m:number"/-->
     </complexType>
 </schema>
