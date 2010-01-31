@@ -1,8 +1,8 @@
 Forklar ganske kort hvordan du har løst opgaven
-
+	Opgaven er løst ved simpelthen at gå igennem kravene et efter et og oprette de tilsvarende element of attribute list tags. The list of allowed tags in wiki, item, italics, tt and bold are filled out after all elements are defined, excluding the tags that are not allowed. When a requirement that cannot be met, or only be partially met, is encountered then a comment is made in the DTD with the identifyer "!!!".
 
 Hvad var svært at skrive i DTD?
-
+	Det der er svært at skrive i DTD er når rækkefølgen af elementer er ligegyldig, da alle kombinationer så skal listes. Heldigvis er dette ike et stort problem i WikiXML. Endvidere er det "umuligt" at udtrykke specifikke krav til typen ud over en predefineret liste eller al tekst. Dette betyder at de steder hvor der står "en URL" eller "ingen whitespaces" eller "kun a-z, A-Z og _" er det ikke muligt at overholde kravene. Endelig er det ikke muligt at udtrykke interne afhængigheder, d.v.s. de to sidste krav omkring specielle situationer hvor et givet element ikke må komme efter et andet.
 
 Hvilke af kravene kan ikke valideres med DTD?
-
+	De to sidste krav kan slet ikke valideres. Derudover kan kravet til at en attribut skal være en URL ikke valideres og det samme gælder kravet til at word kun må indeholde a-zA-Z og _ samt at text ikke må have leading eller trailing whitespaces.
