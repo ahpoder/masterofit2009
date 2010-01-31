@@ -2,42 +2,42 @@
         xmlns:m="http://moviesstudio.org"
         targetNamespace="http://moviesstudio.org">
 
-	<element name="movie" type="m:MovieType"/>
-	<element name="title" type="string"/>
-	<element name="part" type="m:PartType"/>
-	<element name="cut" type="m:CutType"/>
-	<element name="film" type="m:FilmType"/>
-	<element name="time" type="time"/>
-	<element name="duration" type="duration"/>
-	<attribute name="number" type="NCName"/>
+      <element name="movie" type="m:MovieType"/>
+      <element name="title" type="string"/>
+      <element name="part" type="m:PartType"/>
+      <element name="cut" type="m:CutType"/>
+      <element name="film" type="m:FilmType"/>
+      <element name="time" type="time"/>
+      <element name="duration" type="duration"/>
+      <attribute name="number" type="NCName"/>
 
-	<complexType name="MovieType">
+    <complexType name="MovieType">
       <sequence>
         <element ref="m:title"/>
         <element ref="m:part" minOccurs="0" maxOccurs="unbounded"/>
       </sequence>
     </complexType>
 
-	<complexType name="PartType">
+    <complexType name="PartType">
       <sequence>
         <element ref="m:title"/>
         <choice>
-			<element ref="m:part" minOccurs="1" maxOccurs="unbounded"/>
-			<element ref="m:cut"/>
-		</choice>
+          <element ref="m:part" minOccurs="1" maxOccurs="unbounded"/>
+          <element ref="m:cut"/>
+        </choice>
       </sequence>
     </complexType>
-	
-	<complexType name="CutType">
+
+    <complexType name="CutType">
       <sequence>
         <element ref="m:film"/>
         <element ref="m:time"/>
         <element ref="m:duration"/>
       </sequence>
     </complexType>
-	
-	<complexType name="FilmType">
-		<attribute name="number" type="NCName"/>
-		<!--attribute ref="m:number"/-->
+
+    <complexType name="FilmType">
+      <attribute name="number" type="NCName"/>
+      <!--attribute ref="m:number"/-->
     </complexType>
 </schema>
