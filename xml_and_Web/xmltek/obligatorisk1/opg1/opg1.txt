@@ -1,0 +1,14 @@
+<a:foo qux="A" xmlns:a="B" xmlns:b="C">
+<b:bar a:quux="D" xmlns="E"/>
+<xmlns xmlns:a="F" xmlns="G">
+<baz a:corge="H" xmlns:baz="I" xmlns=""/>
+</xmlns>
+</a:foo> 
+
+foo tilhører B 
+bar tilhører C 
+baz tilhører default ns (den tomme streng) 
+Hvilke namespaces tilhører attributterne qux, quux, og corge? (Læs om de mærkelige navne.) 
+qux tilhører B fordi den er attribut i a:foo og dermed arver ns fra a 
+quux er henvist som a:quux og tilhører derfor ns B
+corge tilhører F fordi a er redefineret
