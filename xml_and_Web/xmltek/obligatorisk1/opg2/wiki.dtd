@@ -6,6 +6,8 @@
 <!-- Requirement 2. This ensures that the root element is wiki -->
 <!-- Requirement 3. This ensures that the wiki element can contain the required sub elements -->
 <!ELEMENT wiki ((image | wikilink | link | italics | tt | bold | header | rule | character | list | br | text | ws)*)>
+<!-- Requirement 3. This defines the wiki name attribute -->
+<!ATTLIST wiki name CDATA #IMPLIED>
 
 <!-- Requirement 4. This defines the image element and its attribute. !!! No validation that url is actually a vaild URL -->
 <!ELEMENT image EMPTY>
@@ -18,7 +20,7 @@
 
 <!-- Requirement 6. This defines the link link element and its attributes. !!! No validation of url being a valid URL -->
 <!ELEMENT link EMPTY>
-<!-- Requirement 7. This defines the word attribute. !!! Unfortunately more than just a-zA-Z_ is allowd -->
+<!-- Requirement 7. This defines the word attribute. !!! Unfortunately more than just a-zA-Z_ is allowed -->
 <!ATTLIST link word CDATA #REQUIRED
                url CDATA #REQUIRED>
 

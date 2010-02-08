@@ -2,7 +2,9 @@ Forklar ganske kort hvordan du har løst opgaven
 	Opgaven er løst ved simpelthen at gå igennem kravene et efter et og oprette de tilsvarende element og attribute list tags. Listen med tilladte tags i wiki, item, italics, tt og bold udfyldes efter at alle elementer er defineret, eksklusiv de tags der ikke er tilladte. Når et krav ikke kan opfyldes, eller kun kan delvist opfyldes, tilføjes der en DTD kommentar med teksten ”!!!” efterfulgt af forklaringen.  Ud for hver krav til elementer og attributer er der tilføjet en kommentar om hvilket krav der er tale om. 
 
 Var der nogen steder hvor beskrivelsen var uklar så du måtte tage beslutninger for at formalisere?
-	Nej
+	Requirement 5: The wikilink element has a word attribute denoting the name of another Wiki page to which a link is created. If the wiki attribute is absent, then the page resides on the same Wiki server as the current one, otherwise the attribute refers to a Wiki server identified by the Wiki metaserver.
+	
+	Der refereres til og anvendes en wiki attribute som ikke er defineret - dvs. fortolkning af formuleringen.
 
 Hvad var svært at skrive i DTD?
 	Det der er svært at skrive i DTD er når rækkefølgen af elementer er ligegyldig, da alle kombinationer så skal listes. Heldigvis er dette ikke et stort problem i WikiXML. Endvidere er det "umuligt" at udtrykke specifikke krav til typen ud over en predefineret liste eller al tekst. Dette betyder at de steder hvor der står "en URL" eller "ingen whitespaces" eller "kun a-z, A-Z og _" er det ikke muligt at overholde kravene. Endelig er det ikke muligt at udtrykke interne afhængigheder, d.v.s. de to sidste krav omkring specielle situationer hvor et givet element ikke må komme efter et andet.
