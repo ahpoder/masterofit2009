@@ -1,0 +1,22 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:g="http://geography.exercise"
+        targetNamespace="http://geography.exercise"
+        elementFormDefault="qualified">
+ 
+  <element name="point">
+    <complexType>
+      <sequence>
+      	<choice>
+          <element name="address" type="string" minOccurs="0"/>
+          <sequence>          
+            <element name="latitude" type="double" minOccurs="0"/>
+            <element name="longitude" type="double" minOccurs="0"/>
+            <!-- mutual dependency of latitude and longitude can't be expressed in xsd -->
+          </sequence>
+      	</choice>
+        <element name="note" type="string"/>
+      </sequence>
+    </complexType>
+  </element>
+
+</schema>
