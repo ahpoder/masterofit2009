@@ -1,0 +1,88 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:p="http://patients.example"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        targetNamespace="http://patients.example"
+        elementFormDefault="qualified">
+ 
+  <annotation>
+    <documentation>
+       <xhtml:p>
+         A <xhtml:tt>data</xhtml:tt> element encloses important information 
+         about <xhtml:i>patients</xhtml:i> and <xhtml:i>doctors</xhtml:i>.
+       </xhtml:p>
+    </documentation>
+  </annotation>
+
+  <element name="data">
+    <complexType>
+      <sequence>
+        <element name="title">
+          <complexType mixed="true">
+            <sequence>
+              <any namespace="http://www.w3.org/1999/xhtml" 
+                   minOccurs="0" maxOccurs="unbounded"
+                   processContents="lax"/>
+            </sequence>
+          </complexType>
+        </element>
+        <choice maxOccurs="unbounded">
+          <element ref="p:patient"/>
+          <element ref="p:doctor"/>
+        </choice>
+      </sequence>
+    </complexType>
+    <unique name="persondata">
+      <selector xpath="p:patient|p:doctor"/>
+      <field xpath="p:name/p:given"/>
+      <field xpath="p:name/p:surname"/>
+      <field xpath="p:born"/>
+    </unique>
+  </element>
+
+  <complexType name="person">
+    <sequence>
+      <element name="name">
+        <complexType>
+          <all>
+            <element name="given" type="string"/>
+            <element name="surname" type="string"/>
+          </all>
+        </complexType>
+      </element>
+      <element name="born" type="gYear"/>
+    </sequence>
+  </complexType>
+
+  <element name="patient">
+    <complexType>
+      <complexContent>
+        <extension base="p:person">
+          <sequence>
+            <element name="account" type="integer"/>
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+  <element name="doctor">
+    <complexType>
+      <complexContent>
+        <extension base="p:person">
+          <sequence>
+            <element name="title" type="string"/>
+            <element name="salarygroup">
+              <simpleType>
+                <restriction base="integer">
+                  <minInclusive value="1"/>
+                  <maxInclusive value="5"/>
+                </restriction>
+              </simpleType>
+            </element>
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>
+  </element>
+
+</schema>

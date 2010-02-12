@@ -1,0 +1,25 @@
+<!ATTLIST patient xmlns CDATA #FIXED ""http://patients.example"">
+
+<!-- A <xhtml:tt>data</xhtml:tt> element encloses important information
+about <xhtml:i>patients</xhtml:i> and <xhtml:i>doctors</xhtml:i>.-->
+
+<!ELEMENT data (title,(patient|doctor)+)>
+
+<!ELEMENT title (#PCDATA)>
+
+<!ELEMENT patient (name,born, account)>
+
+<!ELEMENT doctor (name,born, title, salarygroup)>
+
+<!ELEMENT name (given,surname)>
+
+<!ELEMENT born (#PCDATA)>
+
+<!ELEMENT given (#PCDATA)>
+
+<!ELEMENT surname (#PCDATA)>
+
+<!ELEMENT account (#PCDATA)>
+
+<!ELEMENT salarygroup (#PCDATA)>
+
