@@ -29,5 +29,14 @@
 
     <xsl:value-of select="(//rcp:ingredient)[40] is (//rcp:ingredient)[53] "/>
 
+    <xsl:text> 
+    1A atomized = empty string:</xsl:text>
+
+    <xsl:value-of select="(//rcp:ingredient)[40] = '' "/>
+
+    <xsl:text> 
+    1A atomized = ():</xsl:text>
+
+    <xsl:value-of select="(//rcp:ingredient)[40] = () "/>
   </xsl:template>
 </xsl:stylesheet>

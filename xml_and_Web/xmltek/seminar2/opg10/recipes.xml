@@ -6,8 +6,8 @@
   <rcp:recipe id="r101">
     <rcp:title>Beef Parmesan with Garlic Angel Hair Pasta</rcp:title>
     <rcp:date>Fri, 28 May 04</rcp:date>
-    <rcp:ingredient name="beef cube steak" amount="1.5" unit="pound"/>
-    <rcp:ingredient name="onion, sliced into thin rings" amount="1"/>
+    <rcp:ingredient name="beef cube steak" amount="1.5" unit="pound"><a>A</a> <a>B</a></rcp:ingredient>
+    <rcp:ingredient name="onion, sliced into thin rings" amount="1"><a>A</a> <a>C</a></rcp:ingredient>
     <rcp:ingredient name="green bell pepper, sliced in rings" amount="1"/>
     <rcp:ingredient name="Italian seasoned bread crumbs" amount="1" unit="cup"/>
     <rcp:ingredient name="grated Parmesan cheese" amount="0.5" unit="cup"/>
