@@ -5,16 +5,30 @@
 
   <xsl:template match="/">
 
-    <!--Exercise 4 -->
-    <xsl:value-of select="fn:sum(for $r in //rcp:ingredient return 
-    				   if (fn:contains($r/@name, 'egg')) 
-    				     then $r/@amount 
-    				   else ()
-    				 )"/>
-
+    <xsl:text>
+    Exercise 1:
+    </xsl:text>
+    
+    <xsl:value-of select="//rcp:recipe[3]//rcp:ingredient[@name='olive oil']/@amount"/>
     <xsl:text> </xsl:text>
+    <xsl:value-of select="//rcp:recipe[3]//rcp:ingredient[@name='olive oil']/@unit"/>
+
+    <xsl:text>
+    Exercise 2:
+    </xsl:text>
+    
+    <xsl:value-of select="//rcp:recipe[rcp:title/text()='Ricotta Pie']//rcp:ingredient[@name='eggs']/@amount"/>
+    <xsl:text> eggs</xsl:text>
+
+    <xsl:text>
+    Exercise 3:
+    </xsl:text>
+    <xsl:value-of select="//rcp:recipe[@id='r105']//rcp:title/text()"/>
 
     <!--Exercise 4 advanced part of the exercise -->
+    <xsl:text>
+    Exercise 4:
+    </xsl:text>
     <xsl:value-of select="fn:sum(for $r in //rcp:ingredient return 
     				   if (fn:contains($r/@name, 'egg')) 
     				     then $r/@amount 
