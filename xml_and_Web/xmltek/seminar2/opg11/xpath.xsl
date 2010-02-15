@@ -27,6 +27,16 @@ a) Does needleBendt exist in haystack: </xsl:text>
 b) The length of the longest string in haystack is: </xsl:text>
 	<xsl:value-of select="fn:max(for $r in //haystack/el return fn:string-length($r))"/>
 
+
+    <xsl:text>
+
+haystack concatenated: </xsl:text>
+	<xsl:value-of select="fn:string-join(//haystack/el, '')"/>
+
+    <xsl:text>
+haystack concatenated and reversed: </xsl:text>
+	<xsl:value-of select="(fn:string-join(//haystack/el,''))"/>
+
     <xsl:text>
 
 Is haystack concat a palindrome: </xsl:text>
@@ -54,18 +64,23 @@ Is haystackPalindrome concat a palindrome: </xsl:text>
 
     <xsl:text>
     
-attribute: </xsl:text>
+attributes (sequence): </xsl:text>
     <xsl:value-of select="fn:doc('attributes.xml')//@*"/>
 
 
     <xsl:text>
     
-d) Number of haystack elements match attribute in attributes.xml: </xsl:text>
+d) Number of haystack elements matching an attribute in attributes.xml: </xsl:text>
+	<xsl:value-of select="fn:count(//haystack/el[. = fn:doc('attributes.xml')//@*])"/>
+
+<!-- 
+Alternative solution to d:
 	<xsl:value-of select="fn:sum(
 	                        for $r in //haystack/el return 
 	                          if ($r = fn:doc('attributes.xml')//@*) then 1 
 	                          else 0
 	                        )"/>
 
+-->
 	</xsl:template>
 </xsl:stylesheet>
