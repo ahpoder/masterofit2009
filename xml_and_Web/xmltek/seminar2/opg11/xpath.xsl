@@ -31,15 +31,20 @@ b) The length of the longest string in haystack is: </xsl:text>
     <xsl:text>
 
 haystack concatenated: </xsl:text>
-	<xsl:value-of select="fn:string-join(//haystack/el, '')"/>
-
+	<xsl:variable name="xconcat" select="fn:lower-case(fn:string-join(//haystack/el, ''))"/>
+        <xsl:value-of select="$xconcat"/>
     <xsl:text>
 haystack concatenated and reversed: </xsl:text>
-	<xsl:value-of select="(fn:string-join(//haystack/el,''))"/>
+	<xsl:variable name="xconcatrev" select="fn:string-join(fn:reverse(for $i in 1 to fn:string-length($xconcat) return fn:substring($xconcat, $i, 1)),'')"/>
+        <xsl:value-of select="$xconcatrev"/>
+    <xsl:text>
+
+c) is haystack concatenated a palindrome: </xsl:text>
+        <xsl:value-of select="$xconcatrev=xconcat"/>
 
     <xsl:text>
 
-Is haystack concat a palindrome: </xsl:text>
+c: Is haystack concat a palindrome: </xsl:text>
 <!-- Attempts was made with //haystack/el = fn:reverse(//haystack/el), but this always return truem, as it is a sequence comparison. -->
 <!-- Further attempts was tried suing fn:concat, fn:string-join, deep-equal. The closest we got was  fn:deep-equal(//haystack/el, fn:reverse(//haystack/el)), but -->
 <!-- fn:reverse(//haystack/el) generally does not work as it reverses the sequence, not the individual letters -->
@@ -56,7 +61,7 @@ eq do not work on sequences and = just needs one match to be true) -->
 	
     <xsl:text>
 <!-- this also show the variable solution -->
-Is haystackPalindrome concat a palindrome: </xsl:text>
+c) Is haystackPalindrome concat a palindrome: </xsl:text>
 	<xsl:variable name="seq-of-char" select="for $r in //haystackPalindrome/el return
 											for $i in 1 to string-length($r) return substring($r, $i, 1)"/>
 	<xsl:value-of select="fn:deep-equal($seq-of-char, fn:reverse($seq-of-char))"/>
