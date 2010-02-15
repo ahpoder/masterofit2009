@@ -36,14 +36,11 @@ eq do not work on sequences and = just needs one match to be true) -->
 									   )"/>
 	
     <xsl:text>
-
+<!-- this also show the variable solution -->
 Is haystackPalindrome concat a palindrome: </xsl:text>
-	<xsl:value-of select="fn:deep-equal(for $r in //haystackPalindrome/el return
-											for $i in 1 to string-length($r) return substring($r, $i, 1) 
-										,
-										fn:reverse(for $r in //haystackPalindrome/el return 
-													   for $i in 1 to string-length($r) return substring($r, $i, 1))
-									   )"/>
+	<xsl:variable name="seq-of-char" select="for $r in //haystackPalindrome/el return
+											for $i in 1 to string-length($r) return substring($r, $i, 1)"/>
+	<xsl:value-of select="fn:deep-equal($seq-of-char, fn:reverse($seq-of-char))"/>
 
     <xsl:text>
 
