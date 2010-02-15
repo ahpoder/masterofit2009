@@ -26,7 +26,8 @@ Is haystack concat a palindrome: </xsl:text>
 <!-- Attempts was made with //haystack/el = fn:reverse(//haystack/el), but this always return truem, as it is a sequence comparison. -->
 <!-- Further attempts was tried suing fn:concat, fn:string-join, deep-equal. The closest we got was  fn:deep-equal(//haystack/el, fn:reverse(//haystack/el)), but -->
 <!-- fn:reverse(//haystack/el) generally does not work as it reverses the sequence, not the individual letters -->
-<!-- currently the only solution (or one of them, anyway) is to create a sequence of chars and then compare with the reverse (eq) -->
+<!-- currently the only solution (or one of them, anyway) is to create a sequence of chars and then compare with the reverse (deep-equal as
+eq do not work on sequences and = just needs one match to be true) -->
 	<xsl:value-of select="fn:deep-equal(for $r in //haystack/el return
 											for $i in 1 to string-length($r) return substring($r, $i, 1) 
 										,
