@@ -5,10 +5,10 @@
      <el>Andreas</el>
      <el>Bendt</el>
      <el>Dorte</el>
-     <el>Andreas</el>
+     <el>Morten</el>
      <el>Frode</el>
-     <el>Bendt</el>
-     <el>Andreas</el>
+     <el>Ole</el>
+     <el>Niels</el>
   </haystack>
   <haystackPalindrome>
      <el>ABC</el>
@@ -16,6 +16,7 @@
      <el>ED</el>
      <el>CBA</el>
   </haystackPalindrome>
-  <needleExists>Andreas</needleExists>
-  <needleNotExists>NoName</needleNotExists>	
+  <needleAndreas>Andreas</needleAndreas>
+  <needleBendt>Bendt</needleBendt>
+  <needleNoName>NoName</needleNoName>	
 </sequences>

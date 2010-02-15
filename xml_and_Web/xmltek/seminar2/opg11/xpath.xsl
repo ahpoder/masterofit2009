@@ -6,37 +6,48 @@
   <xsl:template match="/">
 
     <xsl:text>
-    1A:</xsl:text>
-    <xsl:copy-of select="(//rcp:ingredient)[40]"/>
 
-    <xsl:text> 
-    
-    1B:</xsl:text>
-    <xsl:copy-of select="(//rcp:ingredient)[53]"/>
+Does needleBendt exist in haystack: </xsl:text>
+    <xsl:value-of select="//haystack/el = //needleBendt "/>
 
-    <xsl:text> 
-    1:</xsl:text>
+    <xsl:text>
 
-    <xsl:value-of select="(//rcp:ingredient)[40] eq (//rcp:ingredient)[53] "/>
+Does needleNoName exist in haystack: </xsl:text>
+    <xsl:value-of select="//haystack/el = //needleNoName "/>
 
-    <xsl:text> 
-    2:</xsl:text>
+    <xsl:text>
 
-    <xsl:value-of select="(//rcp:ingredient)[40] = (//rcp:ingredient)[53] "/>
+The length of the longest string in haystack is: </xsl:text>
+	<xsl:value-of select="fn:max(for $r in //haystack/el return fn:string-length($r))"/>
 
-    <xsl:text> 
-    3:</xsl:text>
+    <xsl:text>
 
-    <xsl:value-of select="(//rcp:ingredient)[40] is (//rcp:ingredient)[53] "/>
+Is haystack concat a palindrome: </xsl:text>
+<!-- Attempts was made with //haystack/el = fn:reverse(//haystack/el), but this always return truem, as it is a sequence comparison. -->
+<!-- Further attempts was tried suing fn:concat, fn:string-join, deep-equal. The closest we got was  fn:deep-equal(//haystack/el, fn:reverse(//haystack/el)), but -->
+<!-- fn:reverse(//haystack/el) generally does not work as it reverses the sequence, not the individual letters -->
+<!-- currently the only solution (or one of them, anyway) is to create a sequence of chars and then compare with the reverse (eq) -->
+	<xsl:value-of select="fn:deep-equal(for $r in //haystack/el return
+											for $i in 1 to string-length($r) return substring($r, $i, 1) 
+										,
+										fn:reverse(for $r in //haystack/el return 
+													   for $i in 1 to string-length($r) return substring($r, $i, 1))
+									   )"/>
+	
+    <xsl:text>
 
-    <xsl:text> 
-    1A atomized = empty string:</xsl:text>
+Is haystackPalindrome concat a palindrome: </xsl:text>
+	<xsl:value-of select="fn:deep-equal(for $r in //haystackPalindrome/el return
+											for $i in 1 to string-length($r) return substring($r, $i, 1) 
+										,
+										fn:reverse(for $r in //haystackPalindrome/el return 
+													   for $i in 1 to string-length($r) return substring($r, $i, 1))
+									   )"/>
 
-    <xsl:value-of select="(//rcp:ingredient)[40] = '' "/>
+    <xsl:text>
 
-    <xsl:text> 
-    1A atomized = ():</xsl:text>
+Number of haystack elements match attribute in attributes.xml: </xsl:text>
+	<xsl:value-of select="//haystack/el = fn:doc('attributes.xml')//@*"/>
 
-    <xsl:value-of select="(//rcp:ingredient)[40] = () "/>
-  </xsl:template>
+	</xsl:template>
 </xsl:stylesheet>

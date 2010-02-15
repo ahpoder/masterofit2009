@@ -1,1 +1,1 @@
-java -classpath ..\opg10\saxon.jar net.sf.saxon.Transform recipes.xml xpath.xsl
+java -classpath ..\opg10\saxon.jar net.sf.saxon.Transform sequences.xml xpath.xsl
