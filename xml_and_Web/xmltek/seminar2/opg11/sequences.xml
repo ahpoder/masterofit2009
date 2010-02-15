@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequences>
+  <haystack>
+     <el>Peter</el>
+     <el>Andreas</el>
+     <el>Bendt</el>
+     <el>Dorte</el>
+     <el>Andreas</el>
+     <el>Frode</el>
+     <el>Bendt</el>
+     <el>Andreas</el>
+  </haystack>
+  <haystackPalindrome>
+     <el>ABC</el>
+     <el>DEF</el>
+     <el>ED</el>
+     <el>CBA</el>
+  </haystackPalindrome>
+  <needleExists>Andreas</needleExists>
+  <needleNotExists>NoName</needleNotExists>	
+</sequences>
