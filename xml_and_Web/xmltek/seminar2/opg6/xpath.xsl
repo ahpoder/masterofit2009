@@ -24,6 +24,8 @@
     Exercise 3:
     </xsl:text>
     <xsl:value-of select="//rcp:recipe[@id='r105']//rcp:title/text()"/>
+    <!-- The solution below does not return the expected result. Why? -->
+    <xsl:value-of select="//fn:id('r105')/rcp:title/text()"/>
 
     <!--Exercise 4 advanced part of the exercise -->
     <xsl:text>
