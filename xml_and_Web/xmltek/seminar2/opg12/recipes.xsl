@@ -1,7 +1,8 @@
 <xsl:stylesheet version="2.0"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:rcp="http://www.brics.dk/ixwt/recipes"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:fn="http://www.w3.org/2005/xpath-functions">
 
   <xsl:template match="rcp:collection">
     <html>
@@ -11,7 +12,11 @@
       </head>
       <body>
         <table border="1">
-          <xsl:apply-templates select="rcp:recipe"/>
+          <xsl:apply-templates select="rcp:recipe">
+            <xsl:sort select="fn:count(.//rcp:ingredient)" data-type="number"
+                      order="descending"/>
+            <xsl:sort select="rcp:nutrition/@calories"/>
+          </xsl:apply-templates>
         </table>
       </body>
     </html>
