@@ -3,7 +3,9 @@
                 xmlns:rcp="http://www.brics.dk/ixwt/recipes"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <xsl:key name="rel" match="rcp:recipe" use="@id"/>
+<!-- This answers bullet 3 -->
+<xsl:key name="rel" match="rcp:recipe" use="rcp:title"/>
+<!-- End of bullet 3 answer -->
 				
   <xsl:template match="rcp:collection">
     <html>
@@ -31,7 +33,9 @@
 <!-- This answers bullet 1 -->
   <xsl:template mode="titles" match="rcp:recipe">
     <li>
-	  <a href="#{generate-id(key('rel', @ref))}">
+<!-- This answers bullet 3 -->
+	  <a href="#{generate-id(key('rel', rcp:title))}">
+<!-- End of bullet 3 answer -->
 	  <xsl:value-of select="rcp:title"/>
 	  </a>
 	</li>
@@ -41,7 +45,9 @@
   <xsl:template mode="content" match="rcp:recipe">
     <tr>
       <td>
+<!-- This answers bullet 3 -->
         <a name="{generate-id(.)}"/>
+<!-- End of bullet 3 answer -->
         <h1><xsl:value-of select="rcp:title"/></h1>
         <i><xsl:value-of select="rcp:date"/></i>
         <ul><xsl:apply-templates select="rcp:ingredient"/></ul>
