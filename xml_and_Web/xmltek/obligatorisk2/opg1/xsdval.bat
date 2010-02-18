@@ -1,0 +1,1 @@
+java -classpath ..\..\seminar1\opg12\jdom.jar;..\..\seminar1\opg12\ ValidateXMLSchema XMLTek.xml

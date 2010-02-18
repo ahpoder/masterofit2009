@@ -1,0 +1,1 @@
+java -classpath ..\..\seminar1\opg12\sqc.jar com.ibm.sketch.util.SchemaQualityChecker wiki.xsd

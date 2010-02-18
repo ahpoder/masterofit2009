@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE wiki SYSTEM "wiki.dtd">
-<wiki xmlns="http://cs.au.dk/~schwarz/XMLTek">
+<wiki xmlns="http://cs.au.dk/~schwarz/XMLTek" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://cs.au.dk/~schwarz/XMLTek wiki.xsd">
     <header>
         <text>The</text>
         <ws/>
