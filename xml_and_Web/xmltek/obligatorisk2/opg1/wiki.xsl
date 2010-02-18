@@ -12,26 +12,26 @@
 		<attribute name="name" type="string"/>
 <!-- Requirement 3. This ensures that the wiki element can contain the required sub elements -->
 		<all>
-<!-- Requirement 4. This defines the image element and its attribute. -->
 		  <element ref="w:image"/>
-		  <element ref="wikilink"/>
-		  <element ref="link"/>
-		  <element ref="italics"/>
-		  <element ref="tt"/>
-		  <element ref="bold"/>
-		  <element ref="header"/>
-		  <element ref="rule"/>
-		  <element ref="character"/>
-		  <element ref="list"/>
-		  <element ref="br"/>
-		  <element ref="text"/>
-		  <element ref="ws"/>
+		  <element ref="w:wikilink"/>
+		  <element ref="w:link"/>
+		  <element ref="w:italics"/>
+		  <element ref="w:tt"/>
+		  <element ref="w:bold"/>
+		  <element ref="w:header"/>
+		  <element ref="w:rule"/>
+		  <element ref="w:character"/>
+		  <element ref="w:list"/>
+		  <element ref="w:br"/>
+		  <element ref="w:text"/>
+		  <element ref="w:ws"/>
 		</all>
     </complexType>
   </element>
   
-	<element name="image" type="anyURI" minOccurs="0" maxOccurs="unbounded">
-	<element name="wikilink" type="w:wikilinkType" minOccurs="0" maxOccurs="unbounded">
+<!-- Requirement 4. This defines the image element and its attribute. -->
+	<element name="image" type="anyURI" minOccurs="0" maxOccurs="unbounded"/>
+	<element name="wikilink" type="w:wikilinkType" minOccurs="0" maxOccurs="unbounded"/>
 	<element name="link" type="w:wikilinkType" minOccurs="0" maxOccurs="unbounded"/>
 	<element name="italics" type="w:italicsType" minOccurs="0" maxOccurs="unbounded"/>
 	<element name="tt" minOccurs="0" maxOccurs="unbounded"/>
@@ -59,57 +59,121 @@
 <!-- Requirement 7. This defines the word attribute. -->
   <complexType name="linkWordType">
     <simpleContent>
-	  <restriction base="string">
-	    <xs:pattern value="[a-zA-Z_]+"/>
-	  </restriction>
+			<restriction base="string">
+				<pattern value="[a-zA-Z_]+"/>
+			</restriction>
+    </simpleContent>
 	<attribute name="url" type="anyURI"/>
   </complexType>
 
-<!ELEMENT wiki ((image | wikilink | link | italics | tt | bold | header | rule | character | list | br | text | ws)*)>
-<!ATTLIST wiki name CDATA #IMPLIED>
-
-<!ELEMENT image EMPTY>
-<!ATTLIST image url CDATA #REQUIRED>
-
-<!ELEMENT wikilink EMPTY>
-<!ATTLIST wikilink word CDATA #REQUIRED
-                   wiki CDATA #IMPLIED>
-
-<!ELEMENT link EMPTY>
-<!ATTLIST link word CDATA #REQUIRED
-               url CDATA #REQUIRED>
-
 <!-- Requirement 8. This defines the italics element -->
-<!ELEMENT italics ((image | wikilink | link | tt | bold | header | rule | character | list | br | text | ws)*)> <!-- all elements from wiki list except italics -->
+  <complexType name="italicsType">
+		<all>
+		  <element ref="w:image"/>
+		  <element ref="w:wikilink"/>
+		  <element ref="w:link"/>
+		  <element ref="w:tt"/>
+		  <element ref="w:bold"/>
+		  <element ref="w:header"/>
+		  <element ref="w:rule"/>
+		  <element ref="w:character"/>
+		  <element ref="w:list"/>
+		  <element ref="w:br"/>
+		  <element ref="w:text"/>
+		  <element ref="w:ws"/>
+		</all>
+  </complexType>
 
 <!-- Requirement 9. This defines the tt element. -->
-<!ELEMENT tt ((image | wikilink | link | italics | bold | header | rule | character | list | br | text | ws)*)> <!-- all elements from wiki list except tt -->
+  <complexType name="ttType">
+		<all>
+		  <element ref="w:image"/>
+		  <element ref="w:wikilink"/>
+		  <element ref="w:link"/>
+		  <element ref="w:italics"/>
+		  <element ref="w:bold"/>
+		  <element ref="w:header"/>
+		  <element ref="w:rule"/>
+		  <element ref="w:character"/>
+		  <element ref="w:list"/>
+		  <element ref="w:br"/>
+		  <element ref="w:text"/>
+		  <element ref="w:ws"/>
+		</all>
+  </complexType>
 
 <!-- Requirement 10. This defines the bold element. -->
-<!ELEMENT bold ((image | wikilink | link | italics | tt | header | rule | character | list | br | text | ws)*)> <!-- all elements from wiki list except bold -->
+  <complexType name="boldType">
+		<all>
+		  <element ref="w:image"/>
+		  <element ref="w:wikilink"/>
+		  <element ref="w:link"/>
+		  <element ref="w:italics"/>
+		  <element ref="w:tt"/>
+		  <element ref="w:header"/>
+		  <element ref="w:rule"/>
+		  <element ref="w:character"/>
+		  <element ref="w:list"/>
+		  <element ref="w:br"/>
+		  <element ref="w:text"/>
+		  <element ref="w:ws"/>
+		</all>
+  </complexType>
 
 <!-- Requirement 11. This defines the header element. -->
-<!ELEMENT header ((image | wikilink | link | italics | tt | bold | character | br | text | ws)*)> <!-- all elements from wiki list except header, list, rule -->
+  <complexType name="headerType">
+		<all>
+		  <element ref="w:image"/>
+		  <element ref="w:wikilink"/>
+		  <element ref="w:link"/>
+		  <element ref="w:italics"/>
+		  <element ref="w:tt"/>
+		  <element ref="w:bold"/>
+			<element ref="w:character"/>
+		  <element ref="w:br"/>
+		  <element ref="w:text"/>
+		  <element ref="w:ws"/>
+		</all>
+  </complexType>
 
 <!-- Requirement 12. This defines the rule element. -->
-<!ELEMENT rule EMPTY>
+  <complexType name="ruleType"/>
 
 <!-- Requirement 13. This defines the character element. -->
-<!ELEMENT character EMPTY>
-<!ATTLIST character entity CDATA #REQUIRED>
+<!-- TODO : limit to XHTML character entity reference -->
+  <complexType name="characterType">
+		<attribute name="entity" type="string"/>
+  </complexType>
 
-<!-- Requirement 14. This defines the list and item elements. -->
-<!ELEMENT list (item*)>
-<!ELEMENT item ((image | wikilink | link | italics | tt | bold | character | br | text | ws)*)> <!-- all elements from wiki list except header, list, rule -->
+<!-- Requirement 14. This defines the list elements. -->
+  <complexType name="listType">
+		<element name="item" type="w:itemType" minOccurance="0" maxOccurance="unbounded"/>
+  </complexType>
+
+<!-- Requirement 14. This defines the item elements. -->
+  <complexType name="itemType">
+		<all>
+		  <element ref="w:image"/>
+		  <element ref="w:wikilink"/>
+		  <element ref="w:link"/>
+		  <element ref="w:italics"/>
+		  <element ref="w:tt"/>
+		  <element ref="w:bold"/>
+			<element ref="w:character"/>
+		  <element ref="w:br"/>
+		  <element ref="w:text"/>
+		  <element ref="w:ws"/>
+		</all>
+  </complexType>
 
 <!-- Requirement 15. This defines the br element. -->
-<!ELEMENT br EMPTY>
+  <complexType name="brType"/>
 
 <!-- Requirement 16. This defines the text element. !!! Unfortunately any char is allowed -->
-<!ELEMENT text (#PCDATA)>
+<!--!ELEMENT text (#PCDATA)-->
 
 <!-- Requirement 17. This defines the ws element. -->
-<!ELEMENT ws EMPTY>
+  <complexType name="wsType"/>
 
 <!-- Requirement 18. !!! Cannot be expressed in DTD -->
 <!-- Requirement 19. !!! Cannot be expressed in DTD -->
