@@ -183,7 +183,7 @@
   <simpleType name="textType">
 		<restriction base="string">
 			<!-- Matches a non-whitespace at the beginning of the string followed by anything and when a non-whitespace at the end of the string -->
-			<pattern value="^([^ ].*[^ ])|[^ ]$"/> 
+			<pattern value="^([^ ](.|\n|\r)*[^ ])|[^ ]$"/> 
 		</restriction>
 	</simpleType>
 
