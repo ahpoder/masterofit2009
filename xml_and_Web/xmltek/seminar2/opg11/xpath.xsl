@@ -69,12 +69,12 @@ c) Is haystackPalindrome concat a palindrome: </xsl:text>
     <xsl:text>
 
 c2: Is haystack concat a palindrome: </xsl:text>
-  <xsl:value-of select="fn:deep-equal(fn:string-to-codepoints(fn:string-join(//haystack/el, '')), fn:reverse(fn:string-to-codepoints(fn:string-join(//haystack/el, ''))))"/>
+  <xsl:value-of select="fn:deep-equal(fn:string-to-codepoints(fn:string-join(//haystack/el/text(), '')), fn:reverse(fn:string-to-codepoints(fn:string-join(//haystack/el/text(), ''))))"/>
 
 <xsl:text>
 
 c2: Is haystackPalindrome concat a palindrome: </xsl:text>
-	<xsl:variable name="seq-of-codepoints" select="fn:string-to-codepoints(fn:string-join(//haystackPalindrome/el, ''))"/>
+	<xsl:variable name="seq-of-codepoints" select="fn:string-to-codepoints(fn:string-join(//haystackPalindrome/el/text(), ''))"/>
   <xsl:value-of select="fn:deep-equal($seq-of-codepoints, fn:reverse($seq-of-codepoints))"/>
 
     <xsl:text>
