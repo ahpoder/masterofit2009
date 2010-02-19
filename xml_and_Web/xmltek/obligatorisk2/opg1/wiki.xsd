@@ -5,11 +5,11 @@
         targetNamespace="http://cs.au.dk/~schwarz/XMLTek"
         elementFormDefault="qualified">
 
+<!-- Element delarations -->
 <!-- Requirement 2. This ensures that the root element is wiki -->
   <element name="wiki" type="w:wikiType"/>
 
-<!-- Requirement 4. This defines the image element and its attribute. -->
-  <element name="image" type="anyURI"/>
+  <element name="image" type="w:imageType"/>
   <element name="wikilink" type="w:wikilinkType"/>
   <element name="link" type="w:linkType"/>
   <element name="italics" type="w:italicsType"/>
@@ -42,9 +42,16 @@
         <element ref="w:ws"/>
       </choice>
     </sequence>
+
 <!-- Requirement 2. This defines the wiki name attribute -->
     <attribute name="name" type="string"/>
   </complexType>
+  
+<!-- Requirement 4. This defines the image element and its url attribute. -->
+  <simpleType name="image">
+    <attribute name="url" type="anyURI"/>
+  </simpleType>
+  
 
 <!-- Requirement 5. This defines the wikilink element and its attributes. -->
   <complexType name="wikilinkType">
