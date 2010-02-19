@@ -41,9 +41,15 @@
 
 	<xsl:template match="w:wikilink">
 		<xsl:element name="a">
-			<xsl:if test="fn:exists(@wiki)">
-				<xsl:attribute name="href" select="@wiki"/>
-			</xsl:if>
+			<xsl:choose>
+				<xsl:when test="fn:exists(@wiki)">
+					<xsl:attribute name="href" select="@wiki"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<!-- TODO get local server address -->
+				</xsl:otherwise>
+			</xsl:choose>
+			<!--xsl:if test="fn:exists(@wiki)"/-->
 			<xsl:value-of select="@word"/>
 		</xsl:element>
 	</xsl:template>
