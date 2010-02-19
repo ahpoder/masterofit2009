@@ -97,6 +97,7 @@
 	</xsl:template>
 	
 	<xsl:template match="text()">
+		<!-- remove all whitespace -->
 	</xsl:template>
 
 </xsl:stylesheet>
