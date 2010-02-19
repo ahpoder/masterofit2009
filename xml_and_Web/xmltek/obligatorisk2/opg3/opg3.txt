@@ -1,0 +1,8 @@
+for $r in //rcp:recipe return 
+	if (fn:contains(fn:string-join($r/rcp:ingredient/@name, ' '), 'milk')) then 
+		if (fn:contains(fn:string-join($r/rcp:ingredient/@name, ' '), 'egg')) then
+			$r/rcp:ingredient[fn:contains(@name, 'egg')]/@amount 
+		else 
+			() 
+	else 
+		()

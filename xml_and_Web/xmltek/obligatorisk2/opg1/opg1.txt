@@ -1,0 +1,7 @@
+Forklar ganske kort hvordan du har løst opgaven
+
+
+Hvilke udfordringer havde du her?
+
+
+Hvilke krav kan ikke valideres med XML Schema?
