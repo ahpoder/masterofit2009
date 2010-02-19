@@ -7,6 +7,7 @@
 
 <!-- Element delarations -->
 <!-- Requirement 2. This ensures that the root element is wiki -->
+<!-- PMD: but read IXWT p. 157 bullet 6: A schema cannot enforce a particular root element...-->
   <element name="wiki" type="w:wikiType"/>
 
   <element name="image" type="w:imageType"/>
@@ -205,5 +206,10 @@
 
 <!-- Requirement 18. !!! Cannot be expressed in DTD -->
 <!-- Requirement 19. !!! Cannot be expressed in DTD -->
+  
+  <group name="wikiSequence">
+    <sequence>
+    </sequence>
+  </group>
 
 </schema>
