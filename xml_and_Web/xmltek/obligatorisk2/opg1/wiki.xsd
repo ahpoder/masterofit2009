@@ -1,5 +1,5 @@
 <!-- Please search for !!! for all descriptions of non-compliance -->
-<!-- Requirement 1. This ensures that the namespace is what it should be -->
+<!-- Requirement 1. The targetNamespace construct ensures that the namespace is what it should be -->
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
         xmlns:w="http://cs.au.dk/~schwarz/XMLTek"
         targetNamespace="http://cs.au.dk/~schwarz/XMLTek"
@@ -7,139 +7,140 @@
 
 <!-- Requirement 2. This ensures that the root element is wiki -->
   <element name="wiki" type="w:wikiType"/>
-<!-- Requirement 4. This defines the image element and its attribute. -->
-	<element name="image" type="anyURI"/>
-	<element name="wikilink" type="w:wikilinkType"/>
-	<element name="link" type="w:linkType"/>
-	<element name="italics" type="w:italicsType"/>
-	<element name="tt" type="w:ttType"/>
-	<element name="bold" type="w:boldType"/>
-	<element name="header" type="w:headerType"/>
-	<element name="rule" type="w:ruleType"/>
-	<element name="character" type="w:characterType"/>
-	<element name="list" type="w:listType"/>
-	<element name="br" type="w:brType"/>
-	<element name="text" type="w:textType"/>
-	<element name="ws" type="w:wsType"/>
 
-	<complexType name="wikiType">
+<!-- Requirement 4. This defines the image element and its attribute. -->
+  <element name="image" type="anyURI"/>
+  <element name="wikilink" type="w:wikilinkType"/>
+  <element name="link" type="w:linkType"/>
+  <element name="italics" type="w:italicsType"/>
+  <element name="tt" type="w:ttType"/>
+  <element name="bold" type="w:boldType"/>
+  <element name="header" type="w:headerType"/>
+  <element name="rule" type="w:ruleType"/>
+  <element name="character" type="w:characterType"/>
+  <element name="list" type="w:listType"/>
+  <element name="br" type="w:brType"/>
+  <element name="text" type="w:textType"/>
+  <element name="ws" type="w:wsType"/>
+
+  <complexType name="wikiType">
 <!-- Requirement 3. This ensures that the wiki element can contain the required sub elements -->
-		<sequence minOccurs="0" maxOccurs="unbounded">
-			 <choice>
-				<element ref="w:image"/>
-				<element ref="w:wikilink"/>
-				<element ref="w:link"/>
-				<element ref="w:italics"/>
-				<element ref="w:tt"/>
-				<element ref="w:bold"/>
-				<element ref="w:header"/>
-				<element ref="w:rule"/>
-				<element ref="w:character"/>
-				<element ref="w:list"/>
-				<element ref="w:br"/>
-				<element ref="w:text"/>
-				<element ref="w:ws"/>
-			 </choice>
-		</sequence>
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <choice>
+        <element ref="w:image"/>
+        <element ref="w:wikilink"/>
+        <element ref="w:link"/>
+        <element ref="w:italics"/>
+        <element ref="w:tt"/>
+        <element ref="w:bold"/>
+        <element ref="w:header"/>
+        <element ref="w:rule"/>
+        <element ref="w:character"/>
+        <element ref="w:list"/>
+        <element ref="w:br"/>
+        <element ref="w:text"/>
+        <element ref="w:ws"/>
+      </choice>
+    </sequence>
 <!-- Requirement 2. This defines the wiki name attribute -->
-		<attribute name="name" type="string"/>
-	</complexType>
+    <attribute name="name" type="string"/>
+  </complexType>
 
 <!-- Requirement 5. This defines the wikilink element and its attributes. -->
   <complexType name="wikilinkType">
-		<attribute name="word" type="string"/>
-		<attribute name="wiki" type="anyURI" use="optional"/>
+    <attribute name="word" type="string"/>
+    <attribute name="wiki" type="anyURI" use="optional"/>
   </complexType>
   
 <!-- Requirement 6. This defines the link link element and its attributes. -->
   <complexType name="linkType">
-		<attribute name="word" type="w:linkWordType"/>
-		<attribute name="url" type="anyURI"/>
+    <attribute name="word" type="w:linkWordType"/>
+    <attribute name="url" type="anyURI"/>
   </complexType>
 
 <!-- Requirement 7. This defines the word attribute. -->
   <simpleType name="linkWordType">
-			<restriction base="string">
-				<pattern value="[a-zA-Z_]+"/>
-			</restriction>
+    <restriction base="string">
+      <pattern value="[a-zA-Z_]+"/>
+    </restriction>
   </simpleType>
 
 <!-- Requirement 8. This defines the italics element -->
   <complexType name="italicsType">
-			<sequence minOccurs="0" maxOccurs="unbounded">
-				 <choice>
-					<element ref="w:image"/>
-					<element ref="w:wikilink"/>
-					<element ref="w:link"/>
-					<element ref="w:tt"/>
-					<element ref="w:bold"/>
-					<element ref="w:header"/>
-					<element ref="w:rule"/>
-					<element ref="w:character"/>
-					<element ref="w:list"/>
-					<element ref="w:br"/>
-					<element ref="w:text"/>
-					<element ref="w:ws"/>
-				 </choice>
-			</sequence>
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <choice>
+        <element ref="w:image"/>
+        <element ref="w:wikilink"/>
+        <element ref="w:link"/>
+        <element ref="w:tt"/>
+        <element ref="w:bold"/>
+        <element ref="w:header"/>
+        <element ref="w:rule"/>
+        <element ref="w:character"/>
+        <element ref="w:list"/>
+        <element ref="w:br"/>
+        <element ref="w:text"/>
+        <element ref="w:ws"/>
+      </choice>
+    </sequence>
   </complexType>
 
 <!-- Requirement 9. This defines the tt element. -->
   <complexType name="ttType">
-			<sequence minOccurs="0" maxOccurs="unbounded">
-				 <choice>
-					<element ref="w:image"/>
-					<element ref="w:wikilink"/>
-					<element ref="w:link"/>
-					<element ref="w:italics"/>
-					<element ref="w:bold"/>
-					<element ref="w:header"/>
-					<element ref="w:rule"/>
-					<element ref="w:character"/>
-					<element ref="w:list"/>
-					<element ref="w:br"/>
-					<element ref="w:text"/>
-					<element ref="w:ws"/>
-				 </choice>
-			</sequence>
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <choice>
+        <element ref="w:image"/>
+        <element ref="w:wikilink"/>
+        <element ref="w:link"/>
+        <element ref="w:italics"/>
+        <element ref="w:bold"/>
+        <element ref="w:header"/>
+        <element ref="w:rule"/>
+        <element ref="w:character"/>
+        <element ref="w:list"/>
+        <element ref="w:br"/>
+        <element ref="w:text"/>
+        <element ref="w:ws"/>
+      </choice>
+    </sequence>
   </complexType>
 
 <!-- Requirement 10. This defines the bold element. -->
   <complexType name="boldType">
-			<sequence minOccurs="0" maxOccurs="unbounded">
-				 <choice>
-					<element ref="w:image"/>
-					<element ref="w:wikilink"/>
-					<element ref="w:link"/>
-					<element ref="w:italics"/>
-					<element ref="w:tt"/>
-					<element ref="w:header"/>
-					<element ref="w:rule"/>
-					<element ref="w:character"/>
-					<element ref="w:list"/>
-					<element ref="w:br"/>
-					<element ref="w:text"/>
-					<element ref="w:ws"/>
-				 </choice>
-			</sequence>
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <choice>
+        <element ref="w:image"/>
+        <element ref="w:wikilink"/>
+        <element ref="w:link"/>
+        <element ref="w:italics"/>
+        <element ref="w:tt"/>
+        <element ref="w:header"/>
+        <element ref="w:rule"/>
+        <element ref="w:character"/>
+        <element ref="w:list"/>
+        <element ref="w:br"/>
+        <element ref="w:text"/>
+        <element ref="w:ws"/>
+      </choice>
+    </sequence>
   </complexType>
 
 <!-- Requirement 11. This defines the header element. -->
   <complexType name="headerType">
-			<sequence minOccurs="0" maxOccurs="unbounded">
-				 <choice>
-					<element ref="w:image"/>
-					<element ref="w:wikilink"/>
-					<element ref="w:link"/>
-					<element ref="w:italics"/>
-					<element ref="w:tt"/>
-					<element ref="w:bold"/>
-					<element ref="w:character"/>
-					<element ref="w:br"/>
-					<element ref="w:text"/>
-					<element ref="w:ws"/>
-				 </choice>
-			</sequence>
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <choice>
+        <element ref="w:image"/>
+        <element ref="w:wikilink"/>
+        <element ref="w:link"/>
+        <element ref="w:italics"/>
+        <element ref="w:tt"/>
+        <element ref="w:bold"/>
+        <element ref="w:character"/>
+        <element ref="w:br"/>
+        <element ref="w:text"/>
+        <element ref="w:ws"/>
+      </choice>
+    </sequence>
   </complexType>
 
 <!-- Requirement 12. This defines the rule element. -->
@@ -148,32 +149,32 @@
 <!-- Requirement 13. This defines the character element. -->
 <!-- TODO : limit to XHTML character entity reference -->
   <complexType name="characterType">
-		<attribute name="entity" type="string"/>
+    <attribute name="entity" type="string"/>
   </complexType>
 
 <!-- Requirement 14. This defines the list elements. -->
   <complexType name="listType">
-		<sequence minOccurs="0" maxOccurs="unbounded">
-			<element name="item" type="w:itemType"/>
-		</sequence>
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <element name="item" type="w:itemType"/>
+    </sequence>
   </complexType>
 
 <!-- Requirement 14. This defines the item elements. -->
   <complexType name="itemType">
-			<sequence minOccurs="0" maxOccurs="unbounded">
-				 <choice>
-					<element ref="w:image"/>
-					<element ref="w:wikilink"/>
-					<element ref="w:link"/>
-					<element ref="w:italics"/>
-					<element ref="w:tt"/>
-					<element ref="w:bold"/>
-					<element ref="w:character"/>
-					<element ref="w:br"/>
-					<element ref="w:text"/>
-					<element ref="w:ws"/>
-				 </choice>
-			</sequence>
+    <sequence minOccurs="0" maxOccurs="unbounded">
+      <choice>
+        <element ref="w:image"/>
+        <element ref="w:wikilink"/>
+        <element ref="w:link"/>
+        <element ref="w:italics"/>
+        <element ref="w:tt"/>
+        <element ref="w:bold"/>
+        <element ref="w:character"/>
+        <element ref="w:br"/>
+        <element ref="w:text"/>
+        <element ref="w:ws"/>
+      </choice>
+    </sequence>
   </complexType>
 
 <!-- Requirement 15. This defines the br element. -->
@@ -181,12 +182,12 @@
 
 <!-- Requirement 16. This defines the text element. -->
   <simpleType name="textType">
-		<restriction base="string">
-			<!-- Matches a non-whitespace at the beginning of the string followed by anything and when a non-whitespace at the end of the string -->
-			<!-- INFO: ^and $ may NOT be included to mean beginning and end of string respectively. The validator automatically asumes that it must match the entire string -->
-			<pattern value="([^ ](.|\n|\r)*[^ ])|[^ ]"/> 
-		</restriction>
-	</simpleType>
+    <restriction base="string">
+      <!-- Matches a non-whitespace at the beginning of the string followed by anything and when a non-whitespace at the end of the string -->
+      <!-- INFO: ^and $ may NOT be included to mean beginning and end of string respectively. The validator automatically asumes that it must match the entire string -->
+      <pattern value="([^ ](.|\n|\r)*[^ ])|[^ ]"/> 
+    </restriction>
+  </simpleType>
 
 <!-- Requirement 17. This defines the ws element. -->
   <complexType name="wsType"/>
