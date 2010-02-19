@@ -26,6 +26,7 @@
 
   <!-- Requirement 3. Ensure that the wiki element can contain the required sub elements -->
   <complexType name="wikiType">
+    <!-- PMD: Why both sequence and choice? -->
     <sequence minOccurs="0" maxOccurs="unbounded">
       <choice>
         <element ref="w:image"/>
