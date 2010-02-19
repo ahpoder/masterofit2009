@@ -23,8 +23,8 @@
   <element name="text" type="w:textType"/>
   <element name="ws" type="w:wsType"/>
 
+  <!-- Requirement 3. Ensure that the wiki element can contain the required sub elements -->
   <complexType name="wikiType">
-<!-- Requirement 3. This ensures that the wiki element can contain the required sub elements -->
     <sequence minOccurs="0" maxOccurs="unbounded">
       <choice>
         <element ref="w:image"/>
@@ -43,7 +43,7 @@
       </choice>
     </sequence>
 
-<!-- Requirement 2. This defines the wiki name attribute -->
+    <!-- Requirement 2. This defines the wiki name attribute -->
     <attribute name="name" type="string"/>
   </complexType>
   
@@ -53,6 +53,9 @@
   </complexType>
 
 <!-- Requirement 5. This defines the wikilink element and its attributes. -->
+<!-- It is not possible to specify this part of the requirement in the xsd : 
+     If the wiki attribute is absent, then the page resides on the same Wiki server as the current one, 
+     otherwise the attribute refers to a Wiki server identified by the Wiki metaserver.-->
   <complexType name="wikilinkType">
     <attribute name="word" type="string"/>
     <attribute name="wiki" type="anyURI" use="optional"/>
@@ -154,6 +157,7 @@
 
 <!-- Requirement 13. This defines the character element. -->
 <!-- TODO : limit to XHTML character entity reference -->
+<!-- PMD: Could we enforce this by requiring a leading &? -->
   <complexType name="characterType">
     <attribute name="entity" type="string"/>
   </complexType>
@@ -191,6 +195,7 @@
     <restriction base="string">
       <!-- Matches a non-whitespace at the beginning of the string followed by anything and when a non-whitespace at the end of the string -->
       <!-- INFO: ^and $ may NOT be included to mean beginning and end of string respectively. The validator automatically asumes that it must match the entire string -->
+      <!-- PMD: Will this do what we want? Won't this one accept empty text? -->
       <pattern value="([^ ](.|\n|\r)*[^ ])|[^ ]"/> 
     </restriction>
   </simpleType>
