@@ -48,10 +48,9 @@
   </complexType>
   
 <!-- Requirement 4. This defines the image element and its url attribute. -->
-  <simpleType name="image">
+  <complexType name="imageType">
     <attribute name="url" type="anyURI"/>
-  </simpleType>
-  
+  </complexType>
 
 <!-- Requirement 5. This defines the wikilink element and its attributes. -->
   <complexType name="wikilinkType">
