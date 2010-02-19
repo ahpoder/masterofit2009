@@ -16,28 +16,25 @@
   </xsl:template>
 
   <xsl:template match="w:header">
-		<h1>
-			<xsl:apply-templates select="w:text"/>
-			<xsl:apply-templates select="w:ws"/>
-			<xsl:apply-templates select="w:link"/>
-			<xsl:apply-templates select="w:wikilink"/>
-		</h1>
+	<h1>
+		<xsl:apply-templates/>
+	</h1>
   </xsl:template>
 
 	<xsl:template match="w:text">
-				<xsl:value-of select="text()"/>
+		<xsl:value-of select="text()"/>
   </xsl:template>
 
-	<xsl:template match="w:ws">
-				<xsl:text> </xsl:text>
+  <xsl:template match="w:ws">
+	<xsl:text> </xsl:text>
   </xsl:template>
 
-	<xsl:template match="w:link">
-				<xsl:value-of select="text()"/>
+  <xsl:template match="w:link">
+	<xsl:value-of select="text()"/>
   </xsl:template>
 
 	<xsl:template match="w:wikilink">
-				<xsl:value-of select="text()"/>
+	  <xsl:value-of select="text()"/>
   </xsl:template>
 
 <!--
