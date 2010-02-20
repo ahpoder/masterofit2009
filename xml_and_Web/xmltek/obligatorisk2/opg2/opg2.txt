@@ -1,3 +1,3 @@
 Da dokumentet allerede er valideret af XML schema ved vi at der ikke kan være nogle elementer der ikke er hvor de skal være. Derfor definere vi en template for hver element, og de elementer der kan indeholde andre elementer kalder bare den generiske apply-templates, da der ikke kan være nogle invalide elementer.
 
-Kun wikilink krævede lidt ekstra programmering da wiki attributen er valgfri og der skal hentes oplysninger om lokal server.
+Kun wikilink krævede lidt ekstra programmering da wiki attributen er valgfri og kun skal bruges hvis den findes.

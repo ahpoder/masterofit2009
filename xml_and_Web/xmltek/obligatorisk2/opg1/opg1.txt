@@ -1,7 +1,7 @@
 Forklar ganske kort hvordan du har løst opgaven
-
+	Vi har taget DTD dokumentet og oversat hvert element og attribut til den respektive element og attribute i XML schema. Derefter har vi tilføjet de rigtige typer (det der stod som ikke muligt i DTD). Endelig kikkede vi på de krav der overhovedet ikke kunne opfyldes i DTD (18 og 19).
 
 Hvilke udfordringer havde du her?
-
+	Der skulle skrives regular expressions til at forhindre begyndende whitespaces m.m.  
 
 Hvilke krav kan ikke valideres med XML Schema?

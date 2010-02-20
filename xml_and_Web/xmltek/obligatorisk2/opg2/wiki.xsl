@@ -43,10 +43,10 @@
 		<xsl:element name="a">
 			<xsl:choose>
 				<xsl:when test="fn:exists(@wiki)">
-					<xsl:attribute name="href" select="@wiki"/>
+					<xsl:attribute name="href" select="fn:concat(@wiki, @word)"/>
 				</xsl:when>
 				<xsl:otherwise>
-					<!-- TODO get local server address -->
+					<xsl:attribute name="href" select="@word"/>
 				</xsl:otherwise>
 			</xsl:choose>
 			<!--xsl:if test="fn:exists(@wiki)"/-->
