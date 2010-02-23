@@ -25,7 +25,7 @@
 	</h1>
   </xsl:template>
 
-	<xsl:template match="w:text">
+  <xsl:template match="w:text">
 		<xsl:value-of select="text()"/>
   </xsl:template>
 
@@ -42,20 +42,20 @@
 	<a href="{@url}"><xsl:value-of select="@word"/></a>
   </xsl:template>
 
-	<xsl:template match="w:wikilink">
-		<xsl:element name="a">
-			<xsl:choose>
-				<xsl:when test="fn:exists(@wiki)">
-					<xsl:attribute name="href" select="fn:concat(@wiki, @word)"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:attribute name="href" select="@word"/>
-				</xsl:otherwise>
-			</xsl:choose>
-			<!--xsl:if test="fn:exists(@wiki)"/-->
-			<xsl:value-of select="@word"/>
-		</xsl:element>
-	</xsl:template>
+  <xsl:template match="w:wikilink">
+    <xsl:element name="a">
+	<xsl:choose>
+		<xsl:when test="fn:exists(@wiki)">
+			<xsl:attribute name="href" select="fn:concat(@wiki, @word)"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:attribute name="href" select="@word"/>
+		</xsl:otherwise>
+	</xsl:choose>
+	<!--xsl:if test="fn:exists(@wiki)"/-->
+	<xsl:value-of select="@word"/>
+    </xsl:element>
+  </xsl:template>
 
 	<xsl:template match="w:bold">
 		<b>
