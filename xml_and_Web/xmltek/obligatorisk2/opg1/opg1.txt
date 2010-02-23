@@ -3,9 +3,11 @@ Forklar ganske kort hvordan du har løst opgaven
 
 Hvilke udfordringer havde du her?
 	Der skulle skrives regular expressions til at forhindre begyndende whitespaces m.m.  
+	Vi opdagede at det ikke er så enkelt at validere root-elementet, og vi løste det ved kun at have ét globalt element - root-elementet. Vi anvendte nedarvning til at lave en afhængigheder mellem de forskellige steder hvor element referencer tidligere blev brugt. 
 
 Hvilke krav kan ikke valideres med XML Schema?
-	Requirement 18: På grund af XML schema kravet om at en node validering skal være selv-indeholdt, er det ikke muligt at lave regler for en node's søskende. I Schematron er det muligt med:
-		<sch:assert test="not(following-sibling::text)"> (for text).
-	Requirement 19: Samme problem som 18.
-	Den eneste måde at løse problemet er at skrive samtlige lovlige kombinationer af sekvenser, hvilket naturligvis er muligt, men fylder meget, er ulæseligt og svært at vedligeholde og ændre.
+	Requirement 18: 
+		På grund af XML schema kravet om at en node validering skal være selv-indeholdt, er det ikke muligt at lave regler for en node's søskende. I Schematron er det muligt med:
+			<sch:assert test="not(following-sibling::text)"> (for text).
+	Requirement 19: 
+		Samme problem som 18. Den eneste måde at løse problemet er at skrive samtlige lovlige kombinationer af sekvenser, hvilket naturligvis er muligt, men fylder meget, er ulæseligt og svært at vedligeholde og ændre.

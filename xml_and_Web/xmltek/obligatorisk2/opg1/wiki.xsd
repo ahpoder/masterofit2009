@@ -6,46 +6,45 @@
         elementFormDefault="qualified">
 
 <!-- Element delarations -->
-<!-- Requirement 2. This ensures that the root element is wiki -->
-<!-- PMD: but read IXWT p. 157 bullet 6: A schema cannot enforce a particular root element...-->
+<!-- Requirement 2. Having only a single global element ensures that the root element is wiki -->
   <element name="wiki" type="w:wikiType"/>
 
-  <element name="image" type="w:imageType"/>
-  <element name="wikilink" type="w:wikilinkType"/>
-  <element name="link" type="w:linkType"/>
-  <element name="italics" type="w:italicsType"/>
-  <element name="tt" type="w:ttType"/>
-  <element name="bold" type="w:boldType"/>
-  <element name="header" type="w:headerType"/>
-  <element name="rule" type="w:ruleType"/>
-  <element name="character" type="w:characterType"/>
-  <element name="list" type="w:listType"/>
-  <element name="br" type="w:brType"/>
-  <element name="text" type="w:textType"/>
-  <element name="ws" type="w:wsType"/>
+<!-- Grouping so we do not have to write these elements every time -->
+  <group name="wikiAlwaysValid">
+	<choice>
+		<element name="image" type="w:imageType"/>
+		<element name="wikilink" type="w:wikilinkType"/>
+		<element name="link" type="w:linkType"/>
+		<element name="character" type="w:characterType"/>
+		<element name="br" type="w:brType"/>
+		<element name="text" type="w:textType"/>
+		<element name="ws" type="w:wsType"/>
+	</choice>
+  </group>
 
-  <!-- Requirement 3. Ensure that the wiki element can contain the required sub elements -->
-  <complexType name="wikiType">
+<!-- Base type containing all elements which may be nested. Limitations and enforced with resttriction and further attributes/elements with extention -->
+  <complexType name="wikiBaseType">
     <sequence minOccurs="0" maxOccurs="unbounded">
       <choice>
-        <element ref="w:image"/>
-        <element ref="w:wikilink"/>
-        <element ref="w:link"/>
-        <element ref="w:italics"/>
-        <element ref="w:tt"/>
-        <element ref="w:bold"/>
-        <element ref="w:header"/>
-        <element ref="w:rule"/>
-        <element ref="w:character"/>
-        <element ref="w:list"/>
-        <element ref="w:br"/>
-        <element ref="w:text"/>
-        <element ref="w:ws"/>
-      </choice>
-    </sequence>
-
-    <!-- Requirement 2. This defines the wiki name attribute -->
-    <attribute name="name" type="string"/>
+		  <group ref="w:wikiAlwaysValid"/>
+		  <element name="italics" type="w:italicsType"/>
+		  <element name="tt" type="w:ttType"/>
+		  <element name="bold" type="w:boldType"/>
+		  <element name="header" type="w:headerType"/>
+		  <element name="rule" type="w:ruleType"/>
+		  <element name="list" type="w:listType"/>
+	  </choice>
+	</sequence>
+  </complexType>
+  
+  <!-- Requirement 3. Ensure that the wiki element can contain the required sub elements -->
+  <complexType name="wikiType">
+    <complexContent>
+		<extension base="w:wikiBaseType">
+			<!-- Requirement 2. This defines the wiki name attribute -->
+			<attribute name="name" type="string"/>
+		</extension>
+    </complexContent>
   </complexType>
   
 <!-- Requirement 4. This defines the image element and its url attribute. -->
@@ -77,80 +76,72 @@
 
 <!-- Requirement 8. This defines the italics element -->
   <complexType name="italicsType">
-    <sequence minOccurs="0" maxOccurs="unbounded">
-      <choice>
-        <element ref="w:image"/>
-        <element ref="w:wikilink"/>
-        <element ref="w:link"/>
-        <element ref="w:tt"/>
-        <element ref="w:bold"/>
-        <element ref="w:header"/>
-        <element ref="w:rule"/>
-        <element ref="w:character"/>
-        <element ref="w:list"/>
-        <element ref="w:br"/>
-        <element ref="w:text"/>
-        <element ref="w:ws"/>
-      </choice>
-    </sequence>
+    <complexContent>
+		<restriction base="w:wikiBaseType">
+			<sequence minOccurs="0" maxOccurs="unbounded">
+			  <choice>
+				  <group ref="w:wikiAlwaysValid"/>
+				  <element name="tt" type="w:ttType"/>
+				  <element name="bold" type="w:boldType"/>
+				  <element name="header" type="w:headerType"/>
+				  <element name="rule" type="w:ruleType"/>
+				  <element name="list" type="w:listType"/>
+			  </choice>
+			</sequence>
+		</restriction>
+    </complexContent>
   </complexType>
 
 <!-- Requirement 9. This defines the tt element. -->
   <complexType name="ttType">
-    <sequence minOccurs="0" maxOccurs="unbounded">
-      <choice>
-        <element ref="w:image"/>
-        <element ref="w:wikilink"/>
-        <element ref="w:link"/>
-        <element ref="w:italics"/>
-        <element ref="w:bold"/>
-        <element ref="w:header"/>
-        <element ref="w:rule"/>
-        <element ref="w:character"/>
-        <element ref="w:list"/>
-        <element ref="w:br"/>
-        <element ref="w:text"/>
-        <element ref="w:ws"/>
-      </choice>
-    </sequence>
+    <complexContent>
+		<restriction base="w:wikiBaseType">
+			<sequence minOccurs="0" maxOccurs="unbounded">
+			  <choice>
+				  <group ref="w:wikiAlwaysValid"/>
+				  <element name="italics" type="w:italicsType"/>
+				  <element name="bold" type="w:boldType"/>
+				  <element name="header" type="w:headerType"/>
+				  <element name="rule" type="w:ruleType"/>
+				  <element name="list" type="w:listType"/>
+			  </choice>
+			</sequence>
+		</restriction>
+    </complexContent>
   </complexType>
 
 <!-- Requirement 10. This defines the bold element. -->
   <complexType name="boldType">
-    <sequence minOccurs="0" maxOccurs="unbounded">
-      <choice>
-        <element ref="w:image"/>
-        <element ref="w:wikilink"/>
-        <element ref="w:link"/>
-        <element ref="w:italics"/>
-        <element ref="w:tt"/>
-        <element ref="w:header"/>
-        <element ref="w:rule"/>
-        <element ref="w:character"/>
-        <element ref="w:list"/>
-        <element ref="w:br"/>
-        <element ref="w:text"/>
-        <element ref="w:ws"/>
-      </choice>
-    </sequence>
+    <complexContent>
+		<restriction base="w:wikiBaseType">
+			<sequence minOccurs="0" maxOccurs="unbounded">
+			  <choice>
+				  <group ref="w:wikiAlwaysValid"/>
+				  <element name="italics" type="w:italicsType"/>
+				  <element name="tt" type="w:ttType"/>
+				  <element name="header" type="w:headerType"/>
+				  <element name="rule" type="w:ruleType"/>
+				  <element name="list" type="w:listType"/>
+			  </choice>
+			</sequence>
+		</restriction>
+    </complexContent>
   </complexType>
 
 <!-- Requirement 11. This defines the header element. -->
   <complexType name="headerType">
-    <sequence minOccurs="0" maxOccurs="unbounded">
-      <choice>
-        <element ref="w:image"/>
-        <element ref="w:wikilink"/>
-        <element ref="w:link"/>
-        <element ref="w:italics"/>
-        <element ref="w:tt"/>
-        <element ref="w:bold"/>
-        <element ref="w:character"/>
-        <element ref="w:br"/>
-        <element ref="w:text"/>
-        <element ref="w:ws"/>
-      </choice>
-    </sequence>
+    <complexContent>
+		<restriction base="w:wikiBaseType">
+			<sequence minOccurs="0" maxOccurs="unbounded">
+			  <choice>
+				  <group ref="w:wikiAlwaysValid"/>
+				  <element name="italics" type="w:italicsType"/>
+				  <element name="tt" type="w:ttType"/>
+				  <element name="bold" type="w:boldType"/>
+			  </choice>
+			</sequence>
+		</restriction>
+    </complexContent>
   </complexType>
 
 <!-- Requirement 12. This defines the rule element. -->
@@ -177,20 +168,18 @@
 
 <!-- Requirement 14. This defines the item elements. -->
   <complexType name="itemType">
-    <sequence minOccurs="0" maxOccurs="unbounded">
-      <choice>
-        <element ref="w:image"/>
-        <element ref="w:wikilink"/>
-        <element ref="w:link"/>
-        <element ref="w:italics"/>
-        <element ref="w:tt"/>
-        <element ref="w:bold"/>
-        <element ref="w:character"/>
-        <element ref="w:br"/>
-        <element ref="w:text"/>
-        <element ref="w:ws"/>
-      </choice>
-    </sequence>
+    <complexContent>
+		<restriction base="w:wikiBaseType">
+			<sequence minOccurs="0" maxOccurs="unbounded">
+			  <choice>
+				  <group ref="w:wikiAlwaysValid"/>
+				  <element name="italics" type="w:italicsType"/>
+				  <element name="tt" type="w:ttType"/>
+				  <element name="bold" type="w:boldType"/>
+			  </choice>
+			</sequence>
+		</restriction>
+    </complexContent>
   </complexType>
 
 <!-- Requirement 15. This defines the br element. -->
