@@ -26,7 +26,6 @@
 
   <!-- Requirement 3. Ensure that the wiki element can contain the required sub elements -->
   <complexType name="wikiType">
-    <!-- PMD: Why both sequence and choice? -->
     <sequence minOccurs="0" maxOccurs="unbounded">
       <choice>
         <element ref="w:image"/>
@@ -158,11 +157,16 @@
   <complexType name="ruleType"/>
 
 <!-- Requirement 13. This defines the character element. -->
-<!-- TODO : limit to XHTML character entity reference -->
-<!-- PMD: Could we enforce this by requiring a leading &? -->
   <complexType name="characterType">
-    <attribute name="entity" type="string"/>
+    <attribute name="entity" type="w:entityType"/>
   </complexType>
+
+<!-- Requirement 13. This limits the possible values of text. -->
+  <simpleType name="entityType">
+    <restriction base="string">
+      <pattern value="$[a-z_0-9]+;"/>
+    </restriction>
+  </simpleType>
 
 <!-- Requirement 14. This defines the list elements. -->
   <complexType name="listType">
@@ -197,7 +201,6 @@
     <restriction base="string">
       <!-- Matches a non-whitespace at the beginning of the string followed by anything and when a non-whitespace at the end of the string -->
       <!-- INFO: ^and $ may NOT be included to mean beginning and end of string respectively. The validator automatically asumes that it must match the entire string -->
-      <!-- PMD: Will this do what we want? Won't this one accept empty text? -->
       <pattern value="([^ ](.|\n|\r)*[^ ])|[^ ]"/> 
     </restriction>
   </simpleType>
@@ -205,8 +208,8 @@
 <!-- Requirement 17. This defines the ws element. -->
   <complexType name="wsType"/>
 
-<!-- Requirement 18. !!! Cannot be expressed in DTD -->
-<!-- Requirement 19. !!! Cannot be expressed in DTD -->
+<!-- Requirement 18. !!! Cannot be expressed in XML Schema -->
+<!-- Requirement 19. !!! Cannot be expressed in XML Schema -->
   
   <group name="wikiSequence">
     <sequence>
