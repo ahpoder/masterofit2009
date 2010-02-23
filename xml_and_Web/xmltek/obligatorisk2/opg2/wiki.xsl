@@ -2,7 +2,10 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:w="http://cs.au.dk/~schwarz/XMLTek"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-				xmlns:fn="http://www.w3.org/2005/xpath-functions">
+		xmlns:fn="http://www.w3.org/2005/xpath-functions">
+
+  <xsl:output doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" 
+            doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" />		
 
   <xsl:template match="w:wiki">
     <html>
@@ -81,8 +84,11 @@
 	</xsl:template>
 
 	<xsl:template match="w:character">
-		<!-- TODO Translate -->
+		<xsl:value-of select="'&amp;'" disable-output-escaping="yes"/>
+   		<xsl:value-of select="@entity" />
+   		<xsl:value-of select="';'" />
 	</xsl:template>
+	
 
 	<xsl:template match="w:list">
 		<ul>
