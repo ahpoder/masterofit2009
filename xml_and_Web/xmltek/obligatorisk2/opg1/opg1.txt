@@ -5,7 +5,7 @@ Hvilke udfordringer havde du her?
 	Der skulle skrives regular expressions til at forhindre begyndende whitespaces m.m.  
 
 Hvilke krav kan ikke valideres med XML Schema?
-	Requirement 18: Due to requirement that a node validation must be self-contained we cannot make requirements about a node's siblings. In Schematron this is possible with <sch:assert test="not(following-sibling::text)">
- for text and something similar for ws.
-	Requirement 19: Same problem as 18.
-	The only way to solve this is to write all legal combinations of sequences, which is possible but rather verbose and not easy to maintain/modify.
+	Requirement 18: På grund af XML schema kravet om at en node validering skal være selv-indeholdt, er det ikke muligt at lave regler for en node's søskende. I Schematron er det muligt med:
+		<sch:assert test="not(following-sibling::text)"> (for text).
+	Requirement 19: Samme problem som 18.
+	Den eneste måde at løse problemet er at skrive samtlige lovlige kombinationer af sekvenser, hvilket naturligvis er muligt, men fylder meget, er ulæseligt og svært at vedligeholde og ændre.
