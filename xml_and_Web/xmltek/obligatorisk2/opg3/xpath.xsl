@@ -51,7 +51,7 @@ Exercise 3.3:
 Exercise 3.3:
   PMD: another solution for the number of eggs in recipies also using milk:
     </xsl:text>
-	<xsl:value-of select="//rcp:ingredient[./@name='milk']/../rcp:ingredient[fn:contains(@name,'egg')]/@amount"/>
+	<xsl:value-of select="//rcp:ingredient[fn:contains(@name,'milk')]/../rcp:ingredient[fn:contains(@name,'egg')]/@amount"/>
 
 
 
