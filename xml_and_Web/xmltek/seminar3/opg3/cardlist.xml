@@ -1,0 +1,34 @@
+<cardlist xmlns="http://businesscard.org"
+          xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <title>
+    <xhtml:h1>My Collection of Business Cards</xhtml:h1>
+    containing people from <xhtml:em>Widget Inc.</xhtml:em> 
+  </title>
+  <card>
+    <name>John Doe</name>
+    <title>CEO, Widget Inc.</title>
+    <email>john.doe@widget.inc</email>
+    <phone>(202) 555-1414</phone>
+  </card>
+  <card>
+    <name>Joe Smith</name>
+    <title>Assistant</title>
+    <email>thrall@widget.inc</email>
+  </card>
+  <card>
+    <name>Zacharias Doe</name>
+    <title>D.D.S. (retired)</title>
+    <email>zach@notmail.com</email>
+  </card>
+  <card>
+    <name>Joe Average</name>
+    <title>student</title>
+    <email>joe@mailorder.edu</email>
+  </card>
+  <card>
+    <name>Jack Doe</name>
+    <title>student</title>
+    <email>jack@mailorder.edu</email>
+  </card>
+</cardlist>
+
