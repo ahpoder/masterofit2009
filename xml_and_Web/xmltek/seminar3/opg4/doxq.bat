@@ -1,0 +1,1 @@
+java -classpath ..\..\seminar2\opg10\saxon.jar net.sf.saxon.Query xquery2xslt.xq
