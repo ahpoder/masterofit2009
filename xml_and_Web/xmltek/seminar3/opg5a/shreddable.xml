@@ -1,0 +1,12 @@
+<foods>
+  <fruit name="banana" taste="sweet"/>
+  <dessert name="banana split">
+    <fruit name="banana" taste="sweet"/>
+    <dairy name="ice cream" taste="sweet"/>
+  </dessert>
+  <fruit name="lemon" taste="sour"/>
+  <dessert name="lemon split">
+    <fruit name="lemon" taste="sour"/>
+    <dairy name="ice cream" taste="sweet"/>
+  </dessert>
+</foods>
