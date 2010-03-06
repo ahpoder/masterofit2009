@@ -1,0 +1,29 @@
+Opgaven ligger lige til højrebenet for en rekursiv løsning.
+
+Tanken er, at man kalder en funktion med et personnavn og et ønsket antal generationer man ønsker at gå tilbage.
+
+Funktionen kalder derefter sig selv på hhv. fædrene og mødrene side
+
+
+declare function local:makePerson($g, $name) {
+  if ($g eq 0) then 
+    element person {
+      attribute name { $name }
+    }
+  else
+    element person {
+      attribute name { $name },
+      element father { local:makePerson($g -1, fn:string-join(($name, 'father'), ' ')) },
+      element mother { local:makePerson($g -1, fn:string-join(($name, 'mother'), ' ')) }
+    }
+};
+<result>
+{
+  local:makePerson(3, "John Doe")
+}
+</result>
+
+Mangler: 
+-apostrof John Doe's osv.
+-namespace
+-undgå result tag
