@@ -1,0 +1,26 @@
+Det var en sjov opgave, og William var et godt valg :)
+
+Var der nogen problemer undevejs?
+	Ikke med JDOM, men den første implementation for SAX tog også tekst fra noder under foo og ikke kun fra foo direkte - det blev dog hurtigt rettet.
+
+Hvilken tekst skrives ud?
+	To see a world in a grain of sand,
+	And a heaven in a wild flower,
+	Hold infinity in the palm of your hand,
+	And eternity in an hour. 
+
+JDOM
+	Hvor lang tid tog JDOM programmet om at køre?
+		3 sekunder
+	Hvor meget af tiden gik med at parse?
+		2,813 sekunder
+	Hvor meget hukommelse bruger programmet?
+		45,441610MB
+
+SAX
+	Hvor lang tid tog SAX programmet om at køre?
+		0,938 sekunder
+	Hvor meget hukommelse bruger det?
+		0,236504MB
+		
+Tallene for memory-forbrug er renset for det forbrug der hører til allokering af VM samt selve den statiske data i den executable.
