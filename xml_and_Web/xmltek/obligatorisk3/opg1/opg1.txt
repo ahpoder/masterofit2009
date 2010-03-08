@@ -5,7 +5,7 @@ Tanken er, at man kalder en funktion med et personnavn og et ønsket antal genera
 Funktionen kalder derefter sig selv på hhv. fædrene og mødrene side
 
 
-declare function local:makePerson($name, $g) {
+declare function local:makePerson($name, $g, $isRoot) {
   if ($g eq 0) then 
     element person {
       attribute name { $name }
@@ -13,16 +13,12 @@ declare function local:makePerson($name, $g) {
   else
     element person {
       attribute name { $name },
-      element father { local:makePerson(fn:string-join(($name, 'father'), '&apos;s '), $g -1) },
-      element mother { local:makePerson(fn:string-join(($name, 'mother'), '&apos;s '), $g -1) }
+      element father { local:makePerson(fn:string-join(($name, 'father'), '&apos;s '), $g -1, fn:false()) },
+      element mother { local:makePerson(fn:string-join(($name, 'mother'), '&apos;s '), $g -1, fn:false()) }
     }
 };
-<result>
-{
-  local:makePerson("John Doe", 3)
-}
-</result>
+
+local:makePerson("John Doe", 3, fn:true())
 
 Mangler: 
 -namespace
--undgå result tag
