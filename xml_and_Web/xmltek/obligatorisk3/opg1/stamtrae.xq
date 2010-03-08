@@ -1,9 +1,17 @@
+declare function local:makePerson($name, $g) {
+  if ($g eq 0) then 
+    element person {
+      attribute name { $name }
+    }
+  else
+    element person {
+      attribute name { $name },
+      element father { local:makePerson(fn:string-join(($name, 'father'), '&apos;s '), $g -1) },
+      element mother { local:makePerson(fn:string-join(($name, 'mother'), '&apos;s '), $g -1) }
+    }
+};
 <result>
 {
-for $e in doc()//b:card
-for $d in doc("c:/dev/mit/xmltek/seminar3/opg3/domains.xml")//domain
-let $reg := fn:concat(".*@", $d)
-where fn:matches($e/b:email, $reg)
-return $e
+  local:makePerson("John Doe", 3)
 }
 </result>
