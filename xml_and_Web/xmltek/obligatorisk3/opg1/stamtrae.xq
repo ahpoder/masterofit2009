@@ -1,4 +1,4 @@
-declare function local:makePerson($name, $g) {
+declare function local:makePerson($name as xs:string, $g as xs:integer) {
   if ($g eq 0) then 
     element person {
       attribute name { $name }
@@ -10,8 +10,5 @@ declare function local:makePerson($name, $g) {
       element mother { local:makePerson(fn:string-join(($name, 'mother'), '&apos;s '), $g -1) }
     }
 };
-<result>
-{
-  local:makePerson("John Doe", 3)
-}
-</result>
+
+local:makePerson("John Doe", 3)
