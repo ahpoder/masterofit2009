@@ -4,20 +4,33 @@ Tanken er, at man kalder en funktion med et personnavn og et ønsket antal genera
 
 Funktionen kalder derefter sig selv på hhv. fædrene og mødrene side.
 
-Nedenstående implementering mangler at levere den ønskede namespace construct i output.
+For at kunne få namespace på den yderste person er det nødvendigt at holde styr på den første gang funktionen bliver kaldt, men det gøres nemt med et ekstra argument ($first). 
 
-declare function local:makePerson($name as xs:string, $g as xs:integer) {
+Nu kan det måske undre at nedenstående har en blanding af direkte element/attribut declerationer (<person ...</person> og oprettede element/attribut declerationer (element person { atttribut name ... }), men det skyldes at vi først forsøgt med oprettede element/attribut declerationer, men kunne ikke få den til at oprette attributter med namespaces. Det viste sig dog ikke at være et problem med direkte element/attribut declerationer, så det er brugt til den første hvor der er behov for attributter med namespace.
+
+Endeligt skal det nævnes at der er to forskelle i outputtet
+  1. saxon.jar tilføjer en processing-instruction der viser XML version og tegnsæt, men den er nu også god at have.
+  2. Rækkefølgen af attributter for det første person element bliver ændret, men da rækkefølgen på attributter ikke har nogen betydning er dette ikke et problem.
+
+declare function local:makePerson($name as xs:string, $g as xs:integer, $first as xs:boolean) {
   if ($g eq 0) then 
     element person {
-      attribute name { $name }
-    }
-  else
-    element person {
       attribute name { $name },
-      element father { local:makePerson(fn:string-join(($name, 'father'), '&apos;s '), $g -1) },
-      element mother { local:makePerson(fn:string-join(($name, 'mother'), '&apos;s '), $g -1) }
+      element father {  },
+      element mother {  }
     }
+  else 
+    if ($first) then
+	  <person name="{ $name }" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="stamtrae.xsd">
+	    <father>{ local:makePerson(fn:string-join(($name, 'father'), '&apos;s '), $g -1, fn:false()) }</father>
+		<mother>{ local:makePerson(fn:string-join(($name, 'mother'), '&apos;s '), $g -1, fn:false()) }</mother>
+	  </person>
+	else
+      element person {
+        attribute name { $name },
+        element father { local:makePerson(fn:string-join(($name, 'father'), '&apos;s '), $g -1, fn:false()) },
+        element mother { local:makePerson(fn:string-join(($name, 'mother'), '&apos;s '), $g -1, fn:false()) }
+	  }
 };
 
-local:makePerson("John Doe", 3)
-
+local:makePerson("John Doe", 3, fn:true())
