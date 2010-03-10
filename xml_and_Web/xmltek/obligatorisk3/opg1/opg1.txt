@@ -7,10 +7,13 @@ Funktionen kalder derefter sig selv på hhv. fædrene og mødrene side.og tæller sa
 Af sikkerhedsgrunde er testen på stopkriteriet sat til le 0 for at imødegå kald med negative generationer.
 
 For at kunne få namespace på den yderste person er det nødvendigt at holde styr på den første gang funktionen bliver kaldt. Det gøres med argument $first.
+Inden da har vi forsøgt med default element namespace. Dette giver 
+<person xmlns="http://www.w3.org/2001/XMLSchema-instance" name="John Doe">
+i output, men tillader ikke de ønskede konstruktioner "xmlns:xsi=" og "xsi:noNamespaceSchemaLocation"
 
 Nu kan det måske undre at implementeringens oprettelse af elementer er en blanding af direkte element/attribut deklarationer (<person ...</person>) og konstruerede elementer/attributter (element person { attribute name ... }). Det skyldes, at vi først forsøgt med konstruerede elementer/attributter, men vi kunne ikke få den til at oprette attributter med namespaces. Det viste sig dog ikke at være et problem med direkte element/attribut deklarationer, så det er brugt til den første hvor der er behov for attributter med namespace.
 
-Formuleringen af funktionen kunne blive simplere, og redundant kode kunne undgås, hvis testen for rodgeneration kunne begrænses til en indpakning omkring namespace deklarationen. Det er ikke lykkedes os at finde en løsning på dette.
+Formuleringen af funktionen kunne blive simplere, og redundant kode kunne undgås, hvis testen for rodgeneration kunne begrænses til en indpakning omkring namespace deklarationen. Det er ikke lykkedes os at finde en løsning på dette. 
 
 Endeligt skal det nævnes at der er to forskelle i output fra vores løsning og den løsning der er opgavens reference:
   1. saxon.jar tilføjer en processing-instruction der indeholder XML version og tegnsæt, men den er nu også god at have.
