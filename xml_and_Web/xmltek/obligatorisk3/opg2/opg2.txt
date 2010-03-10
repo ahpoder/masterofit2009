@@ -1,7 +1,7 @@
 Det var en sjov opgave, og William var et godt valg :)
 
-Var der nogen problemer undevejs?
-	Ikke med JDOM, men den første implementation for SAX tog også tekst fra noder under foo og ikke kun fra foo direkte - det blev dog hurtigt rettet.
+Var der nogen problemer undervejs?
+	Ikke med JDOM, men den første implementering for SAX tog også tekst fra noder under foo og ikke kun fra foo direkte - det blev dog hurtigt rettet.
 
 Hvilken tekst skrives ud?
 	To see a world in a grain of sand,
@@ -23,4 +23,5 @@ SAX
 	Hvor meget hukommelse bruger det?
 		0,236504MB
 		
-Tallene for memory-forbrug er renset for det forbrug der hører til allokering af VM samt selve den statiske data i den executable.
+Tallene for memory-forbrug er renset for det forbrug der hører til allokering af VM samt selve de statiske data i den executable.
+

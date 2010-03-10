@@ -1,13 +1,10 @@
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.jdom.*;
 import org.jdom.filter.*;
 import org.jdom.input.*;
-import org.jdom.output.XMLOutputter;
 
 public class JDOMSolution {
 	
