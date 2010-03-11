@@ -19,3 +19,8 @@ Endeligt skal det nævnes at der er to forskelle i output fra vores løsning og de
   1. saxon.jar tilføjer en processing-instruction der indeholder XML version og tegnsæt, men den er nu også god at have.
   2. Rækkefølgen af attributter for rodpersonen er anderledes, men da rækkefølgen på attributter ikke har nogen betydning er dette ikke et problem.
 
+Se venligst subversion repository 
+
+http://masterofit2009.googlecode.com/svn/trunk/xml_and_Web/xmltek/obligatorisk3/opg1
+
+for en eksempel-kørsel incl. bat fil. (kræver opsætning af classpath)

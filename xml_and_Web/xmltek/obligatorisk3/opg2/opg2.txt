@@ -25,3 +25,8 @@ SAX
 		
 Tallene for memory-forbrug er renset for det forbrug der hører til allokering af VM samt selve de statiske data i den executable.
 
+Se venligst subversion repository 
+
+http://masterofit2009.googlecode.com/svn/trunk/xml_and_Web/xmltek/obligatorisk3/opg2
+
+for en eksempel-kørsel incl. bat fil. (kræver opsætning af classpath)
