@@ -6,8 +6,8 @@ public class MaxMinVolumeHandler extends DefaultHandler {
 
 	public void printMaxMin()
 	{
-		System.out.println("Max volume: " + maxVolume + " of " + maxVolumeName);
-		System.out.println("Min volume: " + minVolume + " of " + minVolumeName);
+		System.out.println("Max volume: " + maxVolume + " ml of " + maxVolumeName);
+		System.out.println("Min volume: " + minVolume + " ml of " + minVolumeName);
 	}
 	
 	double maxVolume = 0;
