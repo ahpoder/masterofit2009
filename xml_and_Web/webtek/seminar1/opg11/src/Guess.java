@@ -34,6 +34,13 @@ public class Guess extends HttpServlet {
       s.setAttribute("correctValue", correctValue);
 	}
 	
+	Integer guessCount = (Integer)s.getAttribute("guessCount");
+    if (guessCount == null) 
+	{
+      guessCount = 0;
+      s.setAttribute("guessCount", guessCount);
+	}
+
 	String previousGuess = request.getParameter("Guess");
 	if (previousGuess != null)
 	{
@@ -44,18 +51,25 @@ public class Guess extends HttpServlet {
 			if (res > 0)
 			{
 				out.println("<br><br>Your guess of " + previousGuess + " was too high, please guess again");
+				guessCount = guessCount + 1;
+				s.setAttribute("guessCount", guessCount);
 			}
 			else if (res < 0)
 			{
 				out.println("<br><br>Your guess of " + previousGuess + " was too low, please guess again");
+				guessCount = guessCount + 1;
+				s.setAttribute("guessCount", guessCount);
 			}
 			else
 			{
-				out.println("<br><br>Your guess of " + previousGuess + " was spot on, please guess again for a new game");
+				guessCount = guessCount + 1;
+				out.println("<br><br>Your guess of " + previousGuess + " was spot on, and you did it in only " + guessCount.toString() + " guesses.<br>Please guess again for a new game");
 				Random random = new Random();
 				int pick = random.nextInt(99);
 				correctValue = new Integer(pick);
 				s.setAttribute("correctValue", correctValue);
+			    guessCount = 0;
+				s.setAttribute("guessCount", guessCount);
 			}
 		}
 		catch (Exception ex)
