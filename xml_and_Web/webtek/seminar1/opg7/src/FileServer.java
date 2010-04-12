@@ -47,12 +47,19 @@ public class FileServer {
         pout = new PrintStream(out);
                 
         String request = in.readLine();
-        con.shutdownInput(); // ignore the rest
         log(con, request);
+        
+        String line;        
+        while((line = in.readLine()) != ""){
+        	log(con, line);
+        	if(line.isEmpty())
+        		exit while;
+        }
+        //con.shutdownInput(); // ignore the rest
 
-        processRequest(request);
-                
+        processRequest(request);                
         pout.flush();
+        
       } catch (IOException e) { 
         System.err.println(e); 
       }
