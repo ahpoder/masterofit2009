@@ -53,7 +53,7 @@ public class FileServer {
         while((line = in.readLine()) != ""){
         	log(con, line);
         	if(line.isEmpty())
-        		exit while;
+        		break;
         }
         //con.shutdownInput(); // ignore the rest
 
@@ -101,16 +101,38 @@ public class FileServer {
             f = new File(path);
           }
           try { 
-            InputStream file = new FileInputStream(f);
-            String contenttype = 
-              URLConnection.guessContentTypeFromName(path);
-            pout.print("HTTP/1.0 200 OK\r\n");
-            if (contenttype!=null)
-              pout.print("Content-Type: "+contenttype+"\r\n");
-            pout.print("Date: "+new Date()+"\r\n"+
-                       "Server: IXWT FileServer 1.0\r\n\r\n");
-            sendFile(file, out); // send raw file 
-            log(con, "200 OK");
+			int startIfModifiedSince = request.indexOf("If-Modified-Since: ");
+			boolean modified = true;
+			if (startIfModifiedSince != -1)
+			{
+			  int endIfModifiedSince = request.indexOf('\r', startIfModifiedSince); // \n is unimportant in finding the index
+			  String lastRequestStr = request.substring(startIfModifiedSince + 19, endIfModifiedSince);
+			  long lastRequest = Long.parseLong(lastRequestStr.trim());
+			  modified = lastRequest < f.lastModified();
+			}
+			
+			if (!modified) // == should be sufficient
+			{
+				pout.print("HTTP/1.0 304 Not Modified\r\n"+
+							 "Location: http://"+
+							 con.getLocalAddress().getHostAddress()+":"+
+							 con.getLocalPort()+req+"/\r\n\r\n");
+				log(con, "304 Not Modified");
+			}
+			else
+			{
+				InputStream file = new FileInputStream(f);
+				String contenttype = 
+				  URLConnection.guessContentTypeFromName(path);
+				pout.print("HTTP/1.0 200 OK\r\n");
+				if (contenttype!=null)
+				  pout.print("Content-Type: "+contenttype+"\r\n");
+				pout.print("LastModified: " + f.lastModified() + "\r\n");
+				pout.print("Date: "+new Date()+"\r\n"+
+						   "Server: IXWT FileServer 1.0\r\n\r\n");
+				sendFile(file, out); // send raw file 
+				log(con, "200 OK");
+			}
           } catch (FileNotFoundException e) { 
             errorReport(pout, con, "404", "Not Found", 
                         "The requested URL was not found "+
