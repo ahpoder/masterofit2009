@@ -1,6 +1,7 @@
 import java.net.*;
 import java.io.*;
 import java.util.*;
+import java.security.*;
 
 public class FileServer {
   int port;
@@ -48,16 +49,21 @@ public class FileServer {
                 
         String request = in.readLine();
         log(con, request);
+        HashMap<String, String> header = new HashMap<String, String>();
         
-        String line;        
+        String line;
+        
         while((line = in.readLine()) != ""){
-        	log(con, line);
+        	//We reached the terminating empty line. Get out of here.
         	if(line.isEmpty())
         		break;
+        	//Add the header, value entry to the hashtable
+        	header.put( line.substring(0, line.indexOf(":")).trim(), line.substring(line.indexOf(":")+1).trim());
         }
-        //con.shutdownInput(); // ignore the rest
 
-        processRequest(request);                
+        //Handle the further action
+        processRequest(request, header);
+        
         pout.flush();
         
       } catch (IOException e) { 
@@ -72,7 +78,7 @@ public class FileServer {
     }
   }
 
-  void processRequest(String request) throws IOException {
+  void processRequest(String request, HashMap<String, String> header) {
     if (!request.startsWith("GET") || request.length()<14 ||
         !(request.endsWith("HTTP/1.0") || 
           request.endsWith("HTTP/1.1")) ||
@@ -101,7 +107,7 @@ public class FileServer {
             f = new File(path);
           }
           try { 
-			int startIfModifiedSince = request.indexOf("If-Modified-Since: ");
+		/*	int startIfModifiedSince = request.indexOf("If-Modified-Since: ");
 			boolean modified = true;
 			if (startIfModifiedSince != -1)
 			{
@@ -120,7 +126,7 @@ public class FileServer {
 				log(con, "304 Not Modified");
 			}
 			else
-			{
+			{*/
 				InputStream file = new FileInputStream(f);
 				String contenttype = 
 				  URLConnection.guessContentTypeFromName(path);
@@ -128,15 +134,22 @@ public class FileServer {
 				if (contenttype!=null)
 				  pout.print("Content-Type: "+contenttype+"\r\n");
 				pout.print("LastModified: " + f.lastModified() + "\r\n");
+				//We'll calculate the ETag as a strong validator according to
+				//http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.3.3
+				pout.print("ETag: " + createChecksum(path) + "\r\n");
 				pout.print("Date: "+new Date()+"\r\n"+
 						   "Server: IXWT FileServer 1.0\r\n\r\n");
 				sendFile(file, out); // send raw file 
 				log(con, "200 OK");
-			}
+			//}
           } catch (FileNotFoundException e) { 
             errorReport(pout, con, "404", "Not Found", 
                         "The requested URL was not found "+
                         "on this server.");
+          }
+          catch (Exception e){
+              errorReport(pout, con, "500", "Internal Server Error", 
+                      "An unexpected error occurred.");        	  
           }
         }
       }
@@ -170,5 +183,23 @@ public class FileServer {
     byte[] buffer = new byte[1000];
     while (file.available()>0) 
       out.write(buffer, 0, file.read(buffer));
+  }
+  
+  //Based on http://www.rgagnon.com/javadetails/java-0416.html
+  private byte[] createChecksum(String filename) throws Exception{
+	     InputStream fis =  new FileInputStream(filename);
+
+	     byte[] buffer = new byte[1024];
+	     MessageDigest complete = MessageDigest.getInstance("MD5");
+	     
+	     int numRead;
+	     do {
+	       numRead = fis.read(buffer);
+	       if (numRead > 0) {
+	         complete.update(buffer, 0, numRead);
+	       }
+	     } while (numRead != -1);
+	     fis.close();
+	     return complete.digest();	  
   }
 }
