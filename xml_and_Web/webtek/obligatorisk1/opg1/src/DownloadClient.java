@@ -5,32 +5,33 @@ import sun.misc.BASE64Encoder;
 
 public class DownloadClient {
 
-  public static String encode(String username, String password) {
+//Encoder formulation from the exercise reference (http://www.cs.au.dk/~schwarz/evuWebTek/src/BasicEncoder.java)   
+public static String encode(String username, String password) {
 	BASE64Encoder encoder = new BASE64Encoder();
-	  return encoder.encode(String.format("%s:%s", username,password).getBytes());
+	return encoder.encode(String.format("%s:%s", username,password).getBytes());
   }
 
   // this method performs a standard HHTP request and read the response. 
   // If a moved permanently is received follow the link.
-  // If an authorazation request is received send user username and password
-  public static void connectAndPerformGet(String host, int port, String username, String password, Boolean authRequired) throws UnknownHostException, IOException, UnsupportedEncodingException, FileNotFoundException
+  // If an authorization request is received send user username and password
+  public static void connectAndPerformGet(String host, String path, int port, String username, String password, Boolean authRequired) throws UnknownHostException, IOException, UnsupportedEncodingException, FileNotFoundException, URISyntaxException
   {
       Socket con = null;
       InputStreamReader in = null;
       String[] header = null;
       int c;
-      int counter = 0;
-	  //Set up the connection
+      //Set up the connection
 	  con = new Socket(host, port);
 	  //Send the request on the connection output stream (based on IXVT p. 375)
 	  BufferedWriter out =
 		  new BufferedWriter
 			 (new OutputStreamWriter(con.getOutputStream(), "UTF8"));
 	  //We're interested in the host root only
-	  out.write("GET / HTTP/1.1\r\n"); 
+	  //out.write("GET / HTTP/1.1\r\n"); 
+	  out.write("GET /" + path + " HTTP/1.1\r\n"); 
 	  //The Host header is required (at least at the tested site: www.brics.dk)
-	  out.write("Host: "+host+"\r\n"); 
-	  //This one is merely to inform the server. It is NOT required for the request to be valid (on the server tested)
+	  out.write("Host: " + host + "\r\n"); 
+	  //This one is merely to inform the server. It is NOT required for the request to be valid (on www.brics.dk)
 	  out.write("User-Agent: IXVT\r\n");
 	  
 	  // check if authorization header should be added
@@ -63,23 +64,27 @@ public class DownloadClient {
 	  //Analyze the response status to handle a '301 Moved Permanently'
 	  if(header[0].contains("301")){
 		  //Find and extract the location
-		  String newHost = null;
+		  String newlocation = null;
+		  String newhost = null;
+		  String newpath = null;
 		  for(int i = 0; i < header.length; i++) {
 			  if(header[i].indexOf("Location:") > -1) {
-				  newHost = header[i].substring(header[i].indexOf(":")+1).trim();
+				  newlocation = (header[i].substring(header[i].indexOf(":")+1).trim());
+				  newhost = newlocation.substring( 0, newlocation.indexOf("/") );
+				  newpath = newlocation.substring( newlocation.indexOf("/") );
 				  break;
 			  }
 		  }
 		  // Call recursively self with new host.
 		  // Be adviced that if there is a loop in the Moved Permanently locations this will result in
 		  // an infinite loop, causing a stack overflow in Java.
-		  System.out.println("Redirecting to " + newHost);
-		  connectAndPerformGet(newHost, port, name, password, false);
+		  System.out.println("Redirecting to " + newlocation);
+		  connectAndPerformGet( newhost, newpath, port, username, password, false );
 	  }
-	  // Analyse the response status to handle a 401 Unauthorized
+	  // Analyze the response status to handle a 401 Unauthorized
 	  else if(header[0].contains("401")){
 	    System.out.println("Authorization required, sending auth");
-		connectAndPerformGet(host, port, name, password, true);
+		connectAndPerformGet(host, path, port, username, password, true);
 	  }
 	  // If not a redirect or auth request write the response to a file
 	  else {
@@ -93,7 +98,7 @@ public class DownloadClient {
 		FileOutputStream fo = new FileOutputStream("body.out");
 		// Be adviced that some servers do not close their stream, which means that end-of-stream
 		// will never be reached and we will block "forever". This is true e.g. for www.google.com
-		// this program do not support this behaviour, but a solution could be to have a read timeout
+		// this program do not support this behavior, but a solution could be to have a read timeout
 		// or to test for data availability before reading.
 		while ((c = in.read())!=-1)
 		  fo.write(c);
@@ -101,7 +106,7 @@ public class DownloadClient {
 	  }
 
 	  // Close the connection. Granted this could be done before the recursive call to 
-	  // avoid maintaining multiple simultanious connections, but since the number
+	  // avoid maintaining multiple simultaneous connections, but since the number
 	  // of Moved Permanently 
       con.close();
   }
@@ -109,22 +114,27 @@ public class DownloadClient {
   public static void main(String[] args) {
 	//Added some help to remember the order of arguments (if more than one)
     if (args.length != 2 && args.length != 4) {
-        System.out.println("Usage: java SimpleClient <host> <port> [<username> <password>]");
+        System.out.println("Call interface reformulated from the exercise: <host> <port> to");
+        System.out.println("Usage: java SimpleClient <url> <port> [<username> <password>]");
         System.exit(-1);
       }
     try {
-      String host = args[0];
-      Integer port = Integer.parseInt(args[1]);
+      String host = args[0].substring( 0, args[0].indexOf("/") );
+      String path = args[0].substring( args[0].indexOf("/") );
+      Integer port = Integer.parseInt( args[1] );
 
 	  if (args.length == 2) {
-	    connectAndPerformGet(host, port, null, null, false);
+	    connectAndPerformGet(host, path, port, null, null, false);
 	  }
 	  else {
-	    connectAndPerformGet(host, port, args[2], args[3], false);
+	    connectAndPerformGet(host, path, port, args[2], args[3], false);
 	  }
 	  System.out.println("DONE");
     } catch (IOException e) {
       System.err.println(e); 
+    }
+    catch (Exception e){
+      System.err.println(e);     	
     }
   }
 }
