@@ -101,47 +101,57 @@ public class FileServer {
                      con.getLocalAddress().getHostAddress()+":"+
                      con.getLocalPort()+req+"/\r\n\r\n");
           log(con, "301 Moved Permanently");
-        } else {
+        }
+        //The request has passed initial tests
+        //Take a closer look at the header 
+        //In order to do the necessary we need a hold on the requested resource
+        else {
           if (f.isDirectory()) { 
             path = path+"index.html";
             f = new File(path);
           }
           try { 
-		/*	int startIfModifiedSince = request.indexOf("If-Modified-Since: ");
-			boolean modified = true;
-			if (startIfModifiedSince != -1)
+        	//Test for a conditional request
+        	if( header.containsKey("If-Modified-Since") ){
+  			  long lastRequest = Long.parseLong( header.get( "If-Modified-Since" ) );
+  			  //If resource not modified send a 304 Not Modified response
+  			  //as per http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.5 
+  			  if ( !( lastRequest > f.lastModified() ) ){ //== should suffice 
+  			  	pout.print( "HTTP/1.0 304 Not Modified\r\n" );
+  			  	pout.print( "Date: " + new Date() + "\r\n" );
+				pout.print( "ETag: " + createChecksum(path) + "\r\n" );
+  			  	/*pout.print("Location: http://"
+						+con.getLocalAddress().getHostAddress()
+						+":"
+						+con.getLocalPort()
+						+req
+						+"\r\n\r\n"); */
+				log( con, "304 Not Modified" );
+  			  }
+        	}
+			else //Return the requested resource
 			{
-			  int endIfModifiedSince = request.indexOf('\r', startIfModifiedSince); // \n is unimportant in finding the index
-			  String lastRequestStr = request.substring(startIfModifiedSince + 19, endIfModifiedSince);
-			  long lastRequest = Long.parseLong(lastRequestStr.trim());
-			  modified = lastRequest < f.lastModified();
-			}
-			
-			if (!modified) // == should be sufficient
-			{
-				pout.print("HTTP/1.0 304 Not Modified\r\n"+
-							 "Location: http://"+
-							 con.getLocalAddress().getHostAddress()+":"+
-							 con.getLocalPort()+req+"/\r\n\r\n");
-				log(con, "304 Not Modified");
-			}
-			else
-			{*/
 				InputStream file = new FileInputStream(f);
-				String contenttype = 
-				  URLConnection.guessContentTypeFromName(path);
-				pout.print("HTTP/1.0 200 OK\r\n");
-				if (contenttype!=null)
-				  pout.print("Content-Type: "+contenttype+"\r\n");
-				pout.print("LastModified: " + f.lastModified() + "\r\n");
+				String contenttype = URLConnection.guessContentTypeFromName( path );
+				pout.print( "HTTP/1.0 200 OK\r\n" );
+				if ( contenttype != null )
+				  pout.print( "Content-Type: " + contenttype + "\r\n" );
+				//Signal that the data may be cached for one hour, 
+				//and the server should confirm all uses of the cached version
+				pout.print( "Cache-Control: public, no-cache, must-revalidate, max-age=3600\r\n" );				
+				pout.print( "LastModified: " + f.lastModified() + "\r\n" );				
 				//We'll calculate the ETag as a strong validator according to
 				//http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.3.3
-				pout.print("ETag: " + createChecksum(path) + "\r\n");
-				pout.print("Date: "+new Date()+"\r\n"+
-						   "Server: IXWT FileServer 1.0\r\n\r\n");
-				sendFile(file, out); // send raw file 
+				//ETag is also defined here
+				//http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.11
+				pout.print( "ETag: " + createChecksum(path) + "\r\n" );
+				pout.print( "Date: " + new Date() + "\r\n" );
+				//Terminate the header with an empty line
+				pout.print( "Server: IXWT FileServer 1.0\r\n\r\n" );
+				//Send the raw file 
+				sendFile(file, out); 
 				log(con, "200 OK");
-			//}
+			}
           } catch (FileNotFoundException e) { 
             errorReport(pout, con, "404", "Not Found", 
                         "The requested URL was not found "+
