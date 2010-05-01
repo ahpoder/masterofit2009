@@ -24,8 +24,11 @@
                   )
             {
                 //TODO : fill this with the necessary business logic
-                return new dk.au.cs.www.schwarz.guestbook.data.Entry();
-        }
+				dk.au.cs.www.schwarz.guestbook.data.Entry e = new dk.au.cs.www.schwarz.guestbook.data.Entry();
+				
+				
+                return e;
+			}
      
     }
     

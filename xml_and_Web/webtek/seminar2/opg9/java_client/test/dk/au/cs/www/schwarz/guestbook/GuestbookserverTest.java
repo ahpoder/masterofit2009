@@ -27,8 +27,10 @@
                                                         (dk.au.cs.www.schwarz.guestbook.GuestbookserverStub.Title)getTestObject(dk.au.cs.www.schwarz.guestbook.GuestbookserverStub.Title.class);
                     // TODO : Fill in the title4 here
                 
-                        assertNotNull(stub.getEntry(
-                        title4));
+//                        dk.au.cs.www.schwarz.guestbook.GuestbookserverStub.Entry e = stub.getEntry(title4);
+//						assertNotNull(e);
+						assertNotNull(stub.getEntry(title4));
+						
                   
 
 
