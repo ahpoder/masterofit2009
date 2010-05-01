@@ -1,12 +1,14 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <table>
   <tr>
     <th>Value</th><th>Square</th>
   </tr>
-  <c:forEach var="x" begin="0" end="10" step="1">
-    <tr>
-      <td><c:out value="${x}"/></td>
-      <td><c:out value="${x * x}"/></td>
-    </tr>
-  </c:forEach>
+<%
+  java.io.PrintWriter oout = response.getWriter();
+  for (int i = 0; i < 10; ++i) {
+    oout.write("<tr>");
+    oout.write("<td>" + x + "</td>");
+    oout.write("<td>" + x * x + "</td>");
+    oout.write("</tr>");
+  }
+%>
 </table>
