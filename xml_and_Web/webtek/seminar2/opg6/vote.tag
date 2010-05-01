@@ -10,5 +10,15 @@
        application.setAttribute("no", new Integer(no+1));
      }
 %>
-     <jsp:doBody/>
+   <jsp:doBody var="br"/>
+<% 
+   String bbodyResult = (String)jspContext.getAttribute("br");
+   java.io.PrintWriter oout = response.getWriter();
+   if (bbodyResult == null || bbodyResult.isEmpty()) {
+     oout.print("No body written, but the vote was: " + vote);
+   }
+   else {
+     oout.print(bbodyResult);
+   }
+%>  
 <% } %>
