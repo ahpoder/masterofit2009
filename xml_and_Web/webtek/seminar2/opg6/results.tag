@@ -13,17 +13,11 @@
    String bbodyResult = (String)jspContext.getAttribute("br");
    java.io.PrintWriter oout = response.getWriter();
    if (bbodyResult == null || bbodyResult.isEmpty()) {
-     oout.print("<table border="1">");
-     oout.print("<tr><td>yes</td><td>" + yes + </td></tr>);
-     oout.print("<table border="1">");
-     oout.print("<table border="1">");
-     oout.print("<table border="1">");
-     oout.print("<table border="1">");
-	
-	${yes}
-	<tr><td>no</td><td>${no}</td></tr>
-	<tr><td>total</td><td>${total}</td></tr>
-	</table>
+     oout.print("<table border=\"1\">");
+     oout.print("<tr><td>yes</td><td>" + yes + "</td></tr>");
+     oout.print("<tr><td>no</td><td>" + no + "</td></tr>");
+     oout.print("<tr><td>total</td><td>" + yes+no + "</td></tr>");
+     oout.print("</table>");
    }
    else {
      oout.print(bbodyResult);

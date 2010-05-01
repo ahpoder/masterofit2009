@@ -1,6 +1,5 @@
 <%@ tag import="java.util.Date" %>
 <%@ variable name-given="question" %>
-<%@ variable name-given="br" %>
 <% String question = request.getParameter("question"); 
    if (question!=null) { 
      jspContext.setAttribute("question", question);
