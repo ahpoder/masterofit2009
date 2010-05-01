@@ -21,6 +21,9 @@
                 </xs:sequence>
             </xs:complexType>
 
+            <xs:element name="empty">
+				<xs:complexType><xs:sequence/></xs:complexType>			
+            </xs:element>
             <xs:element name="entry" type="d:entryType"/>
             <xs:element name="collection" type="d:collectionType"/>
             <xs:element name="title" type="xs:string"/>
@@ -34,6 +37,11 @@
             <input element="d:title"/>
             <output element="d:entry"/>
         </operation>
+		
+        <operation name="listEntries" pattern="http://www.w3.org/2006/01/wsdl/in-out">
+            <input element="d:empty"/>
+            <output element="d:collection"/>
+        </operation>
     </interface>
 
     <binding name="guestbookserverbinding"
@@ -42,6 +50,7 @@
              ws:protocol="http://www.w3.org/2003/05/soap/bindings/HTTP"
              ws:mepDefault="http://www.w3.org/2003/05/soap/mep/request-response">
         <operation ref="t:getEntry"/>
+        <operation ref="t:listEntries"/>
     </binding>
 
     <service name="guestbookserver" interface="t:guestbookserverinterface">

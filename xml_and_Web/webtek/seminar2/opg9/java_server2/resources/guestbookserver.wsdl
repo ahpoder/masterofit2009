@@ -1,0 +1,22 @@
+<description xmlns="http://www.w3.org/ns/wsdl" xmlns:d="http://www.cs.au.dk/schwarz/guestbook/data" xmlns:t="http://www.cs.au.dk/schwarz/guestbook" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wrpc="http://www.w3.org/ns/wsdl/rpc" xmlns:tns="http://www.cs.au.dk/schwarz/guestbook" xmlns:wsoap="http://www.w3.org/ns/wsdl/soap" xmlns:wsdlx="http://www.w3.org/ns/wsdl-extensions" xmlns:whttp="http://www.w3.org/ns/wsdl/http" targetNamespace="http://www.cs.au.dk/schwarz/guestbook"><types><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://www.cs.au.dk/schwarz/guestbook/data">
+<xs:complexType name="collectionType">
+<xs:sequence maxOccurs="unbounded" minOccurs="0">
+<xs:element ref="d:entry" />
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="entryType">
+<xs:sequence>
+<xs:element ref="d:title" />
+<xs:element ref="d:content" />
+</xs:sequence>
+</xs:complexType>
+<xs:element name="empty">
+<xs:complexType>
+<xs:sequence />
+</xs:complexType>
+</xs:element>
+<xs:element name="entry" type="d:entryType" />
+<xs:element name="collection" type="d:collectionType" />
+<xs:element name="title" type="xs:string" />
+<xs:element name="content" type="xs:string" />
+</xs:schema></types><interface name="guestbookserverinterface"><operation name="listEntries" style="http://www.w3.org/2006/01/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out" wsdlx:safe="false"><input element="d:empty" wsaw:Action="urn:listEntries" /><output element="d:collection" wsaw:Action="urn:listEntriesResponse" /></operation><operation name="getEntry" style="http://www.w3.org/2006/01/wsdl/style/rpc" pattern="http://www.w3.org/ns/wsdl/in-out" wsdlx:safe="false"><input element="d:title" wsaw:Action="urn:getEntry" /><output element="d:entry" wsaw:Action="urn:getEntryResponse" /></operation></interface><binding name="guestbookserverbinding" interface="tns:guestbookserverinterface" type="http://www.w3.org/ns/wsdl/soap" wsoap:version="1.2"><operation ref="tns:listEntries" /><operation ref="tns:getEntry" /></binding><service name="guestbookserver" interface="tns:guestbookserverinterface"><endpoint name="guestbookEndpoint" binding="tns:guestbookserverbinding" address="http://localhost:8080/axis2/services/guestbookserver/" /></service></description>
