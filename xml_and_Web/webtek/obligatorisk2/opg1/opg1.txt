@@ -1,0 +1,49 @@
+//20100502/PMD:
+Løsning af obligatorisk opgave 2, opg 1 
+
+Opgaven er at implementere nogle tags (cart, add, process, empty, nonempy, loop, url) som får 
+http://www.brics.dk/ixwt/examples/ShoppingTags.jsp
+til at køre.
+
+ShoppingTags.jsp er fuld af referencer til de omtalte tags. Der er refereret til en implementering af 
+den tilsvarende løsning i afsnit 10.1.9, hvor implementeringen er med alt i én jsp fil.
+
+Det ser ud til der skal gennemføres noget iteration. Derfor får vi sandsynligvis brug for JSTL.
+Hvordan får vi dette til at køre med tomcat 6.0?
+
+Denne blog beskriver lidt om opsætning
+http://www.mularien.com/blog/2008/04/24/how-to-reference-and-use-jstl-in-your-web-application/
+
+Analyse af web.xml i min tomcat installation viser at jeg har Servlet version 2.5 
+(<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+   version="2.5">)
+
+Med lidt google lader det til, at flere har haft problemer med at finde jstl 1.2. Endelig løsning er, at hente 
+http://download.java.net/maven/glassfish/javax/servlet/jsp/jstl/jstl-api/1.2/jstl-api-1.2.jar
+og
+http://download.java.net/maven/glassfish/org/glassfish/web/jstl-impl/1.2/jstl-impl-1.2.jar
+og lægge dem i WEB-INF/lib (ikke i Tomcat 6.0/lib som anbefalet nogle steder)
+
+Indholdet af det sædvanlige c prefix i ovenstående erklæres på følgende måde i jsp-filen:
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+Med den sidste kører dette lille script
+
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<html>
+  <head>
+    <title>Count to 10 Example (using JSTL)</title>
+  </head>
+
+  <body>
+    <c:forEach var="i" begin="1" end="10" step="1">
+      <c:out value="${i}" />
+
+      <br />
+    </c:forEach>
+  </body>
+</html>
+
+
