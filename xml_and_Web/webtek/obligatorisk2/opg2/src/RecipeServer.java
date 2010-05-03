@@ -16,6 +16,7 @@ import org.jdom.input.*;
 import org.jdom.output.*;
 import org.jdom.xpath.*;
 import java.util.*;
+import java.net.*;
 
 public class RecipeServer extends HttpServlet {
   public void doGet(HttpServletRequest request,
@@ -51,22 +52,31 @@ public class RecipeServer extends HttpServlet {
 		{
 			response.setContentType("text/xml");
 			XMLOutputter xo = new XMLOutputter();
-			xo.output(d, response.getWriter());
+			CharArrayWriter caw = new CharArrayWriter();
+			xo.output(d, caw); // We could have written directly to the stream as xo.output(d, response.getWriter()) but then we would not be able to set the length
+			char[] temp = caw.toCharArray();
+			response.setContentLength(temp.length);
+			response.getWriter().write(temp, 0, temp.length);
 		}
 		else
 		{
-			String recipeName = uri.substring(reqStart + 10);
+			String recipeName = uri.substring(reqStart + 9);
+			recipeName = URLDecoder.decode(recipeName, "UTF-8");
 			// What if there is more than one???
 		    Element r = (Element)XPath.selectSingleNode(d, "//rcp:recipe[rcp:title='" + recipeName + "']");
 			if (r == null)
 			{
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, "Recipe not found");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "Recipe not found: " + recipeName);
 				return;
 			}
 
 			response.setContentType("text/xml");
 			XMLOutputter xo = new XMLOutputter();
-			xo.output(r, response.getWriter());
+			CharArrayWriter caw = new CharArrayWriter();
+			xo.output(r, caw); // We could have written directly to the stream as xo.output(d, response.getWriter()) but then we would not be able to set the length
+			char[] temp = caw.toCharArray();
+			response.setContentLength(temp.length);
+			response.getWriter().write(temp, 0, temp.length);
 		}
 	}
 	catch (JDOMException ex) {
