@@ -1,0 +1,2 @@
+javac -classpath "C:\Programmer\Apache Software Foundation\Tomcat 6.0\lib\servlet-api.jar;C:/Documents and Settings/Poder Conultancy/Dokumenter/school/masterofit2009/xml_and_Web/xmltek/seminar1/opg10/jdom.jar" src\*.java
+pause
