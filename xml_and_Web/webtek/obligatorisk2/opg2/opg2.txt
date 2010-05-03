@@ -1,0 +1,8 @@
+
+
+Text to insert for test:
+
+Recipe to POST to see update
+
+<?xml version="1.0" encoding="UTF-8"?><rcp:collection xmlns:rcp="http://www.brics.dk/ixwt/recipes"><rcp:description>Unused</rcp:description><rcp:recipe id="r103"><rcp:title>Linguine Pescadoro without sauce</rcp:title><rcp:date>Fri, 04 May 10</rcp:date><rcp:ingredient name="linguini pasta" amount="16" unit="ounce" /><rcp:preparation><rcp:step>In a large pot of boiling salted water cook linguini until al dente. Drain.</rcp:step><rcp:step>Toss cooked and drained linguine pasta. Serve warm.</rcp:step></rcp:preparation><rcp:nutrition calories="532" fat="12%" carbohydrates="59%" protein="29%" /></rcp:recipe></rcp:collection>
+

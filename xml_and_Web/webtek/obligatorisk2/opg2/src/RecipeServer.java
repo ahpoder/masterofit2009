@@ -140,6 +140,9 @@ public class RecipeServer extends HttpServlet {
 
 		d.removeContent(r);
 		d.addContent(doc.getRootElement()); // TODO is this added the right place???
+		
+		response.setContentLength(27);
+		response.getWriter().write("Recipe successfully updated");
 	}
 	catch (JDOMException ex) {
 	    // If an error occur when parsing the XML file write a site down warning
@@ -181,6 +184,9 @@ public class RecipeServer extends HttpServlet {
 			  return;
 			}
 			d.addContent(doc.getRootElement()); // TODO is this added the right place???
+			
+			response.setContentLength(25);
+			response.getWriter().write("Recipe successfully added");
 		}
 		catch (JDOMException ex) {
 			// If an error occur when parsing the XML file write a site down warning
@@ -223,6 +229,9 @@ public class RecipeServer extends HttpServlet {
 			}
 
 			d.removeContent(r);
+			
+			response.setContentLength(27);
+			response.getWriter().write("Recipe successfully deleted");
 		}
 		catch (JDOMException ex) {
 			// If an error occur when parsing the XML file write a site down warning

@@ -1,0 +1,1 @@
+java -cp src;tomcat\RecipeServer\WEB-INF\lib\jdom.jar;tomcat\RecipeServer\WEB-INF\lib\xercesImpl.jar RecipeClient 127.0.0.1:8080
