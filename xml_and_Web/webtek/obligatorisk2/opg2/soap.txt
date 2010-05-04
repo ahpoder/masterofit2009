@@ -1,0 +1,59 @@
+Spørgsmål:
+
+Diskuter hvordan en SOAP/WSDL-løsning til opgaven ville være anderledes end REST udgaven og skitser hvilke operationer og beskeder der ville indgå i en sådan løsning
+
+Besvarelse:
+
+Da SOAP/WSDL er en ret åben standard kan den naturligvis minde mere eller mindre om REST versionen, f.eks. kan WSDL anvende ren HTTP til RPC i stedet for SOAP, men i denne besvarelse vil vi diskutere ud fra den mest almindelige configuration hvor der anvendes SOAP og SOAP-RPC i WSDL beskrivelsen.
+
+Den største forskel mellem REST og SOAP/WSDL er naturligvis at det SOAP/WSDL er et RPC framework og REST er en "arkitektur". Dette betyder at hvor SOAP/WSDL arbejder med kald af funktioner og modtagelse af retur-værdier, omhandler REST mere en ide til hvordan man kan tilgå, modificere, tilføje og slette resourcer på en server. HTTP, som er protokollen for REST, blev oprindeligt opfundet til deling af dokumenter på et netværk, og denne grundstruktur er naturligvis stadig grundtanken bag HTTP, på trods af dets mange andre anvendelser. Det er en enkelt tanke at udvide ideen om dokumenter til resourcer helt generelt. 
+
+For REST tilgår man altså resourcer (GET, POST, PUT, DELETE) og i SOAP/WSDL kalder man funktioner. Man kan meget simpelt emulere REST med SOAP/WSDL ved bare at lave fire metoder; GET, POST, PUT og DELETE, men så kan man ligeså godt lade være med at bruge SOAP/WSDL :)
+
+SOAP/WSDL er som sagt et framework, og det kræver derfor en del for at være "compliant"; eksekvering af selve SOAP-RCP frameworket, design af WSDL beskrivelse, implementation af funktioner. Hvis man allerede har en server med HTTP hvor man kan tilgå resourcer kan dette virke som en stor mundfuld from for bare at bruge HTTP til at udføre de ønskede "funktioner" direkte (REST). Fordelen ved SOAP/WSDL er at når beskrivelsen er lavet kan den distribueres og det er derfor nemt for 3-parts personer at udvikle klienter til den, ligesom at der ikke er tvivl om hvordan funktionerne skal kaldes (WSDL har en mangel at der ikke kan udtrykkes rækkefølger of afhængigheder mellem funktioner, så det skal beskrives separat). I REST er dette "interface" rent propiatært, hvor det eneste der vides er at det anvendes HTTP og at der er forsøgt at overholde grundideen bag REST. Det er muligt at beskrive dette interface i WSDL, men så er man jo på vej over mod SOAP/WSDL. 
+
+For at REST skal fungere optimalt skal det altså være "intuitivt" hvad en given GET/POST/PUT/DELETE gør, hvilket kan være svært. Allerede i denne lille opgave så vi et eksempel på det: /recipes/pasta => find opskrifter med pasta som title. Er det intuitivt? Det sammen med POST og PUT. Hvilken betydning ville det have hvis man angav en title? Det er altså nødvendigt med en beskrivelse, også selv om REST har det akronym det har :)
+
+Det funktioner man ville lave for at implementere REST RecipeServer med SOAP/WSDL kunne være (repræsenteret som et udsnit af et WSDL dokument):
+
+    <types>
+		<xs:schema
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                targetNamespace="http://www.brics.dk/ixwt/recipes"
+                xmlns:rcp="http://www.brics.dk/ixwt/recipes">
+
+			<xs:import namespace="http://www.brics.dk/ixwt/recipes" 
+						schemaLocation="http://www.brics.dk/ixwt/recipes/recipies.xsd"/>
+
+            <xs:element name="empty">
+				<xs:complexType><xs:sequence/></xs:complexType>			
+            </xs:element>
+    </types>
+
+    <interface name="recipeserverinterface"
+               styleDefault="http://www.w3.org/2006/01/wsdl/style/rpc">
+        <operation name="getRecipe" pattern="http://www.w3.org/2006/01/wsdl/in-out">
+            <input element="rcp:title"/>
+            <output element="rcp:recipe"/>
+        </operation>
+
+        <operation name="listRecipes" pattern="http://www.w3.org/2006/01/wsdl/in-out">
+            <input element="rcp:empty"/>
+			<!-- Should this return a collection so we can support same title recipes? -->
+            <output element="rcp:collection"/>
+        </operation>
+
+        <operation name="updateRecipe" pattern="http://www.w3.org/2006/01/wsdl/in-only">
+            <input element="rcp:recipe"/>
+        </operation>
+
+        <operation name="addRecipe" pattern="http://www.w3.org/2006/01/wsdl/in-only">
+            <input element="rcp:recipe"/>
+        </operation>
+
+        <operation name="deleteRecipe" pattern="http://www.w3.org/2006/01/wsdl/in-only">
+            <input element="rcp:recipe"/>
+        </operation>
+	</interface>
+
+I det ovenstående er det forsøgt at bruge samme struktur som REST. Her er der ingen tvivl om hvad de forskellige metoder gør, og man kan tydelig se at getRecipe skal have en title som argument. Omvendt kan man sige: "Hvorfor skal man tage den store hammer frem for at lave et RPC framework til at udføre noget som kan gøres med den eksisterende HTTP protokol". Når alt kommer til at er det nok et spørgsmål om brugsscenariet, da der er situationer hvor REST passer som fod i hose, mens andre situationer giver mere mening som en serie af RPC kald.

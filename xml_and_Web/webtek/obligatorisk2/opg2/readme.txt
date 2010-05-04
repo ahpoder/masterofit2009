@@ -26,7 +26,7 @@ Test scenario:
 19. Copy the XML from the bottom of this document for the PUT test and hit enter
 20. Verify that a 200 OK and a "success" text is returned.
 21. Verify that the recipe.xml document was correctly updated.
-22. Select 3. PUT
+22. Select 4. DELETE
 23. Copy the XML from the bottom of this document for the PUT test and hit enter
 24. Verify that a 200 OK and a "success" text is returned.
 25. Verify that the recipe.xml document was correctly updated.
@@ -67,6 +67,10 @@ Overvejelser:
 1. Det er ikke rigtig REST at bare indtaste titlen efter /recipies/. Der bør naturligvis være et lag mere - /recipies/title/<title of recipe>, sådanne at man også kan søge med f.eks. /recipies/id/<id> o.s.v. Dette er ikke gjort her, og vi tillader kun title sortering.
 2. Der er ingen begræsninger i recipe XML schema for at der ikke må være to recipes med samme title, så det burde der tages højde for i serveren, men det gøres der ikke.
 3. I POST, PUT og DELETE sendes der til /recipies, da det vedhæftede XML jo beskriver den recipe der skal opdateres, tilføjes eller slettes - der er ingen grund til at udtrykke det i stien. En mere REST måde at gøre det på kunne være at slette opskrifter via /recipies/title/<title of recipe> eller /recipies/id/<id>, hvor den første så vil slette alle der har den title. Dette er ikke gjort i den nuværende implementation. For POST og PUT er det lidt sværere, da det vil være dobbelt-konfekt at skulle udtrykke titlen eller id'et både i recipe XML'en og i URL'en. Dette snakkes der mere om i soap.xml.
+
+Noter:
+
+1. Der er næsten ingen kommentarer i RecipeClient, og dem der er kan være helt forkerte i forhold til hvor de står. RecipeClient er et rent test tool og leveres med intet dokumentation andet en usage og test-scenariet ovenfor.
 
 Text to insert for test:
 
