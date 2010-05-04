@@ -8,7 +8,7 @@ http://www.brics.dk/ixwt/examples/ShoppingCart.jsp (IXWT afsnit 10.1.9)
 
 ShoppingTags.jsp refererer de omtalte 7 tags.
 
-Det ser ud til der skal gennemføres noget iteration. Derfor får vi sandsynligvis brug for JSTL.
+Det ser ud til der skal gennemføres noget iteration (loop). Derfor får vi sandsynligvis brug for JSTL.
 Hvordan får vi dette til at køre med tomcat 6.0?
 
 Denne blog beskriver lidt om opsætning
@@ -69,3 +69,6 @@ Udskriver sit indhold afhængigt af om 'cart' indeholder elementer eller ej.
 
 process.tag:
 Udskriver blot sit indhold
+
+loop.tag:
+Er implementeret som en iterator omkring jsp:doBody. Det betyder, at vi helt har undgået anvendelsen af JSTL. Øv for besværet med at finde ud af at installere.
