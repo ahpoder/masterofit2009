@@ -107,20 +107,21 @@ public class RecipeServer extends HttpServlet {
   public void doPost(HttpServletRequest request,
                     HttpServletResponse response)
       throws IOException, ServletException {
-	  
+
 	// Retrieve the XML file path from the init param (relative to the location of the servlet)
 	String xmlPath = getInitParameter("RecipeXMLPath");
-	String xmlSchemaPath = getInitParameter("RecipeSchemaXMLPath");
+	String xmlSchemaPath = getInitParameter("RecipeXMLSchemaPath");
 	try {
-		SAXBuilder builder =
-		  new SAXBuilder("org.apache.xerces.parsers.SAXParser", true);
-		builder.setFeature(
-		  "http://apache.org/xml/features/validation/schema", true);
-		builder.setProperty(
-		  "http://apache.org/xml/properties/schema/external-schemaLocation",
-		  xmlSchemaPath);
-		Document doc = builder.build(request.getInputStream());
-		
+		SAXBuilder builder;
+		builder = new SAXBuilder();
+		builder.setValidation(true);
+		builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+		"http://www.w3.org/2001/XMLSchema");
+		builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaSource",
+		xmlSchemaPath);
+
+        Document doc = builder.build(request.getInputStream());
+
 	    Attribute id = (Attribute)XPath.selectSingleNode(doc, "//rcp:recipe/@id");
 		
 		Document d = loadXML(xmlPath);
@@ -137,36 +138,53 @@ public class RecipeServer extends HttpServlet {
 		  response.sendError(HttpServletResponse.SC_NOT_FOUND, "Recipe not found - use PUT to add a new recipe");
 		  return;
 		}
-
-		d.removeContent(r);
-		d.addContent(doc.getRootElement()); // TODO is this added the right place???
 		
-		response.setContentLength(27);
-		response.getWriter().write("Recipe successfully updated");
+		Element eCollection = d.getRootElement(); // Root (the document itself)
+		Element eRecipe = doc.getRootElement();
+		if (!eCollection.removeContent(r)) {
+		  response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR , "Failure deleting recipe");
+		  return;
+		}
+		
+		if (eCollection.addContent((Element)eRecipe.clone()) == null) {
+		  response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR , "Failure adding recipe");
+		  return;
+		}
+		
+		XMLOutputter xout = new XMLOutputter();
+		java.io.FileWriter xwriter = new java.io.FileWriter(xmlPath);
+		xout.output(d, xwriter);
+		xwriter.flush();
+		xwriter.close();
+
+		String resp = "Recipe successfully updated";
+		response.setContentLength(resp.length());
+		response.getWriter().write(resp);
 	}
 	catch (JDOMException ex) {
 	    // If an error occur when parsing the XML file write a site down warning
-		  response.sendError(HttpServletResponse.SC_NOT_FOUND, "Unkonwn server side error occured: " + ex.getMessage());
+		  response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR , "Unkonwn server side error occured: " + ex.getMessage());
 	}
   }
   
     public void doPut(HttpServletRequest request,
                       HttpServletResponse response)
       throws IOException, ServletException {
-	  
+
 		// Retrieve the XML file path from the init param (relative to the location of the servlet)
 		String xmlPath = getInitParameter("RecipeXMLPath");
 		String xmlSchemaPath = getInitParameter("RecipeXMLSchemaPath");
 		try {
-			SAXBuilder builder =
-			  new SAXBuilder("org.apache.xerces.parsers.SAXParser", true);
-			builder.setFeature(
-			  "http://apache.org/xml/features/validation/schema", true);
-			builder.setProperty(
-			  "http://apache.org/xml/properties/schema/external-schemaLocation",
-			  xmlSchemaPath);
+			SAXBuilder builder;
+			builder = new SAXBuilder();
+			builder.setValidation(true);
+			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+			"http://www.w3.org/2001/XMLSchema");
+			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaSource",
+			xmlSchemaPath);
+
 			Document doc = builder.build(request.getInputStream());
-			
+
 			Attribute id = (Attribute)XPath.selectSingleNode(doc, "//rcp:recipe/@id");
 			
 			Document d = loadXML(xmlPath);
@@ -180,37 +198,52 @@ public class RecipeServer extends HttpServlet {
 
 			if (r != null)
 			{
-			  response.sendError(HttpServletResponse.SC_NOT_FOUND, "Recipe already exists - use POST to update a recipe");
+			  response.sendError(HttpServletResponse.SC_BAD_REQUEST , "Recipe with supplied ID already exists");
 			  return;
 			}
-			d.addContent(doc.getRootElement()); // TODO is this added the right place???
 			
-			response.setContentLength(25);
-			response.getWriter().write("Recipe successfully added");
+			Element eCollection = d.getRootElement(); // Root (the document itself)
+			Element eRecipe = doc.getRootElement();
+			
+			if (eCollection.addContent((Element)eRecipe.clone()) == null) {
+			  response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR , "Failure adding recipe");
+			  return;
+			}
+			
+			XMLOutputter xout = new XMLOutputter();
+			java.io.FileWriter xwriter = new java.io.FileWriter(xmlPath);
+			xout.output(d, xwriter);
+			xwriter.flush();
+			xwriter.close();
+
+			String resp = "Recipe successfully added";
+			response.setContentLength(resp.length());
+			response.getWriter().write(resp);
 		}
 		catch (JDOMException ex) {
-			// If an error occur when parsing the XML file write a site down warning
-			  response.sendError(HttpServletResponse.SC_NOT_FOUND, "Unkonwn server side error occured: " + ex.getMessage());
+			// TODO we should c heck if it is a schema violation or something else that triggered the exception:
+			// Schema violation => SC_BAD_REQUEST
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR , "Unkonwn server side error occured: " + ex.getMessage());
 		}
-	  
     }
     public void doDelete(HttpServletRequest request,
                          HttpServletResponse response)
       throws IOException, ServletException {
 
-	  // Retrieve the XML file path from the init param (relative to the location of the servlet)
+		// Retrieve the XML file path from the init param (relative to the location of the servlet)
 		String xmlPath = getInitParameter("RecipeXMLPath");
-		String xmlSchemaPath = getInitParameter("RecipeSchemaXMLPath");
+		String xmlSchemaPath = getInitParameter("RecipeXMLSchemaPath");
 		try {
-			SAXBuilder builder =
-			  new SAXBuilder("org.apache.xerces.parsers.SAXParser", true);
-			builder.setFeature(
-			  "http://apache.org/xml/features/validation/schema", true);
-			builder.setProperty(
-			  "http://apache.org/xml/properties/schema/external-schemaLocation",
-			  xmlSchemaPath);
+			SAXBuilder builder;
+			builder = new SAXBuilder();
+			builder.setValidation(true);
+			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+			"http://www.w3.org/2001/XMLSchema");
+			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaSource",
+			xmlSchemaPath);
+
 			Document doc = builder.build(request.getInputStream());
-			
+
 			Attribute id = (Attribute)XPath.selectSingleNode(doc, "//rcp:recipe/@id");
 			
 			Document d = loadXML(xmlPath);
@@ -224,18 +257,32 @@ public class RecipeServer extends HttpServlet {
 
 			if (r == null)
 			{
-			  response.sendError(HttpServletResponse.SC_NOT_FOUND, "Recipe not found - nothing to DELETE");
+			  response.sendError(HttpServletResponse.SC_NOT_FOUND , "Recipe with supplied ID not found");
 			  return;
 			}
-
-			d.removeContent(r);
 			
-			response.setContentLength(27);
-			response.getWriter().write("Recipe successfully deleted");
+			Element eCollection = d.getRootElement(); // Root (the document itself)
+			Element eRecipe = doc.getRootElement();
+			
+			if (!eCollection.removeContent(r)) {
+			  response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR , "Failure deleting recipe");
+			  return;
+			}
+			
+			XMLOutputter xout = new XMLOutputter();
+			java.io.FileWriter xwriter = new java.io.FileWriter(xmlPath);
+			xout.output(d, xwriter);
+			xwriter.flush();
+			xwriter.close();
+
+			String resp = "Recipe successfully deleted";
+			response.setContentLength(resp.length());
+			response.getWriter().write(resp);
 		}
 		catch (JDOMException ex) {
-			// If an error occur when parsing the XML file write a site down warning
-			  response.sendError(HttpServletResponse.SC_NOT_FOUND, "Unkonwn server side error occured: " + ex.getMessage());
+			// TODO we should c heck if it is a schema violation or something else that triggered the exception:
+			// Schema violation => SC_BAD_REQUEST
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR , "Unkonwn server side error occured: " + ex.getMessage());
 		}
     }
 }

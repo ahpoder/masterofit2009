@@ -126,28 +126,15 @@ public class RecipeClient {
 		  out.write("Host: " + host + "\r\n"); 
 		  //This one is merely to inform the server. It is NOT required for the request to be valid
 		  out.write("User-Agent: IXVT\r\n");
-
-		  System.out.println("Document: " + str);
-/*
-		   SAXParserFactory factory = SAXParserFactory.newInstance();
-           SAXParser saxParser = factory.newSAXParser();
-           XMLReader xmlReader = saxParser.getXMLReader();
-           xmlReader.setFeature("http://apache.org/xml/features/validation/schema";,
-true);
-		   xmlReader.setProperty(
-		      "http://apache.org/xml/properties/schema/external-schemaLocation",
-			  "C:\\db\\recipes.xsd"
 		  
-		   xmlReader.parse(new StringReader(str));
-*/
+			SAXBuilder builder;
+			builder = new SAXBuilder();
+			builder.setValidation(true);
+			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+			"http://www.w3.org/2001/XMLSchema");
+			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaSource",
+			"C:\\db\\recipes.xsd");
 
-		   
-		  SAXBuilder builder = new SAXBuilder("org.apache.xerces.parsers.SAXParser", true);
-		  builder.setFeature("http://apache.org/xml/features/validation/schema", true);
-		  builder.setFeature("http://apache.org/xml/features/validation/schema-full-checking", true);
-		  builder.setProperty(
-			  "http://apache.org/xml/properties/schema/external-schemaLocation",
-			  "C:\\db\\recipes.xsd"); // Nasty hard-coded value
 		    Document doc = builder.build(new StringReader(str));
 
 			XMLOutputter xo = new XMLOutputter();
@@ -155,7 +142,7 @@ true);
 			xo.output(doc, caw); // We could have written directly to the stream as xo.output(d, response.getWriter()) but then we would not be able to set the length
 			char[] tempDoc = caw.toCharArray();
 
-			out.write("Content-Type: text/xml");
+			out.write("Content-Type: text/xml\r\n");
 			out.write("Content-Length: " + tempDoc.length + "\r\n");
 			
 		  //Signal POST termination with an empty line. This one is required for the request to be valid.
@@ -219,11 +206,199 @@ true);
 	}
 	
 	public void performPut(String str) {
-	
+		try {
+		  //Set up the connection
+		  Socket con = new Socket(host, port);
+		  
+		  //Send the request on the connection outputstream (based on IXVT p. 375)
+		  BufferedWriter out =
+			  new BufferedWriter
+				 (new OutputStreamWriter(con.getOutputStream(), "UTF8"));
+		  //We're interested in the host root only
+		  
+		  out.write("PUT /RecipeServer/recipies HTTP/1.1\r\n");
+
+		  //The Host header is required (at least at the tested site: www.brics.dk)
+		  out.write("Host: " + host + "\r\n"); 
+		  //This one is merely to inform the server. It is NOT required for the request to be valid
+		  out.write("User-Agent: IXVT\r\n");
+
+		  System.out.println("Document: " + str);
+		  
+			SAXBuilder builder;
+			builder = new SAXBuilder();
+			builder.setValidation(true);
+			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+			"http://www.w3.org/2001/XMLSchema");
+			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaSource",
+			"C:\\db\\recipes.xsd");
+
+		    Document doc = builder.build(new StringReader(str));
+
+			XMLOutputter xo = new XMLOutputter();
+			CharArrayWriter caw = new CharArrayWriter();
+			xo.output(doc, caw); // We could have written directly to the stream as xo.output(d, response.getWriter()) but then we would not be able to set the length
+			char[] tempDoc = caw.toCharArray();
+
+			out.write("Content-Type: text/xml\r\n");
+			out.write("Content-Length: " + tempDoc.length + "\r\n");
+			
+		  //Signal POST termination with an empty line. This one is required for the request to be valid.
+		  //If it is missing we just be waiting "forever" for a server response
+		  out.write("\r\n"); 
+		  
+		  out.write(tempDoc, 0, tempDoc.length);
+		  out.flush();
+
+		  //Get a handle on the server response      
+		  BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+		  System.out.println("\r\nResult: ");
+		  int i = -2;
+		  int length = -1;
+		  boolean headerReceived = false;
+		  CharArrayWriter buffer = new CharArrayWriter();
+		  char[] tempBuffer = new char[1024];
+		  while (i < length) {
+			if (!headerReceived) {
+				String line = in.readLine();
+				System.out.println(line);
+				if (line.indexOf("Content-Length: ") != -1) {
+					length = Integer.parseInt(line.substring(16));
+					i = 0;
+				}
+				else if (line.length() == 0) { // blank line indicates seperation between header and payload
+					headerReceived = true;
+				}
+			}
+			else {
+				int temp = in.read(tempBuffer, 0, tempBuffer.length);
+				if (temp > 0)
+				{
+					buffer.write(tempBuffer, 0, temp);
+					if (length > 0) { // Only count up if we have a length
+						i += temp;
+					}
+				}
+				else {
+					break;
+				}
+			}
+		  }
+		  
+		  if (length > 0 && i < length) { // error
+			System.err.println("Failure received full payload");
+		  }
+		  else {
+			char[] temp = buffer.toCharArray();
+			System.out.println(new String(temp, 0, temp.length));
+		  }
+
+		  //Do a clean up of the resources
+		  con.close();
+		} catch (IOException e) {
+		  System.err.println(e);
+		} catch (JDOMException e) {
+		  System.err.println(e);
+		}
 	}
 
 	public void performDelete(String str) {
-	
+		try {
+		  //Set up the connection
+		  Socket con = new Socket(host, port);
+		  
+		  //Send the request on the connection outputstream (based on IXVT p. 375)
+		  BufferedWriter out =
+			  new BufferedWriter
+				 (new OutputStreamWriter(con.getOutputStream(), "UTF8"));
+		  //We're interested in the host root only
+		  
+		  out.write("DELETE /RecipeServer/recipies HTTP/1.1\r\n");
+
+		  //The Host header is required (at least at the tested site: www.brics.dk)
+		  out.write("Host: " + host + "\r\n"); 
+		  //This one is merely to inform the server. It is NOT required for the request to be valid
+		  out.write("User-Agent: IXVT\r\n");
+
+		  System.out.println("Document: " + str);
+		  
+			SAXBuilder builder;
+			builder = new SAXBuilder();
+			builder.setValidation(true);
+			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+			"http://www.w3.org/2001/XMLSchema");
+			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaSource",
+			"C:\\db\\recipes.xsd");
+
+		    Document doc = builder.build(new StringReader(str));
+
+			XMLOutputter xo = new XMLOutputter();
+			CharArrayWriter caw = new CharArrayWriter();
+			xo.output(doc, caw); // We could have written directly to the stream as xo.output(d, response.getWriter()) but then we would not be able to set the length
+			char[] tempDoc = caw.toCharArray();
+
+			out.write("Content-Type: text/xml\r\n");
+			out.write("Content-Length: " + tempDoc.length + "\r\n");
+			
+		  //Signal POST termination with an empty line. This one is required for the request to be valid.
+		  //If it is missing we just be waiting "forever" for a server response
+		  out.write("\r\n"); 
+		  
+		  out.write(tempDoc, 0, tempDoc.length);
+		  out.flush();
+
+		  //Get a handle on the server response      
+		  BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+		  System.out.println("Result: ");
+		  int i = -2;
+		  int length = -1;
+		  boolean headerReceived = false;
+		  CharArrayWriter buffer = new CharArrayWriter();
+		  char[] tempBuffer = new char[1024];
+		  while (i < length) {
+			if (!headerReceived) {
+				String line = in.readLine();
+				System.out.println(line);
+				if (line.indexOf("Content-Length: ") != -1) {
+					length = Integer.parseInt(line.substring(16));
+					i = 0;
+				}
+				else if (line.length() == 0) { // blank line indicates seperation between header and payload
+					headerReceived = true;
+				}
+			}
+			else {
+				int temp = in.read(tempBuffer, 0, tempBuffer.length);
+				if (temp > 0)
+				{
+					buffer.write(tempBuffer, 0, temp);
+					if (length > 0) { // Only count up if we have a length
+						i += temp;
+					}
+				}
+				else {
+					break;
+				}
+			}
+		  }
+		  
+		  if (length > 0 && i < length) { // error
+			System.err.println("Failure received full payload");
+		  }
+		  else {
+			char[] temp = buffer.toCharArray();
+			System.out.println(new String(temp, 0, temp.length));
+		  }
+
+		  //Do a clean up of the resources
+		  con.close();
+		} catch (IOException e) {
+		  System.err.println(e);
+		} catch (JDOMException e) {
+		  System.err.println(e);
+		}
 	}
 
 	public static void main (String args[]) {
