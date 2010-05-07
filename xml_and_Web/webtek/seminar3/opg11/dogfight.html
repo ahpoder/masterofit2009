@@ -1,0 +1,47 @@
+<html><head><title>opg4</title></head>
+<body>
+	<script type="text/JavaScript">
+		function Pet(n, s) {
+			this.name = n;
+			this.petSound = s;
+			this.noisiest = function() { this.prototype.vovCount > this.prototype.meowCount ? "Dog" : "Cat"; }
+			this.sound = function() { if(s == "vov") Pet.prototype.vovCount++; else Pet.prototype.meowCount++; return petSound; }
+		}
+		Pet.prototype.vovCount = 0;
+		Pet.prototype.meowCount = 0;
+
+		function Dog(n) {
+			this.base = Pet;
+			this.base(n, "vov");
+			//delete this.base
+		}
+
+		Dog.prototype = new Pet;
+
+		function Cat(n) {
+			this.base = Pet;
+			this.base(n, "meow");
+			//delete this.base
+		}
+
+		Cat.prototype = new Pet;
+
+		var d1 = new Dog("Fido");
+		var d2 = new Dog("Mads");
+		var d3 = new Dog("Bent");
+		var c1 = new Cat("Miv");
+		var c2 = new Cat("Plus");
+
+		var s1 = d1.sound();
+		var s2 = d2.sound();
+		var s3 = c1.sound();
+		var s4 = c2.sound();
+		var s5 = c1.sound();
+
+		var n = d3.noisiest();
+
+
+	</script>
+
+</body>
+</html>
