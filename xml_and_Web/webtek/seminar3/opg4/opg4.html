@@ -1,0 +1,23 @@
+<html><head><title>opg4</title></head>
+<body>
+	<div style="background-color: red">WEBTEK, seminar 3, opgave 4</div>
+
+	<script type="text/JavaScript">
+		var state=true;
+		function clicked() {
+			var divs=document.getElementsByTagName("div");
+			for(i=0;i<divs.length;i++){
+				if(state){
+					divs[i].style.backgroundColor="purple";
+				}
+				else {
+					divs[i].style.backgroundColor="white";
+				}
+			}
+			state = !state;
+		}
+	</script>
+
+	<input type="button" value="Change color" onclick="clicked()"/>
+</body>
+</html>
