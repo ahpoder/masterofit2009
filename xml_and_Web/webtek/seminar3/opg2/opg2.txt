@@ -1,0 +1,11 @@
+function calcavg(o){
+	var sum=0;
+	for(i=0;i<o.length;i++){
+		sum=sum+o[i].grade;
+	}
+	return sum/o.length;
+}
+
+var o=[{name:"John Doe", grade:12},{name:"a",grade:5}]
+
+calcavg(o);
