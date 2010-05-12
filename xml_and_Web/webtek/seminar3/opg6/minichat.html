@@ -1,0 +1,53 @@
+<html>
+<head>
+<title>Same screen chat</title>
+<script type="text/JavaScript">
+	function addListItem(sour){
+		// Get the value into the input text field
+		var element = document.getElementById('newItem' + sour).value;
+		if(element==""){
+			// Show an error message if the field is blank;
+			document.getElementById('msg').style.display="block";
+			document.getElementById('msg').innerHTML = "Error! You must have something to say";
+		}else{
+			// This is the <ul id="myList"> element that will contains the new elements
+			var container = document.getElementById('myList');
+			// Create a new <li> element for to insert inside <ul id="myList">
+			var new_element = document.createElement('li');
+			new_element.innerHTML = sour + " said: " + element;
+			container.insertBefore(new_element, container.firstChild);
+			// Clear error field
+			document.getElementById('msg').style.display="block";
+			document.getElementById('msg').innerHTML = "";
+			// Clean input field
+			document.getElementById('newItem' + sour).value="";
+		}
+	}
+</script>
+</head>
+<body>
+<table>
+<tr>
+<td>
+<input name="newItem1" id="newItem1" type="text" value=""/>
+</td>
+<td>
+<input type="button" value="submit" name="submit" onClick = "javascript:addListItem('1')"/>
+</td>
+</tr>
+<tr>
+<td>
+<input name="newItem2" id="newItem2" type="text" value=""/>
+</td>
+<td>
+<input type="button" value="submit" name="submit" onClick = "javascript:addListItem('2')"/>
+</td>
+</tr>
+</table>
+<div id="msg"></div>
+Chat list</br>
+<ul id="myList">
+</ul>
+
+</body>
+</html>
