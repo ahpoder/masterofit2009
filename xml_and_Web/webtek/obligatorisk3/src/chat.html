@@ -1,0 +1,65 @@
+<html>
+<head>
+<title>Chat client</title>
+<script type="text/JavaScript">
+	function sendListItem(){
+		// Get the value of the name field
+		var name = document.getElementById('name').value;
+		if (name=="") {
+			// Show an error message if the field is blank;
+			document.getElementById('msg').style.display="block";
+			document.getElementById('msg').innerHTML = "Error! Please enter a name to identify yourself on the chat"; 
+		} else {
+			// Get the value into the input text field
+			var element = document.getElementById('newItem').value;
+			if(element==""){
+				// Show an error message if the field is blank;
+				document.getElementById('msg').style.display="block";
+				document.getElementById('msg').innerHTML = "Error! You must have something to say";
+			} else {
+				// Send to server
+			}
+		}
+	}
+	
+	function pollServer() {
+		// Read from server
+	}
+	
+	function addListItem(element) {
+		// This is the <ul id="myList"> element that will contains the new elements
+		var container = document.getElementById('myList');
+		// Create a new <li> element for to insert inside <ul id="myList">
+		var new_element = document.createElement('li');
+		new_element.innerHTML = name + " says: " + element;
+		container.insertBefore(new_element, container.firstChild);
+		// Clear error field
+		document.getElementById('msg').style.display="block";
+		document.getElementById('msg').innerHTML = "";
+		// Clean input field
+		document.getElementById('newItem' + sour).value="";
+	}
+	
+	window.setTimeout('pollServer()', 3000);
+</script>
+</head>
+<body>
+Please enter your name:
+<input name="name" id="name" type="text" value=""/>
+<table>
+<tr>
+<td>
+<input name="newItem" id="newItem" type="text" value=""/>
+</td>
+<td>
+<input type="button" value="submit" name="submit" onClick = "javascript:sendListItem()"/>
+</td>
+</tr>
+</table>
+<div id="msg"></div>
+Chat list</br>
+<ul id="myList">
+</ul>
+
+</body>
+</html>
