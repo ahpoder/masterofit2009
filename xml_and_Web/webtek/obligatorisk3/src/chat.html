@@ -1,65 +1,118 @@
 <html>
 <head>
 <title>Chat client</title>
-<script type="text/JavaScript">
-	function sendListItem(){
-		// Get the value of the name field
+<script type="text/javascript" src="ajax.js"/>
+<script type="text/javascript">
+	var timeout;
+
+	function switchName(){
+		// Get the value of the chat field
 		var name = document.getElementById('name').value;
 		if (name=="") {
 			// Show an error message if the field is blank;
 			document.getElementById('msg').style.display="block";
-			document.getElementById('msg').innerHTML = "Error! Please enter a name to identify yourself on the chat"; 
+			document.getElementById('msg').innerHTML = "Error! You cannot use a blank name"; 
+		} else {
+			document.getElementById('currentName').innerHTML = name; 
+		}
+	}
+
+	function switchChat(){
+		// Get the value of the chat field
+		var chat = document.getElementById('chat').value;
+		if (chat=="") {
+			// Show an error message if the field is blank;
+			document.getElementById('msg').style.display="block";
+			document.getElementById('msg').innerHTML = "Error! You cannot use a blank chat"; 
+		} else {
+			document.getElementById('currentChat').innerHTML = chat; 
+			pollServer();
+		}
+	}
+
+	function sendListItem(){
+		// Get the value of the chat field
+		var chat = document.getElementById('currentChat').value;
+		// Get the value of the name field
+		var name = document.getElementById('currentName').value;
+		if (name=="" || chat=="") {
+			// Show an error message if the field is blank;
+			document.getElementById('msg').style.display="block";
+			document.getElementById('msg').innerHTML = "Error! Please enter a name to identify yourself and a chat to join/create"; 
 		} else {
 			// Get the value into the input text field
-			var element = document.getElementById('newItem').value;
-			if(element==""){
+			var text = document.getElementById('newItem').value;
+			if(text==""){
 				// Show an error message if the field is blank;
 				document.getElementById('msg').style.display="block";
 				document.getElementById('msg').innerHTML = "Error! You must have something to say";
 			} else {
-				// Send to server
+				if (http.readyState == 0 || http.readyState == 4) {
+					sendRequest(encodeURI(location.host + "/ChatServer?chat=" + chat + "&name=" + name + "&text=" + text), serverResponse);
+				} else {
+					window.clearTimeout(timeout);
+					timeout = window.setTimeout(sendListItem, 500);
+				}
 			}
 		}
 	}
+
+	// This function can be reused by both send chat and poll
+	function serverResponse() {
+		if (http.readyState == 4) {
+			try {
+				if (http.status == 200) {
+					// Parse the repsonse and update the chat list
+					
+					// This is the <div id="chatTextList"> element that will contains the new elements
+					var container = document.getElementById('chatTextList');
+					
+					var d = document.createElement("div");
+					d.innerHTML = http.responseText;
+					var u = d.getElementByTagName("table");
+
+					container.innerHTML = u;
+				} else {
+					alert("Error: " + http.status);
+				}
+			} catch (e) {
+				alert(e);
+			}
+		}
+		window.clearTimeout(timeout);
+		window.setTimeout(pollServer, 3000);
+	}
 	
 	function pollServer() {
-		// Read from server
+		// Get the value of the name field
+		var chat = document.getElementById('currentChat').value;
+		if (chat!="") {
+			if (http.readyState == 0 || http.readyState == 4) {
+				sendRequest(encodeURI(location.host + "/ChatServer?chat=" + chat), serverResponse);
+			} else {
+				window.clearTimeout(timeout);
+				timeout = window.setTimeout(pollServer, 500);
+			}
+		}
 	}
-	
-	function addListItem(element) {
-		// This is the <ul id="myList"> element that will contains the new elements
-		var container = document.getElementById('myList');
-		// Create a new <li> element for to insert inside <ul id="myList">
-		var new_element = document.createElement('li');
-		new_element.innerHTML = name + " says: " + element;
-		container.insertBefore(new_element, container.firstChild);
-		// Clear error field
-		document.getElementById('msg').style.display="block";
-		document.getElementById('msg').innerHTML = "";
-		// Clean input field
-		document.getElementById('newItem' + sour).value="";
-	}
-	
-	window.setTimeout('pollServer()', 3000);
+
+	timeout = window.setTimeout(pollServer, 3000);
 </script>
 </head>
 <body>
-Please enter your name:
+Please enter your name - current name: <div id="currentName">Unknown</div>
 <input name="name" id="name" type="text" value=""/>
-<table>
-<tr>
-<td>
+<input type="button" value="submit" name="submit" onClick="javascript:switchName()"/>
+Please enter the chat you wish to join - current chat: <div id="currentChatName">Unknown</div><br/>
+<input name="chat" id="chat" type="text" value=""/>
+<input type="button" value="submit" name="submit" onClick="javascript:switchChat()"/>
+This is a list of ongoing chats and their last update time:
+<div id="ongoingChatList"/>
+Please enter the text you wish to add to the chat:
 <input name="newItem" id="newItem" type="text" value=""/>
-</td>
-<td>
 <input type="button" value="submit" name="submit" onClick = "javascript:sendListItem()"/>
-</td>
-</tr>
-</table>
 <div id="msg"></div>
 Chat list</br>
-<ul id="myList">
-</ul>
-
+<div id="chatTextList"/>
 </body>
 </html>
