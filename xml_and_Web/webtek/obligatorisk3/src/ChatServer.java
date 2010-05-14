@@ -30,7 +30,7 @@ public class ChatServer extends HttpServlet {
 	sb.append("<head>");
 	sb.append("<title>Chat response</title>");
 	sb.append("</head>");
-	sb.append("<body>>");
+	sb.append("<body>");
 	sb.append("<table>");
 
 	synchronized (this) {
@@ -40,7 +40,7 @@ public class ChatServer extends HttpServlet {
 			c.setAttribute("chats", n);
 		}
 		
-		if (!n.contains(chat)) {
+		if (!n.containsKey(chat)) {
 			n.put(chat, new ArrayList<ChatItem>());
 		}
 		ArrayList<ChatItem> chatList = n.get(chat);
