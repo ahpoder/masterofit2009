@@ -16,6 +16,22 @@ public class ChatServer extends HttpServlet {
 	public Date dateTime;
   }
   
+  private String htmlEscape(String s) {
+    StringBuffer b = new StringBuffer();
+	for (int i = 0; i < s.length(); ++i) {
+	  char c = s.charAt(i);
+	  switch (c) {
+	    case '<': b.append("&lt;"); break;
+	    case '>': b.append("&gt;"); break;
+	    case '"': b.append("&quot;"); break;
+	    case '\'': b.append("&apos;"); break;
+	    case '&': b.append("&amp;"); break;
+		default: b.append(c);
+	  }
+	}
+	return b.toString();
+  }
+	
   public void doGet(HttpServletRequest request,
                     HttpServletResponse response)
       throws IOException, ServletException {
@@ -55,10 +71,10 @@ public class ChatServer extends HttpServlet {
 			ChatItem ciOut = i.next();
 			sb.append("<tr>");
 			sb.append("<td>");
-			sb.append(ciOut.name);
+			sb.append(htmlEscape(ciOut.name));
 			sb.append("</td>");
 			sb.append("<td>");
-			sb.append(ciOut.text);
+			sb.append(htmlEscape(ciOut.text));
 			sb.append("</td>");
 			sb.append("<td>");
 			sb.append(ciOut.dateTime.toString());
