@@ -3,47 +3,58 @@
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	    <title>Simple Chat</title>
 	</head>
+
+
 	<body>
     	<table width="99%">
     		<tr>
     			<td align=left>
-					<form onsubmit="clickedleft()">
-						Left:
-						<input id="inputleft" type="text" size="75">
-						<input type="submit" value="Send">
-					</form>
+					Left:
+					<input id="inputleft" type="text" size="75">
+					<input type="button" value="Send" onclick="clickedLeft()">
     			</td>
-    			<td/>
     			<td align=right>
-					<form onsubmit="clickedright()">
-						Right:
-						<input id="inputright" type="text" size="75">
-						<input type="submit" value="Send">
-					</form>
+					Right:
+					<input id="inputright" type="text" size="75">
+					<input type="button" value="Send" onclick="clickedRight()">
     			</td>
     		</tr>
+    	</table>
+    	<hr/>
+    	<table width="50%" align="center">
     		<tr>
-    			<td/>
-    			<td>
-					Chat trace:
-					<ul id="chattrace">
-					</ul>
-    			</td>
-    			<td/>
+    			<td>Chat trace:
+			</tr>
+    		<tr>
+				<td><ul id="chattrace"/>
     		</tr>
     	</table>
     </body>
 
 	<script type="text/JavaScript">
-		function clickedleft() {
+		function clickedLeft() {
 			var src=document.getElementById("inputleft");
+			appendChat("left", src);
+		}
+
+		function clickedRight() {
+			var src=document.getElementById("inputright");
+			appendChat("right", src);
+		}
+		<!-- Add the user entered text to the chat trace (with a timestamp as text)-->
+		function appendChat(user, src){
 			var dst=document.getElementById("chattrace");
 			var newel=document.createElement("li");
-			<!-- ins.setAttribute("Text", src.value); -->
-			var newtext=document.createTextNode(src.value);
+			var newtext=document.createTextNode(user);
+			newtext.appendData(" ");
+			newtext.appendData(" says: ");
+			newtext.appendData(src.value);
+			newtext.appendData(" (@");
+			newtext.appendData(new Date());
+			newtext.appendData(")");
 			newel.appendChild(newtext);
 			dst.appendChild(newel);
+			src.value="";
 		}
 	</script>
-
 </html>
