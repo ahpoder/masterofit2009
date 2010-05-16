@@ -122,4 +122,10 @@ public class ChatServer extends HttpServlet {
 	response.setContentLength(resp.length());
 	response.getWriter().write(resp);
   }
+  
+  public void doPost(HttpServletRequest request,
+                    HttpServletResponse response)
+      throws IOException, ServletException {
+	doGet(request, response);
+  }
 }
