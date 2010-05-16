@@ -6,11 +6,13 @@ Vi har løst opgaven som et projekt, ved først at implementere den nødvendige fun
 
 Der er et punkt hvor vi har valgt at prioritere kode simplicitet over overholdelse af HTTP/REST principperne. I vores implmentering er en tilføjelse til en chat bare en udvidelse af en request efter en chat liste, og rent kode-mæssigt er det derfor meget simplere at implementere disse sammen. Dette er naturligvis en overtrædelse af princippet om at GET ikke må have sideeffekter, og HTTP/REST evangelisterne ville helt sikkert har grebet høtyve og fakler og drevet os ud af byen hvis de vidste det. Omvendt har vi valgt at argumentere med at ChatServer, hvor denne overtrædelse finder sted, kun tilgås fra vores AJAX kode, og aldrig skal tilgås direkte, samt at vi naturligvis anvender POST til opdatering og GET til request i denne kode, så overtrædelsen er kun en mulighed hvis man overtræder brugs-scenariet for vores applikation.
 
+Endvidere kan det ses at vi altid overfører alt chat indholdet. Dette er den simpleste måde at sikre korrekt rækkefølge af chat entries. Et alternativ er kun at sende nye chat opdateringer, incl. ens egne, i den rigtige rækkefølge og så have en speciel kommando til at requeste en hel chat historik (hvis man ønsker at skifte chat), eller man kan kun sende andres nye chat beskeder og injecte ens egne direkte ind i listen, men det vil kræve client-side kontrol med datoen samt administration af hvis man skifter navn, men det er muligt. Vi har dog valgt den simpleste løsning, og argumenterer med at rå tekst er relativt "billigt" at sende hver gang, og hvis en chat bliver for lang bliver den alligevel uoverskuelig. Dette kan naturligvis løses ved at lave en "expires" tid på chat items, eller en maksimal længde på chat listen, men det er p.t. ikke implementeret - vi genstarter bare timcat serveren hver nat :)
+
 Test:
 
 1. Copier indholdet af tomcat til webapps i tomcat install folderen.
 2. Genstrat tomcat servicen
-3. Naviger til 127.0.0.1:8080/ChatClient/chat.html (hvis din tomcat service lyter på en anden port anvend den)
+3. Naviger til 127.0.0.1:8080/ChatClient/chat.html (hvis din tomcat service lytter på en anden port anvend den)
 4. Udfyld navn og tryk "Set nama".
 5. Se at current name opdateres
 6. Udfyld chat og vælg "Set chat"
