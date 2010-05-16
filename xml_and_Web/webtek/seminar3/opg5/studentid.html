@@ -2,7 +2,7 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Input student id</title></head><body>
         <div>
-            <form onsubmit="clicked()">
+            <form onsubmit="return clicked()">
                 Student ID: <input id="istudentId" type="text">
                 <input type="submit">
             </form>
@@ -13,8 +13,15 @@
 		function clicked() {
 			var res=document.getElementById("istudentId");
 			result = res.value.match(/\d{8}/);
-			if(!result)
-				alert("8 digits only");
+			if(!result) {
+				var newel=document.createElement("b");
+				var newtext=document.createTextNode("8 digits only (pattern: NNNNNNNN)");
+				newel.appendChild(newtext);
+				res.parentNode.appendChild(newel);
+				return false;
+			}
+			else
+				return true;
 		}
 	</script>
 
