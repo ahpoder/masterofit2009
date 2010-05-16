@@ -1,0 +1,93 @@
+<html>
+<head>
+<title>Chat client</title>
+<script type="text/javascript" src="jquery-1.4.2.js"/>
+<script type="text/javascript">
+	var timeout;
+
+	function switchName(){
+		// Get the value of the chat field
+		var name = $('#name').val();
+		if (name=="") {
+			// Show an error message if the field is blank;
+			$('#msg').css("display", "block");
+			$('#msg').html("Error! You cannot use a blank name"); 
+		} else {
+			$('#currentName').html(name); 
+			$('#msg').html("");
+			$('#name').val("");
+		}
+	}
+
+	function switchChat(){
+		// Get the value of the chat field
+		var chat = $('#chat').val();
+		if (chat=="") {
+			// Show an error message if the field is blank;
+			$('#msg').css("display", "block");
+			$('msg').html("Error! You cannot use a blank chat"); 
+		} else {
+			$('#currentChat').html(chat); 
+			$('#msg').html("");
+			$('#chat').val("");
+			pollServer();
+		}
+	}
+
+	function sendListItem(){
+		// Get the value of the chat field
+		var chatN = $('#currentChat').html();
+		// Get the value of the name field
+		var nameN = $('#currentName').html();
+		if (nameN=="" || chatN=="") {
+			// Show an error message if the field is blank;
+			$('#msg').css("display", "block");
+			$('#msg').html("Error! Please enter a name to identify yourself and a chat to join/create"); 
+		} else {
+			// Get the value into the input text field
+			var textN = $('#newItem').val();
+			if(textN==""){
+				// Show an error message if the field is blank;
+				$('#msg').css("display", "block");
+				$('#msg').html("Error! You must have something to say");
+			} else {
+				$('#msg').html("");
+				$.post("http://" + location.host + "/ChatServer", { chat: chatN, name: nameN, text: textN }, function(data) { $("#chatTextList table").html(data) });
+			}
+		}
+	}
+
+	function pollServer() {
+		// Get the value of the name field
+		var chat = $('#currentChat').html();
+		if (chat != "") {
+			$.get("http://" + location.host + "/ChatServer", { chat: chatN }, function(data) { $("#chatTextList table").html(data) });
+		}
+	}
+
+	timeout = window.setTimeout(pollServer, 3000);
+</script>
+</head>
+<body>
+<table><tr><td>Current name:</td><td><div id="currentName"></div></td></tr>
+<tr><td>Please enter your name:</td><td>
+<input name="name" id="name" type="text" value=""/>
+<input type="button" value="Set name" name="submit" onClick="javascript:switchName()"/>
+</td></tr>
+<tr><td>Current chat:</td><td><div id="currentChat"></div></td></tr>
+<tr><td>Please enter the chat you wish to join:</td><td>
+<input name="chat" id="chat" type="text" value=""/>
+<input type="button" value="Set chat" name="submit" onClick="javascript:switchChat()"/>
+</td></tr></table><br/>
+This is a list of ongoing chats and their last update time:
+<div id="ongoingChatList"/>
+<br/>
+Please enter the text you wish to add to the chat:
+<input name="newItem" id="newItem" type="text" value=""/>
+<input type="button" value="Add to chat" name="submit" onClick = "javascript:sendListItem()"/><br/><br/>
+<div id="msg"></div>
+<br/>
+Chat list</br>
+<div id="chatTextList"/>
+</body>
+</html>
