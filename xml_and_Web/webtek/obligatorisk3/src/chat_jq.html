@@ -1,6 +1,9 @@
 <html>
 <head>
 <title>Chat client</title>
+<!-- These tags disable caching, which is very important, otherwise IR do not load the new data upon timeout -->
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
+<META HTTP-EQUIV="Expires" CONTENT="0"/>
 <script type="text/javascript" src="jquery-1.4.2.js"></script>
 <script type="text/javascript">
 	var timeout; // This variable is used for changing between http not ready timeout and polling timeout
@@ -56,7 +59,8 @@
 				// Clear any previous error message
 				$('#msg').html("");
 				// POST the new chat item to the ChatServer and call serverResponse upon completion.
-				$.post("http://" + location.host + "/ChatServer", { chat: chatN, name: nameN, text: textN }, serverResponse);
+				// The dummy adding is only to make IE happy - UGLY!!!!
+				$.post("http://" + location.host + "/ChatServer", { chat: chatN, name: nameN, text: textN, dummy: new Date().getTime() }, serverResponse);
 			}
 		}
 	}
@@ -84,7 +88,8 @@
 		var chatN = $('#currentChat').html();
 		if (chatN != "") { // Test that a chat was entered
 			// If so send a request for the chat data
-			$.get("http://" + location.host + "/ChatServer", { chat: chatN }, serverResponse);
+			// The dummy adding is only to make IE happy - UGLY!!!!
+			$.get("http://" + location.host + "/ChatServer", { chat: chatN, dummy: new Date().getTime() }, serverResponse);
 // 			TODO load is a fancy form of $.get that set it directly on the 
 // 			element - can we use this??? - possibly $('#chatTextList table'),
 // 			but this seems to try and find aa table in the existing test, not in the new.

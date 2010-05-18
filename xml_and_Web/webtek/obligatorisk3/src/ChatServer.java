@@ -66,6 +66,8 @@ public class ChatServer extends HttpServlet {
 	sb.append("<html>");
 	sb.append("<head>");
 	sb.append("<title>Chat response</title>"); // title is only decorative, it serves no purpose.
+	sb.append("<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\"/>");
+	sb.append("<META HTTP-EQUIV=\"Expires\" CONTENT=\"0\"/>");
 	sb.append("</head>");
 	sb.append("<body>");
 	sb.append("<table>");

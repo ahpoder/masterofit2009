@@ -12,6 +12,12 @@ ChatServeren returnerer chat entries som html. De kunne naturligvis også have væ
 
 Endelig kan det ses at JQuery løsningen, ud over at anvende POST korrekt, også er noget mere let-læselig og dermed overskuelig, hvilket er et stort plus med scripting-kode, og så sikre JQuery også at det er cross-browser kompatibelt, hvilket også er et enormt plus.
 
+Da vi testede det opdagede vi en sjov detalje. I IE virkede det ikke. Når der forekom et timeout så gik systemet tilbage til det der havde stået i chatten første gang den indlæte den (dette tog lidt test at finde ud af). Efter lidt fundering konkluderede vi at det måtte være caching, da vi jo requester det samme igen. Først prøve vi atindsætte no-caching meta-flag i html filerne, men nej, det virkede ikke. Lidt mere fundering og så slog det os - det er naturligvis responset fra ChatServeren der skal indeholde no-caching, ellers så vil den bare genbruge det den modtog sidste gang, men nej, det virkede heller ikke. Og så var vi tæt på at droppe IE, men fandt så følgende link: 
+
+http://weblogs.asp.net/pleloup/archive/2006/06/08/451583.aspx
+
+Nej, hvor er det grimt, og hold da op hvor det virker :(
+
 Test:
 1. Kopier indholdet af tomcat til webapps i tomcat install folderen.
 2. Genstart tomcat servicen
