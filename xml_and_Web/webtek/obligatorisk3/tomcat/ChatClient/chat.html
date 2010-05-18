@@ -1,6 +1,9 @@
 <html>
 <head>
 <title>Chat client</title>
+<!-- These tags disable caching, which is very important, otherwise IR do not load the new data upon timeout -->
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache"/>
+<META HTTP-EQUIV="Expires" CONTENT="0"/>
 <!-- Load the little ajax "framework" from the slides -->
 <script type="text/javascript" src="ajax.js"></script>
 <script type="text/javascript">
@@ -60,7 +63,9 @@
 				// Validate that the HTTP is ready for transmitting
 				if (http.readyState == 0 || http.readyState == 4) {
 					// If it is send the chat text to the ChatServer and call serverResponse upon completion.
-					sendRequest(encodeURI("http://" + location.host + "/ChatServer?chat=" + chat + "&name=" + name + "&text=" + text), serverResponse);
+					// TODO - how to make POST request (how to add the payload in the ajax.js script)
+					// The dummy adding is only to make IE happy - UGLY!!!!
+					sendRequest(encodeURI("http://" + location.host + "/ChatServer?chat=" + chat + "&name=" + name + "&text=" + text + "&dummy=" + new Date().getTime()), serverResponse);
 					document.getElementById('newItem').value = "";
 				} else {
 					// If not wait 500ms and try again (clearing the 3 second poll timer)
@@ -113,7 +118,8 @@
 			
 			if (http.readyState == 0 || http.readyState == 4) { // Test that we have never requested anything before or we are not processing any requests
 				// If so send a request for the chat data
-				sendRequest(encodeURI("http://" + location.host + "/ChatServer?chat=" + chat), serverResponse);
+				// The dummy adding is only to make IE happy - UGLY!!!!
+				sendRequest(encodeURI("http://" + location.host + "/ChatServer?chat=" + chat + "&dummy=" + new Date().getTime()), serverResponse);
 			} else { // otherwise wait 500ms and try again.
 				window.clearTimeout(timeout);
 				timeout = window.setTimeout(pollServer, 500);
