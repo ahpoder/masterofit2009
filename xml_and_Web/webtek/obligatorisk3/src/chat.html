@@ -60,6 +60,7 @@
 				// Validate that the HTTP is ready for transmitting
 				if (http.readyState == 0 || http.readyState == 4) {
 					// If it is send the chat text to the ChatServer and call serverResponse upon completion.
+					// TODO - how to make POST request (how to add the payload in the ajax.js script)
 					sendRequest(encodeURI("http://" + location.host + "/ChatServer?chat=" + chat + "&name=" + name + "&text=" + text), serverResponse);
 					document.getElementById('newItem').value = "";
 				} else {
