@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	    <title>Seminar 3, opgave 10</title>
+	</head>
+	<body>
+		<input type="button" value="Iterate "a" tags" onclick="clicked()">
+    	<hr/>
+		<a id="et"/>
+		<a id="to"/>
+		<a id="tre"/>
+		<a id="fire"/>
+		<a id="fem"/>
+    </body>
+
+	<script type="text/JavaScript">
+		function clicked() {
+			iterateatags(function(s) {alert(s)});
+		}
+
+		<!-- Return the counter'th item and increase the global variable counter-->
+		function iterateatags(f){
+			var atags=document.getElementsByTagName("a");
+			for( var i = 0; i < atags.length; i++ )
+				f( atags[i].id );
+		}
+	</script>
+</html>
