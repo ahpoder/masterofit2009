@@ -1,19 +1,34 @@
-<html><head><title>opg4</title></head>
+<html><head><title>Seminar 3, opgave 4</title></head>
 <body>
 	<script type="text/JavaScript">
+		//Define the Pet object
 		function Pet(n, s) {
 			this.name = n;
-			this.petSound = s;
-			this.noisiest = function() { this.prototype.vovCount > this.prototype.meowCount ? "Dog" : "Cat"; }
-			this.sound = function() { if(s == "vov") Pet.prototype.vovCount++; else Pet.prototype.meowCount++; return petSound; }
+			this.mySound = s;
 		}
+
 		Pet.prototype.vovCount = 0;
 		Pet.prototype.meowCount = 0;
+
+		Pet.prototype.noisiest = function() {
+			//Note Pet.prototype not this.prototype
+			if(Pet.prototype.vovCount == Pet.prototype.meowCount)
+				return "Equally noisy";
+			else
+				return Pet.prototype.vovCount > Pet.prototype.meowCount ? "Dog" : "Cat";
+		}
+
+		Pet.prototype.sound = function() {
+			if(this.mySound == "vov")
+				Pet.prototype.vovCount++;
+			else
+				Pet.prototype.meowCount++;
+			return this.mySound;
+		}
 
 		function Dog(n) {
 			this.base = Pet;
 			this.base(n, "vov");
-			//delete this.base
 		}
 
 		Dog.prototype = new Pet;
@@ -21,27 +36,42 @@
 		function Cat(n) {
 			this.base = Pet;
 			this.base(n, "meow");
-			//delete this.base
 		}
 
 		Cat.prototype = new Pet;
 
+		//Declare some objects to make sound
 		var d1 = new Dog("Fido");
-		var d2 = new Dog("Mads");
-		var d3 = new Dog("Bent");
 		var c1 = new Cat("Miv");
-		var c2 = new Cat("Plus");
 
-		var s1 = d1.sound();
-		var s2 = d2.sound();
-		var s3 = c1.sound();
-		var s4 = c2.sound();
-		var s5 = c1.sound();
+		//User interaction functions
+		//Make the dog bark
+		function dogclicked(){
+			alert(d1.sound());
+			addToNoisiestList();
+		}
 
-		var n = d3.noisiest();
+		//Make the cat meow
+		function catclicked(){
+			alert(c1.sound());
+			addToNoisiestList();
+		}
 
-
+		//Add to noisiest list
+		function addToNoisiestList(){
+			var dst=document.getElementById("noisiesttrace");
+			var newel=document.createElement("li");
+			var newtext=document.createTextNode(d1.noisiest());
+			newel.appendChild(newtext);
+			dst.appendChild(newel);
+		}
 	</script>
+	<!-- Here is the user interaction -->
+	<input type="button" value="dog bark" onclick="dogclicked()">
+	<input type="button" value="cat meow" onclick="catclicked()">
+	<p>Noisiest:</p>
+	<ul id="noisiesttrace">
+	</ul
 
 </body>
 </html>
