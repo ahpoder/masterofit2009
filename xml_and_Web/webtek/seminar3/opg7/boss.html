@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+    "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<title>Letter to your boss</title>
+<script type="text/javascript" src="ajax.js"></script>
+<script type="text/javascript">
+var timeout;
+
+function employeeKeyPressed(e){
+	var e=window.event || e
+	var keyunicode=e.charCode || e.keyCode
+	
+	if (http.readyState == 0 || http.readyState == 4) { // Test that we have never requested anything before or we are not processing any requests
+		// If so send a request for the chat data
+		sendRequest(encodeURI("http://" + location.host + "/BossServer/BossServer.jsp?type=ID&key=" + keyunicode), serverResponse);
+	} else { // otherwise error - we could buffer the keypresses and send at intervals or when we have a certain amount, but this works too :)
+		alert('Stop typing so fast!!!');
+	}
+
+	return true; // false will supress the key-press so it does not reach the control
+}
+
+function messageKeyPressed(e){
+	var e=window.event || e
+	var keyunicode=e.charCode || e.keyCode
+	if (http.readyState == 0 || http.readyState == 4) { // Test that we have never requested anything before or we are not processing any requests
+		// If so send a request for the chat data
+		sendRequest(encodeURI("http://" + location.host + "/BossServer/BossServer.jsp?type=Msg&key=" + keyunicode), serverResponse);
+	} else { // otherwise error
+		alert('Stop typing so fast!!!');
+	}
+
+	return true; // false will supress the key-press so it does not reach the control
+}
+
+function serverResponse() {
+	if (http.readyState == 4) {
+		try {
+			if (http.status == 200) { // Check that the request was a success
+				var dummy = http.responseText;
+			} else {
+				// IF the request was not a success report an error.
+				alert("Error: " + http.status);
+			}
+		} catch (e) {
+			// If an exception occur report the error.
+			alert(e);
+		}
+	}
+}
+</script>
+</head>
+<body>
+
+<h1>Message service</h1>
+
+<form action="boss.php" method="POST">
+Your employee ID: #<input type="text" name="employee" id="employeeInput" size="6" maxlength="6">
+<p>
+Please write your letter to your boss here:<p>
+<textarea name="message" id="messageInput" cols=80 rows=20></textarea>
+<p>
+<input type="submit" value="Send">
+</form>
+
+</body>
+<script type="text/javascript">
+
+document.getElementById("employeeInput").onkeypress=employeeKeyPressed;
+document.getElementById("messageInput").onkeypress=messageKeyPressed;
+</script>
+</html>
