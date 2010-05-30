@@ -1,0 +1,97 @@
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	    <title>Seminar 3, opgave 13, Todolist</title>
+		<link type="text/css" href="css/jquery.ui.all.css" rel="stylesheet" /> 
+		<script type="text/javascript" src="js/jquery-1.4.2.js"></script> 
+		<script type="text/javascript" src="js/ui/jquery.ui.core.js"></script> 
+		<script type="text/javascript" src="js/ui/jquery.ui.widget.js"></script> 
+		<script type="text/javascript" src="js/ui/jquery.ui.mouse.js"></script> 
+		<script type="text/javascript" src="js/ui/jquery.ui.draggable.js"></script> 
+		<script type="text/javascript" src="js/ui/jquery.ui.droppable.js"></script> 
+		<script type="text/javascript"> 
+			var draggableID = 0;
+			var droppableID = 0;
+			
+			function handleDrop(event, ui) {
+				// $(this) == droppable
+				// ui.draggable = draggable
+				// Get the source text and ID.
+				var srcText = ui.draggable.html(); // div content
+				// var srcID = ui.draggable.getAttribute('id'); // Not really needed
+				
+				// var dstID = $(this).getAttribute('id');
+				
+				// Remove srcID from overall TODO-list
+				var srcTODO=document.getElementById("todoList");
+				srcTODO.removeChild(ui.draggable[0]); // li
+				
+				var dst = $(this)[0];
+				var dstTODO = dst.getElementsByTagName("ul")[0];
+
+				var newel=document.createElement("li");
+				var newtext=document.createTextNode(srcText);
+				newel.appendChild(newtext);
+				dstTODO.appendChild(newel);
+			}
+			
+			$(document).ready(function() {
+				//$("#draggable").draggable();
+				//$("#droppablePeter").droppable({
+				//	drop: handleDrop
+				//});
+			});
+		</script> 
+	</head>
+	<body>
+		<h1>TODO-list</h1>
+		<h2>Create assignee</h2>
+		Write the name of a person and hit Create<br/>
+		<input id="assigneeInput" type="text" size="75">
+		<input type="button" value="Create" onclick="clickedCreateAssignee()"><br/>
+    	<hr/>
+		<h2>Create TODO</h2>
+		Create an assignment and the drag-drop it to the person who should carry out the assignment.<br/>
+		<input id="todoInput" type="text" size="75">
+		<input type="button" value="Create" onclick="clickedCreateTodo()"><br/>
+		<ul id="todoList"></ul>
+    	<hr/>
+		<h2>Assignees TODO sheets</h2>
+		<div id="assignees">
+		</div>
+    </body>
+	
+	<script type="text/JavaScript">
+		function clickedCreateTodo() {
+			var src=document.getElementById("todoInput");
+			
+			var dst=document.getElementById("todoList");
+			var newel=document.createElement("li");
+			newel.setAttribute('id', 'draggable'  + draggableID);
+			var newtext=document.createTextNode(src.value);
+			newel.appendChild(newtext);
+			dst.appendChild(newel);
+			src.value="";
+			$("#draggable"  + draggableID).draggable();
+			++draggableID;
+		}
+		function clickedCreateAssignee() {
+			var src=document.getElementById("assigneeInput");
+			
+			var dst=document.getElementById("assignees");
+			var newel=document.createElement("div");
+			var newiel=document.createElement("ul");
+			
+			newel.setAttribute('id', 'droppable'  + droppableID);
+			var newtext=document.createTextNode(src.value + "'s TODO-list (drop here)");
+			newel.appendChild(newtext);
+			newel.appendChild(newiel);
+			dst.appendChild(newel);
+			src.value="";
+			$("#droppable" + droppableID).droppable({
+				drop: handleDrop
+			});
+			++droppableID;
+		}
+	</script>
+</html>
