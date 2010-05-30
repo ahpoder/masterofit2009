@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>LIX calculator</title>
+<script type="text/javascript">
+function lix(str){
+	var averageWordsInSentence = 0;
+	var wordsOverSixChar = 0;
+	var wordsTotal = 0;
+	var sentencesTotal = 0; // This is only needed to remove empty sentences (1 sentence ending in . would give 2 sentences)
+	var sentences = str.split('.');
+	for (i=0;i<sentences.length;++i) {
+		if (sentences[i])
+		{
+			var wordsInSentence = sentences[i].split(' ');
+			for (ii=0;ii<wordsInSentence.length;++ii) {
+				if (wordsInSentence[ii].length > 6) {
+					++wordsOverSixChar;
+				}
+				++wordsTotal;
+			}
+			averageWordsInSentence += wordsInSentence.length;
+			++sentencesTotal;
+		}
+	}
+	averageWordsInSentence /= sentencesTotal;
+	
+	return (averageWordsInSentence + ((wordsOverSixChar * 100) / wordsTotal))
+}
+
+function clickedEvaluate() {
+	var src=document.getElementById("inputEvalStr");
+	var dst=document.getElementById("lixResult");
+	dst.textContent = "The text: \"" + src.value + "\" has LIX count: " + lix(src.value);
+	src.value="";
+}
+
+</script>
+</head>
+<body>
+Enter the string to evaluate and hit Evaluate.<br/>
+<input id="inputEvalStr" type="text" size="75">
+<input type="button" value="Evaluate" onclick="clickedEvaluate()">
+<br/>
+<br/>
+<div id="lixResult"></div>
+</body>
+</html>
