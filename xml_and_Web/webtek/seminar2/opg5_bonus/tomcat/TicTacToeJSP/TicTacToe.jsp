@@ -5,17 +5,25 @@
     for (int i = 0; i<3; i++) 
       for (int j = 0; j<3; j++) 
 	board[i][j] = new Integer(0);
-    application.setAttribute("board", board);
-    application.setAttribute("players", new Integer(0));
-    application.setAttribute("winner", new Integer(0));
-    application.setAttribute("next", new Integer(1));
-    application.setAttribute("free", new Integer(9));
+	// application => getServletContext() - why does this fail
+    ServletContext c = getServletContext();
+	c.setAttribute("board", board);
+    c.setAttribute("players", new Integer(0));
+    c.setAttribute("winner", new Integer(0));
+    c.setAttribute("next", new Integer(1));
+    c.setAttribute("free", new Integer(9));
   }
 %>
 
 <!-- lokale variable -->
 <% 
 	boolean post = request.getMethod().equals("POST");
+    ServletContext c = getServletContext();
+    Integer[][] board;
+    int next;
+    int winner;
+    int player;
+    int free;
 %>
 
 <%
@@ -40,10 +48,10 @@
 		<% return; 
 	  } %>
 	
-      <%! Integer[][] board = (Integer[][])c.getAttribute("board"); %>
-      <%! int next = ((Integer)c.getAttribute("next")).intValue(); %>
-      <%! int winner = ((Integer)c.getAttribute("winner")).intValue(); %>
-      <%! int free = ((Integer)c.getAttribute("free")).intValue(); %>
+      <% board = (Integer[][])c.getAttribute("board"); %>
+      <% next = ((Integer)c.getAttribute("next")).intValue(); %>
+      <% winner = ((Integer)c.getAttribute("winner")).intValue(); %>
+      <% free = ((Integer)c.getAttribute("free")).intValue(); %>
       
 	  <%
       if (session.getAttribute("new") == null) {
@@ -52,8 +60,8 @@
 		int players = ((Integer)c.getAttribute("players")).intValue();
 		if (players<2) {
 		  player = ++players;
-		  application.setAttribute("players", new Integer(players));
-		  application.setAttribute("player"+player, ses);
+		  c.setAttribute("players", new Integer(players));
+		  c.setAttribute("player"+player, session);
 		  session.setAttribute("player", new Integer(player));	  
 		} else{
 		  response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Too many users!");
@@ -61,7 +69,7 @@
 		}
 		session.setAttribute("new", 1);
 		  } else {
-		player = ((Integer)ses.getAttribute("player")).intValue();
+		player = ((Integer)session.getAttribute("player")).intValue();
 		String move = request.getParameter("move");
 		if (post && move!=null && next==player && winner==0) {
 		  int i = move.charAt(0)-'0';
@@ -101,6 +109,9 @@
 				   "no-store, no-cache, must-revalidate");
 		response.setHeader("Pragma", "no-cache");
 	%>
+
+    <%
+/*
 // Internet Explorer users, look here: http://krijnhoetmer.nl/stuff/html/bug-internet-explorer-submit-button/
 
 import java.io.*;
@@ -238,20 +249,5 @@ public class TicTacToe extends HttpServlet {
     out.print("</body></html>");
   }
 }
-
-
-
-<%@ page isErrorPage="true" %>
-<html>
-<head>
-<title>Error page</title>
-</head>
-<body>
-ERROR occured!<br><br>Exception: 
-<% if (exception != null) { %>
-<%= exception.getMessage() %>
-<% } else { %>
-You requested the error page directly, you idiot!
-<% } %>
-</body>
-</html>
+*/
+%>
