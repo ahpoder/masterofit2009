@@ -1,0 +1,37 @@
+<html>
+	<head><meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>Seminar 3, opgave 3, beregning af LIX</title>
+	</head>
+	<body>
+		Enter the string to evaluate and hit Evaluate.<br/>
+		<input id="inputEvalStr" type="text" size="75">
+		<input type="button" value="Evaluate" onclick="clickedEvaluate()">
+		<br/>
+		<br/>
+		<div id="lixResult"></div>
+	</body>
+	<script type="text/JavaScript">
+		function NSentences(s){
+			return s.split(/[^\.]+\./).length;
+		}
+		function NWords(s){
+			return s.split(/\w/).length;
+		}
+		function NLongWords(s){
+			return s.split(/\s[a-zA-Z]{{7,}}\s/).length;
+		}
+		function LIX(s){
+			var w=NWords(s);
+			var p=NSentences(s);
+			var l=NLongWords(s);
+			return w/p+100*l/w;
+		}
+
+		function clickedEvaluate() {
+			var src=document.getElementById("inputEvalStr");
+			var dst=document.getElementById("lixResult");
+			dst.textContent = "The text: \"" + src.value + "\" has LIX: " + LIX(src.value);
+			src.value="";
+		}
+	</script>
+</html>
