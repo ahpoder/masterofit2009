@@ -1,0 +1,63 @@
+Opgave:
+
+PA international produces Geo-location software and data logging units. The department for data logging and and geo location is fully developed, but the department for data presentation and unit monitoring is falling behind. 
+
+The PA international has requested a project with a new website and a webservice. 
+
+* The website must use google maps to illustrate the location of the data logging unit, their status and last reading. Google maps are programmed in Javascript and any changes must be evented using AJAX and the website should have an "application" look and feel.
+  * Each unit has a geographical location, indicated by a GPS coordinate.
+  * The units can be grouped into zones where zero or more units are seens as one and their status is shown as a colour scheam (red = error in one or more units, green = all units OK).
+  * There should be one or more views:
+    * Zone view - shows all the views and their status.
+    * Detail view - shows the individual units in a given zone, their status and last reading.
+  * A zone is drawn as a polygon on google map, and the uints which are located inside this polygon is indicated  as part of it (can be manually changed)
+
+* The webservice should be light-weight (REST based, but have an interface defined in SAP/WSDL (is this possible?))
+  * The service should support the following operations:
+    * Adding a new zone (argument - a series of GPS locations to draw a polygon from)
+	* Returning the zone(s) that a given GPS point is within.
+	* Add a new data logging unit (arguments: a GPS coordinate)
+	* Change the zone relationship for a given data logging unit manually)
+
+* There is some code already implemented in the subgurim.NET google maps API, and it is preferred that the google maps control is written as a ASP.NET server control with as much client side code as possible (application look and feel).
+
+* The REST web service should implement:
+  * /units
+    * PUT - add new unit
+	* POST - update a unit
+	* DELETE - ...
+	* GET - get the status of a given unit (or all units)
+  * /units/zones
+	* GET - Return a list of zones that this unit belong to.
+  * /zones
+    * PUT - add new zone
+	* POST - update a zone
+	* DELETE - ...
+	* GET - Return the status of the zone as a whole
+  * /zones/units
+	* GET - Return a list of units that is in this zone
+
+* There must be defined an XML language for units and zones and an XML schema to validate/define these in the SOAP/WSDL.
+
+* The main focus of the assignment is on the Javascript website. 
+
+
+Idea:
+
+Create a Dan-card + Nem-ID and bank account payment system where the person can scan the invoice and then 
+enter their Nem-ID or Dancard and Pin and then have the invoice payed for e.g. 5 DKR as opposed to 25 kr.'
+If Nem-ID is used they has to be paied from their Nem-konto (if one can get that info from the nem id).
+
+They may have to select the bank first and then we directly acccess their web-bank. 
+
+The dan card solution is the easiest - may be used alone. 
+
+1. Transfer amount from dancard to our account
+2. Pay bill from our account (large customer account - free).
+
+If we charge e.g. 5-10 kr. per bill, it is still a lot cheaper than the 25 kr. the postoffice charge.
+
+They could be placed in the post office, coop stores or the library.
+
+The only HW required is a touch screen, a dancard reader and a scanner for the invoices (+71, ...) - some OCR software may be required as well as on-screen keypad for entering/correcting the entered.
+
