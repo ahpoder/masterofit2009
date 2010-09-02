@@ -1,0 +1,47 @@
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:g="http://www.pa.com/geolog"
+        targetNamespace="http://www.pa.com/geolog"
+        elementFormDefault="qualified">
+
+  <element name="devices" type="g:DevicesType"/>
+
+  <complexType name="DevicesType">
+    <sequence minOccurs="0" maxOccurs="unbounded">
+	  <element name="deviceURL" type="url"/>
+	</sequence>
+  </complexType>
+  
+  <element name="zones" type="g:ZonesType"/>
+  
+  <complexType name="ZonesType">
+    <sequence minOccurs="0" maxOccurs="unbounded">
+	  <element name="zoneURL" type="url"/>
+	</sequence>
+  </complexType>
+  
+  <element name="device" type="g:DeviceType"/>
+
+  <complexType name="DeviceType">
+    <sequence>
+	  <element name="geologCollection" minOccurs="0" type="g:GeologCollectionType"/>
+	</sequence>
+	<attribute name="id" type="string"/>
+	<attribute name="owner" optional="yes" type="string"/>
+  </complexType>
+
+  <complexType name="GeologCollectionType">
+    <sequence minOccurs="0" maxOccurs="unbounded">
+	  <element name="geolog" minOccurs="0" type="g:GeologType"/>
+	</sequence>
+	<attribute name="dateTime" type="datetime"/>
+  </complexType>
+
+  <complexType name="GeologType">
+    <sequence>
+	  <element name="readings" minOccurs="0" maxOccurs="unbounded" type="g:ReadingType"/>
+	  <element name="status" minOccurs="0" type="g:StatusType"/>
+	  <element name="location" minOccurs="0" type="g:LocationType"/>
+	</sequence>
+  </complexType>
+  
+</schema>
