@@ -43,5 +43,22 @@
 	  <element name="location" minOccurs="0" type="g:LocationType"/>
 	</sequence>
   </complexType>
+
+  <complexType name="ReadingType">
+    <sequence>
+	  <element name="key" type="string"/>
+	  <element name="value"/>
+	  <element name="type" type="g:MimeType"/>
+	</sequence>
+  </complexType>
+
+  <simpleType name="StatusType">
+    <restriction base="xs:string">
+	  <enumeration value="OK"/>
+	  <enumeration value="DISCONNECTED"/>
+	  <enumeration value="ERROR"/>
+	  <enumeration value="DEPRECATED"/>
+    </restriction>
+  </simpleType>
   
 </schema>
