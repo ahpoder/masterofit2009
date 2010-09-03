@@ -1,0 +1,6 @@
+0/08/2010 11:06
+
+Mathias Romme Schwarz
+Rigtig fin projektbeskrivelse med nogle klare mål, så det skal nok blive godt. 
+
+Jeres tidsplan nævner ikke at XML-sproget skal formaliseres med et skemasprog eller om I har tænkt jer at specificere interfacet for jeres web service med WSDL. Hvis jeg var jer ville jeg nok gøre mindst en af tingene (men I nævner også i synopsis at I vil formalisere sproget).
