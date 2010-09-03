@@ -47,8 +47,9 @@
   <complexType name="ReadingType">
     <sequence>
 	  <element name="key" type="string"/>
-	  <element name="value"/>
-	  <element name="type" type="g:MimeType"/>
+	  <element name="value" type="any"/>
+	  <element name="type" type="g:MIMEType"/>
+	  <element name="unit" type="string"/>
 	</sequence>
   </complexType>
 
@@ -60,5 +61,15 @@
 	  <enumeration value="DEPRECATED"/>
     </restriction>
   </simpleType>
+  
+  <element name="configuration" type="g:ConfigurationType"/>
+
+  <complexType name="ConfigurationType">
+    <sequence>
+	  <element name="id" type="string"/>
+	  <element name="simpleInterval" type="int"/>
+	  <element name="location" minOccurs="0" type="g:LocationType"/>
+	</sequence>
+  </complexType>
   
 </schema>
