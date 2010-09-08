@@ -1,24 +1,24 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
         xmlns:g="http://www.pa.com/geolog"
+        xmlns:k="http://code.google.com/kml21"
+		xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
         targetNamespace="http://www.pa.com/geolog"
         elementFormDefault="qualified">
+
+<xsd:import namespace="http://code.google.com/kml21"
+            schemaLocation="http://code.google.com/intl/da-DK/apis/kml/schema/kml21.xsd"/>
+
+<xsd:import namespace="http://schemas.xmlsoap.org/wsdl/mime/"
+			schemaLocation="http://schemas.xmlsoap.org/wsdl/mime/mime.xsd"/>
 
   <element name="devices" type="g:DevicesType"/>
 
   <complexType name="DevicesType">
-    <sequence minOccurs="0" maxOccurs="unbounded">
-	  <element name="deviceURL" type="url"/>
+    <sequence>
+	  <element name="deviceURL" type="url" minOccurs="0" maxOccurs="unbounded"/>
 	</sequence>
   </complexType>
-  
-  <element name="zones" type="g:ZonesType"/>
-  
-  <complexType name="ZonesType">
-    <sequence minOccurs="0" maxOccurs="unbounded">
-	  <element name="zoneURL" type="url"/>
-	</sequence>
-  </complexType>
-  
+    
   <element name="device" type="g:DeviceType"/>
 
   <complexType name="DeviceType">
@@ -30,8 +30,8 @@
   </complexType>
 
   <complexType name="GeologCollectionType">
-    <sequence minOccurs="0" maxOccurs="unbounded">
-	  <element name="geolog" minOccurs="0" type="g:GeologType"/>
+    <sequence>
+	  <element name="geolog" minOccurs="0" maxOccurs="unbounded" type="g:GeologType"/>
 	</sequence>
 	<attribute name="dateTime" type="datetime"/>
   </complexType>
@@ -40,14 +40,14 @@
     <sequence>
 	  <element name="readings" minOccurs="0" maxOccurs="unbounded" type="g:ReadingType"/>
 	  <element name="status" minOccurs="0" type="g:StatusType"/>
-	  <element name="location" minOccurs="0" type="g:LocationType"/>
+	  <element name="location" minOccurs="0" type="k:Point"/>
 	</sequence>
   </complexType>
 
   <complexType name="ReadingType">
     <sequence>
 	  <element name="key" type="string"/>
-	  <element name="value" type="any"/>
+	  <element name="value" type="CDATA"/>
 	  <element name="type" type="g:MIMEType"/>
 	  <element name="unit" type="string"/>
 	</sequence>
@@ -68,7 +68,24 @@
     <sequence>
 	  <element name="id" type="string"/>
 	  <element name="simpleInterval" type="int"/>
-	  <element name="location" minOccurs="0" type="g:LocationType"/>
+	  <element name="location" minOccurs="0" type="k:Point"/>
+	</sequence>
+  </complexType>
+
+  <element name="zones" type="g:ZonesType"/>
+  
+  <complexType name="ZonesType">
+    <sequence>
+	  <element name="zoneURL" type="url"  minOccurs="0" maxOccurs="unbounded"/>
+	</sequence>
+  </complexType>
+
+  <element name="zone" type="g:ZoneType"/>
+  
+  <complexType name="ZoneType">
+    <sequence>
+	  <element name="name" type="string"/>
+	  <element name="polygon" type="k:Polygon"/>
 	</sequence>
   </complexType>
   
