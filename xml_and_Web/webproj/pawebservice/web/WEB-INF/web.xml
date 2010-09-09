@@ -62,18 +62,8 @@
     </context-param>
 
 
-    <!-- Servlet definitions for the servlets that make up
-         your web application, including initialization
-         parameters.  With Tomcat, you can also send requests
-         to servlets not listed here with a request like this:
-
-           http://localhost:8080/{context-path}/servlet/{classname}
-
-         but this usage is not guaranteed to be portable.  It also
-         makes relative references to images and other resources
-         required by your servlet more complicated, so defining
-         all of your servlets (and defining a mapping to them with
-         a servlet-mapping element) is recommended.
+    <!-- Define a data file with device data 
+    		 (better as a database - not implemented in this project)
 
          Servlet initialization parameters can be retrieved in a
          servlet or JSP page by calling:
@@ -83,10 +73,22 @@
 
          where "name" matches the <param-name> element of
          one of these initialization parameters.
-
-         You can define any number of servlets, including zero.
     -->
+		<init-param>
+		  <param-name>GeologDataFile</param-name>
+		  <param-value>nonexistingfile</param-value>
+		</init-param>
 
+		<init-param>
+		  <param-name>DeviceListXSLT</param-name>
+		  <param-value>nonexistingfile</param-value>
+		</init-param>
+		
+		<init-param>
+		  <param-name>DeviceXSLT</param-name>
+		  <param-value>nonexistingfile</param-value>
+		</init-param>
+		
     <servlet>
       <servlet-name>deviceservlet</servlet-name>
       <description>
@@ -98,7 +100,7 @@
     <servlet>
       <servlet-name>zoneservlet</servlet-name>
       <description>
-      This is the handler of requests addressed to {context-path}/devices/*
+      This is the handler of requests addressed to {context-path}/zones
       </description>
       <servlet-class>ZoneServlet</servlet-class>
     </servlet>
@@ -148,7 +150,9 @@
          servlet, if you wish to.
     -->
 
-    <!-- two mappings to support both accepted ways to call devices -->
+    <!-- Two mappings to support both accepted ways to call devices     
+    		 some discussions discourages mapping a servlet more than once 
+    -->    
     <servlet-mapping>
       <servlet-name>deviceservlet</servlet-name>
       <url-pattern>/devices</url-pattern>
