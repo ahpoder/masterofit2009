@@ -48,31 +48,72 @@ public class DeviceServlet extends HttpServlet {
 			return;
 		}
 		catch (Exception e) {
-			response.sendError(500, "Internal error");
+			//TODO: Remove exposure of internal exceptions to the caller
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error: " + e.getMessage());
 		}
   }
 
+	/**
+		POST device readings for a specified ID. The caller knows the id.
+		The device ID must be specified on the request path
+	**/
   public void doPost(HttpServletRequest request,
                     HttpServletResponse response)
       throws IOException, ServletException {
 
-	simpleResponse( "You called the DeviceServlet POST handler",
-					request,
-					response);
-	return;
+		try {
+
+			//The server has taken care of redirecting "/devices" and "/devices/*" to this servlet
+			//A POST request require a device id on the path
+			String pathInfo = request.getPathInfo();
+			//No device id specified. Get out of here with a clear message.
+			if((pathInfo == null) || (pathInfo.length() == 1)) {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "On POSTing a device id is required in the URI");
+				return;
+			}
+
+			//When we're here the request is known to contain something.that's expected to be a device id
+			//Validate the part that might be an id
+			if (!GeologDeviceID.isValidID(pathInfo.substring(1))) {
+				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "The supplied device id ("+ pathInfo.substring(1) + ") does not match the expected ID pattern");
+				return;
+			}
+			//Get and validate the payload
+			String xmlSchemaPath = getServletContext().getRealPath("/" + getServletContext().getInitParameter("DeviceXSDFile"));
+			SAXBuilder builder;
+			builder = new SAXBuilder();
+			builder.setValidation(true);
+			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+													"http://www.w3.org/2001/XMLSchema");
+			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaSource",
+													xmlSchemaPath);
+			Document doc = builder.build(request.getInputStream());
+
+			//Send the payload to the data access handler
+			GeologDeviceID id = new GeologDeviceID(pathInfo.substring(1));
+			GeologDataAccess da =	new GeologDataAccess(getServletContext());
+			da.storeDevice(id, doc);
+		}
+		catch (Exception e) {
+			//TODO: Remove exposure of internal exceptions to the caller
+			response.sendError(500, "Internal error: " + e.getMessage());
+		}
   }
 
-   public void doPut(HttpServletRequest request,
-                      HttpServletResponse response)
-      throws IOException, ServletException {
+	public void doPut(HttpServletRequest request,
+              			HttpServletResponse response)
+  		throws IOException, ServletException {
 
-	simpleResponse( "You called the DeviceServlet PUT handler",
-					request,
-					response);
-	return;
-   }
+		simpleResponse( "You called the DeviceServlet PUT handler. NOT IMPLEMENTED",
+							request,
+							response);
+		return;
+	}
 
-   private void simpleResponse( String title,
+	/**
+		Internal member to create a usable output when request handlers aren't implemented
+	**/
+	private void simpleResponse( String title,
    								HttpServletRequest request,
    								HttpServletResponse response )
    		throws IOException, ServletException{
@@ -99,5 +140,5 @@ public class DeviceServlet extends HttpServlet {
 		out.println("</body>");
 		out.println("</html>");
 		return;
-   }
+	}
 }

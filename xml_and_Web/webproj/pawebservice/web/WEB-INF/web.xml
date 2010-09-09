@@ -62,21 +62,11 @@
     </context-param>
 
 
-    <!-- Define a data file with device data 
-    		 (better as a database - not implemented in this project)
+    <!-- Servlet initialization parameters -->
 
-         Servlet initialization parameters can be retrieved in a
-         servlet or JSP page by calling:
-
-             String value =
-               getServletConfig().getInitParameter("name");
-
-         where "name" matches the <param-name> element of
-         one of these initialization parameters.
-    -->
 		<init-param>
-		  <param-name>GeologDataFile</param-name>
-		  <param-value>nonexistingfile</param-value>
+		  <param-name>DeviceXSDFile</param-name>
+		  <param-value>geolog.xsd</param-value>
 		</init-param>
 
 		<init-param>

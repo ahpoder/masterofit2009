@@ -4,36 +4,30 @@ import org.jdom.input.*;
 import org.jdom.output.*;
 import org.jdom.transform.*;
 import javax.servlet.*;
+import java.util.*;
 
 public class GeologDataAccess  {
-	static Namespace jml =
-		Namespace.getNamespace("http://localhost:8080/geolog");
 
 	ServletContext context;
-	String geologDataFile;
-	Document geologData;
+	Hashtable<String, GeologDeviceStatus> hashDeviceStatus;
 
 	/**
-		Initialize and create an "geologData" attribute
-		on the servlet context. The geologData object is
-		the central place holder for data while the service
-		is alive.
-		TODO: Implement geologData persistense
+	  The class will create relevant data access objects
+	  on the servlet context.
+		These objects are the transient storage for data
+		while the service is alive
+		TODO: Implement persistence
 	**/
 	public GeologDataAccess(ServletContext context)
 			throws JDOMException, IOException {
 
 		this.context = context;
-		geologData = (Document)context.getAttribute("geologData");
-		geologDataFile = context.getInitParameter("GeologDataFile");
-		if (geologData==null){
-			try {
-				geologData = new SAXBuilder().build(new File(geologDataFile));
-			}
-			catch (Exception e) {
-				geologData = new Document(new Element("collection", jml));
-			}
-			context.setAttribute("geologData", geologData);
+		//Get the data object from the servlet context
+		hashDeviceStatus = (Hashtable)context.getAttribute("hashDeviceStatus");
+		//Create the data object if it wasn't there already
+		if (hashDeviceStatus==null){
+			hashDeviceStatus = new Hashtable<String, GeologDeviceStatus>();
+			context.setAttribute("hashDeviceStatus", hashDeviceStatus);
 		}
 	}
 
@@ -47,10 +41,13 @@ public class GeologDataAccess  {
 	public void writeDevices(java.io.PrintWriter writer)
 			throws IOException, ServletException, XSLTransformException {
 
+		//Create a well formed XML document with the relevant information
+		//even if the collection is empty
+
 		//Run the relevant XSLT transform on the global data object
-		String xslt =	context.getInitParameter("DeviceListXSLT");
-		XSLTransformer t = new XSLTransformer(xslt);
-		new XMLOutputter().output(t.transform(geologData), writer);
+		//String xslt =	context.getInitParameter("DeviceListXSLT");
+		//XSLTransformer t = new XSLTransformer(xslt);
+		//new XMLOutputter().output(t.transform(geologData), writer);
 	}
 
 	/**
@@ -61,10 +58,10 @@ public class GeologDataAccess  {
 			throws IOException, ServletException, XSLTransformException {
 
 		//Run the relevant XSLT transform on the global data object
-		String xslt =	context.getInitParameter("DeviceXSLT");
+//		String xslt =	context.getInitParameter("DeviceXSLT");
 		//TODO: Use the supplied id (XPath?)
-		XSLTransformer t = new XSLTransformer(xslt);
-		new XMLOutputter().output(t.transform(geologData), writer);
+//		XSLTransformer t = new XSLTransformer(xslt);
+//		new XMLOutputter().output(t.transform(geologData), writer);
 	}
 
 	/**
@@ -85,14 +82,13 @@ public class GeologDataAccess  {
 	//****All the setters exposed by the service****
 
 	/**
-		Insert information about a device into the document
+		Insert information about a device into the storage
 	**/
-	public void addDevice(Document more)
+	public void storeDevice(GeologDeviceID id, Document doc)
 			throws JDOMException, IOException {
 		//Critical region, as more servlets may try a concurrent context update
 		synchronized(context) {
-			//Add the received data to the context object
-			geologData.getRootElement().addContent(more.getRootElement().removeContent());
+			//Extract the status and location and store those in the hashtable
 		}
 	}
 
