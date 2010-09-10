@@ -36,11 +36,17 @@
 	<attribute name="dateTime" type="datetime"/>
   </complexType>
 
-  <complexType name="GeologType">
+    <complexType name="GeologType">
     <sequence>
-	  <element name="readings" minOccurs="0" maxOccurs="unbounded" type="g:ReadingType"/>
+	  <element name="readings" minOccurs="0" type="g:ReadingsType"/>
 	  <element name="status" minOccurs="0" type="g:StatusType"/>
 	  <element name="location" minOccurs="0" type="k:Point"/>
+	</sequence>
+  </complexType>
+
+  <complexType name="ReadingsType">
+    <sequence>
+	  <element name="reading" minOccurs="0" maxOccurs="unbounded" type="g:ReadingType"/>
 	</sequence>
   </complexType>
 
