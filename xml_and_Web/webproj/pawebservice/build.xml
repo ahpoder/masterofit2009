@@ -185,6 +185,7 @@
 <!--
     <pathelement location="${foo.jar}"/>
 -->
+    <pathelement location="lib/jdom.jar"/>
 
     <!-- Include all elements that Tomcat exposes to applications -->
     <fileset dir="${catalina.home}/bin">
