@@ -1,5 +1,27 @@
-<device id="device1" xmlns="http://www.pa.com/geolog" xmlns:k="http://code.google.com/kml21">
+<device id="device1" owner="peter" xmlns="http://www.pa.com/geolog" xmlns:k="http://code.google.com/kml21">
   <geologCollection>
+    <geolog dateTime="2001-10-25T21:32:52.1267">
+	  <readings>
+	    <reading id="sensor1">
+		  <key>altitude</key>
+		  <value>125.0001</value>
+		  <type>xs:double</type>
+		  <unit>m</unit>
+	    </reading>
+	    <reading id="sensor2">
+		  <key>light</key>
+		  <value>25</value>
+		  <type>xs:int32</type>
+		  <unit>lm</unit>
+	    </reading>
+	  </readings>
+	  <status>OK</status>
+	  <location>
+		<k:Point>
+		  <k:coordinates>-90.86948943473118,48.25450093195546</k:coordinates>
+		</k:Point>
+	  </location>
+	</geolog>
     <geolog dateTime="2001-10-26T21:32:52.1267">
 	  <readings>
 	    <reading id="sensor1">

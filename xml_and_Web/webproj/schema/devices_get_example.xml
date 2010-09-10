@@ -1,0 +1,7 @@
+<devices xmlns="http://www.pa.com/geolog">
+	<deviceURL>http://www.pa.com/geolog/devices/device1</deviceURL>
+	<deviceURL>http://www.pa.com/geolog/devices/device2</deviceURL>
+	<deviceURL>http://www.pa.com/geolog/devices/device3</deviceURL>
+	<deviceURL>http://www.pa.com/geolog/devices/device4</deviceURL>
+	<deviceURL>http://www.pa.com/geolog/devices/device5</deviceURL>
+</devices>
