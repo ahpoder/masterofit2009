@@ -9,7 +9,7 @@ import java.util.*;
 public class GeologDataAccess  {
 
 	ServletContext context;
-	Hashtable<String, GeologDeviceStatus> hashDeviceStatus;
+	Hashtable<String, GeologDeviceStatus> hashDevices;
 
 	/**
 	  The class will create relevant data access objects
@@ -23,11 +23,11 @@ public class GeologDataAccess  {
 
 		this.context = context;
 		//Get the data object from the servlet context
-		hashDeviceStatus = (Hashtable)context.getAttribute("hashDeviceStatus");
+		hashDevices = (Hashtable)context.getAttribute("hashDevices");
 		//Create the data object if it wasn't there already
-		if (hashDeviceStatus==null){
-			hashDeviceStatus = new Hashtable<String, GeologDeviceStatus>();
-			context.setAttribute("hashDeviceStatus", hashDeviceStatus);
+		if (hashDevices==null){
+			hashDevices = new Hashtable<String, GeologDeviceStatus>();
+			context.setAttribute("hashDevices", hashDevices);
 		}
 	}
 
@@ -88,7 +88,9 @@ public class GeologDataAccess  {
 			throws JDOMException, IOException {
 		//Critical region, as more servlets may try a concurrent context update
 		synchronized(context) {
-			//Extract the status and location and store those in the hashtable
+			//Check for existence of the device in the hash table
+			//if exists add to the present document
+			//if not exists insert it
 		}
 	}
 
