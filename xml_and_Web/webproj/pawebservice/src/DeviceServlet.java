@@ -88,7 +88,6 @@ public class DeviceServlet extends HttpServlet {
 			}
 			//Get and validate the payload
 			String xmlSchemaPath = getServletContext().getRealPath("/" + getInitParameter("DeviceXSDFile"));
-			Debuglog.write(xmlSchemaPath);
 			SAXBuilder builder = new SAXBuilder();
 			
 			builder.setValidation(true);
