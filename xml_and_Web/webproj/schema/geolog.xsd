@@ -48,6 +48,7 @@
     <sequence>
 	  <element name="reading" minOccurs="0" maxOccurs="unbounded" type="g:ReadingType"/>
 	</sequence>
+	<attribute name="id" type="string" optional="yes"/>
   </complexType>
 
   <complexType name="ReadingType">
