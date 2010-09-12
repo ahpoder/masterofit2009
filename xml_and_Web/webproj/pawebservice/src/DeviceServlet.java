@@ -34,6 +34,8 @@ public class DeviceServlet extends HttpServlet {
 
 			//Case 1: "devices" and devices/" shall return all devices
 			if ((pathInfo == null) || (pathInfo.equals("/"))) {
+				String rootPath = request.getRequestURI();
+				Debuglog.write(rootPath);
 				response.setContentType("text/xml");
 				GeologDataAccess da =	new GeologDataAccess(getServletContext());
 				da.writeDevices(response.getWriter());
@@ -44,8 +46,10 @@ public class DeviceServlet extends HttpServlet {
 			GeologDeviceID id = new GeologDeviceID(pathInfo.substring(1));
 			response.setContentType("text/xml");
 			GeologDataAccess da =	new GeologDataAccess(getServletContext());
-			da.writeDevice(id, response.getWriter());
-			return;
+			if (!da.writeDevice(id, response.getWriter()))
+			{
+				response.sendError(HttpServletResponse.SC_NOT_FOUND , "Device with ID (" + id.toString() + ") not found");
+			}
 		}
 		catch (Exception e) {
 			//TODO: Remove exposure of internal exceptions to the caller
@@ -118,6 +122,8 @@ public class DeviceServlet extends HttpServlet {
 			GeologDeviceID id = new GeologDeviceID(pathInfo.substring(1));
 			GeologDataAccess da = new GeologDataAccess(getServletContext());
 			da.storeDevice(id, doc);
+			
+			Debuglog.write("POST DONE");
 		}
 		catch (Exception e) {
 			//TODO: Remove exposure of internal exceptions to the caller

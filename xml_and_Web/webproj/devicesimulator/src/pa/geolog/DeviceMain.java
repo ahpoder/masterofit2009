@@ -101,7 +101,10 @@ public class DeviceMain {
 			catch (IOException ex)
 			{
 				System.out.println("An exception occured: " + ex.toString() + "\r\n");
-				ex.printStackTrace();
+				if (verbose)
+				{
+					ex.printStackTrace();
+				}
 			}
 		}
 		while (selection != 0);

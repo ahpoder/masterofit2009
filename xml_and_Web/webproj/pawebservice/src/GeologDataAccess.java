@@ -51,6 +51,22 @@ public class GeologDataAccess  {
 	public void writeDevices(java.io.PrintWriter writer)
 			throws IOException, ServletException, XSLTransformException {
 
+		Namespace root = Namespace.getNamespace("http://www.pa.com/geolog");
+		Element devicesElement = new Element("devices", root);
+		Document myDocument = new Document(devicesElement);
+		
+		Enumeration e = hashDevicesReadings.keys();
+ 
+		//iterate through Hashtable keys Enumeration
+		while(e.hasMoreElements()) {
+			Element du = new Element("deviceURL", root);
+			du.setText("http://localhost:8080/geolog/devices/" + (String)e.nextElement());
+			devicesElement.addContent(du);
+		}
+
+		XMLOutputter xo = new XMLOutputter(Format.getPrettyFormat());
+		xo.output(myDocument, writer);
+		
 		//Create a well formed XML document with the relevant information
 		//even if the collection is empty
 
@@ -64,14 +80,26 @@ public class GeologDataAccess  {
 		Return information about a specific device registered with the system
 		The id must be validated conforming to the required structure
 	**/
-	public void writeDevice(GeologDeviceID id, java.io.PrintWriter writer)
+	public boolean writeDevice(GeologDeviceID id, java.io.PrintWriter writer)
 			throws IOException, ServletException, XSLTransformException {
+
+		if (!hashDevicesReadings.containsKey(id.toString()))
+		{
+			return false; // ERROR
+		}
+
+		Document hashDoc = hashDevicesReadings.get(id.toString());
+
+		XMLOutputter xo = new XMLOutputter(Format.getPrettyFormat());
+		xo.output(hashDoc, writer);
 
 		//Run the relevant XSLT transform on the global data object
 //		String xslt =	context.getInitParameter("DeviceXSLT");
 		//TODO: Use the supplied id (XPath?)
 //		XSLTransformer t = new XSLTransformer(xslt);
 //		new XMLOutputter().output(t.transform(geologData), writer);
+
+		return true;
 	}
 
 	/**
@@ -119,27 +147,27 @@ public class GeologDataAccess  {
 			Document hashDoc = hashDevicesReadings.get(id.toString());
 			
 			Namespace root = Namespace.getNamespace("http://www.pa.com/geolog");
+
 			Element hashDevice = hashDoc.getRootElement();
 			Element hashColl = hashDevice.getChild("geologCollection", root);
 			
 			Element newDevice = doc.getRootElement();
 			Element newColl = newDevice.getChild("geologCollection", root);
-			
-/*
-			// Try this
-			XPath xp = XPath.newInstace("//geologCollection");
+
+/* This does not work - why
+			XPath xp = XPath.newInstance("//geologCollection");
 			xp.addNamespace(root);
 			Element hashColl = (Element)xp.selectSingleNode(hashDoc.getRootElement());
 			Element newColl = (Element)xp.selectSingleNode(doc.getRootElement());
-*/			
+*/
 			List geologList = newColl.getChildren();
 			Iterator itt = geologList.iterator();
 			while (itt.hasNext())
 			{
-				hashColl.addContent((Element)((Element)itt.next()).clone());
+				Element e = (Element)itt.next();
+				Debuglog.write("Test: " + e.toString());
+				hashColl.addContent((Element)e.clone());
 			}
 		}
 	}
-
-
 }
