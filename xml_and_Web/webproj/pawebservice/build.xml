@@ -167,6 +167,9 @@
   <property name="jdom.jar"
            value="lib/jdom.jar"/>
 
+  <!-- 20100912/PMD defined geolog.xsd -->
+  <property name="geolog.xsd"
+           value="../schema/geolog.xsd"/>
 
 <!-- ==================== Compilation Classpath =========================== -->
 
@@ -471,6 +474,9 @@
 -->
     <!-- 20100912/PMD added jdom.jar -->
     <copy todir="${build.home}/WEB-INF/lib" file="${jdom.jar}"/>
+
+    <!-- 20100912/AHP added geolog.xsd -->
+    <copy todir="${build.home}" file="${geolog.xsd}"/>
 
     <!-- Copy static files from external dependencies as needed -->
     <!-- *** CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->

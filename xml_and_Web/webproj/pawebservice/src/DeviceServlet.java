@@ -36,14 +36,18 @@ public class DeviceServlet extends HttpServlet {
 			if ((pathInfo == null) || (pathInfo.equals("/"))) {
 				response.setContentType("text/xml");
 				GeologDataAccess da =	new GeologDataAccess(getServletContext());
+				// Write the URL to use for details about the devices registered with the system. The serverName and port is 
+				// required to build these URLs.
 				da.writeDevices("http://" + request.getServerName() + ":" + request.getServerPort(), response.getWriter());
 				return;
 			}
 			//Case 2: "devices/1" shall return the device with id=1
-			//Here we may assume that pathInfo holds a valid device id with a / in front
+			// Here we may assume that pathInfo holds a valid device id with a / in front
 			GeologDeviceID id = new GeologDeviceID(pathInfo.substring(1));
 			response.setContentType("text/xml");
 			GeologDataAccess da =	new GeologDataAccess(getServletContext());
+			// Write the device details in the response. If the device ID is not know 
+			// simply return false, which triggers a resource not found error response.
 			if (!da.writeDevice(id, response.getWriter()))
 			{
 				response.sendError(HttpServletResponse.SC_NOT_FOUND , "Device with ID (" + id.toString() + ") not found");
@@ -51,22 +55,9 @@ public class DeviceServlet extends HttpServlet {
 		}
 		catch (Exception e) {
 			//TODO: Remove exposure of internal exceptions to the caller
+			Debuglog.write("Internal error: " + e.getMessage());
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error: " + e.getMessage());
 		}
-  }
-  
-  private void writeDebugLog(String msg)
-  {
-	try {
-		// Create file 
-		FileWriter fstream = new FileWriter("c:\\debuglog.txt",true);
-			BufferedWriter out = new BufferedWriter(fstream);
-		out.write("\r\n\r\n" + msg + "\r\n\r\n");
-		//Close the output stream
-		out.close();
-		}catch (Exception e){//Catch exception if any
-		  System.err.println("Error: " + e.getMessage());
-	}
   }
 
 	/**
@@ -96,15 +87,16 @@ public class DeviceServlet extends HttpServlet {
 				return;
 			}
 			//Get and validate the payload
-			String xmlSchemaPath = getServletContext().getRealPath("/" + getServletContext().getInitParameter("DeviceXSDFile"));
+			String xmlSchemaPath = getServletContext().getRealPath("/" + getInitParameter("DeviceXSDFile"));
+			Debuglog.write(xmlSchemaPath);
 			SAXBuilder builder = new SAXBuilder();
-/*
+			
 			builder.setValidation(true);
 			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
 													"http://www.w3.org/2001/XMLSchema");
 			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaSource",
 													xmlSchemaPath);
-*/
+
 			Document doc = builder.build(request.getInputStream());
 
 // Debugging ----------------------
