@@ -48,7 +48,7 @@ public class GeologDataAccess  {
 		formatted for the final output. In the final implementation we might
 		chose to have the
 	**/
-	public void writeDevices(java.io.PrintWriter writer)
+	public void writeDevices(String serverPath, java.io.PrintWriter writer)
 			throws IOException, ServletException, XSLTransformException {
 
 		Namespace root = Namespace.getNamespace("http://www.pa.com/geolog");
@@ -60,7 +60,7 @@ public class GeologDataAccess  {
 		//iterate through Hashtable keys Enumeration
 		while(e.hasMoreElements()) {
 			Element du = new Element("deviceURL", root);
-			du.setText("http://localhost:8080/geolog/devices/" + (String)e.nextElement());
+			du.setText(serverPath + "/geolog/devices/" + (String)e.nextElement());
 			devicesElement.addContent(du);
 		}
 
@@ -165,7 +165,6 @@ public class GeologDataAccess  {
 			while (itt.hasNext())
 			{
 				Element e = (Element)itt.next();
-				Debuglog.write("Test: " + e.toString());
 				hashColl.addContent((Element)e.clone());
 			}
 		}

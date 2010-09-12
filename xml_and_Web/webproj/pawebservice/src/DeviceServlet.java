@@ -34,11 +34,9 @@ public class DeviceServlet extends HttpServlet {
 
 			//Case 1: "devices" and devices/" shall return all devices
 			if ((pathInfo == null) || (pathInfo.equals("/"))) {
-				String rootPath = request.getRequestURI();
-				Debuglog.write(rootPath);
 				response.setContentType("text/xml");
 				GeologDataAccess da =	new GeologDataAccess(getServletContext());
-				da.writeDevices(response.getWriter());
+				da.writeDevices("http://" + request.getServerName() + ":" + request.getServerPort(), response.getWriter());
 				return;
 			}
 			//Case 2: "devices/1" shall return the device with id=1
