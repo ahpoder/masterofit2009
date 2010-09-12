@@ -52,6 +52,20 @@ public class DeviceServlet extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error: " + e.getMessage());
 		}
   }
+  
+  private void writeDebugLog(String msg)
+  {
+	try {
+		// Create file 
+		FileWriter fstream = new FileWriter("c:\\debuglog.txt",true);
+			BufferedWriter out = new BufferedWriter(fstream);
+		out.write("\r\n\r\n" + msg + "\r\n\r\n");
+		//Close the output stream
+		out.close();
+		}catch (Exception e){//Catch exception if any
+		  System.err.println("Error: " + e.getMessage());
+	}
+  }
 
 	/**
 		POST device readings for a specified ID. The caller knows the id.
@@ -60,7 +74,6 @@ public class DeviceServlet extends HttpServlet {
   public void doPost(HttpServletRequest request,
                     HttpServletResponse response)
       throws IOException, ServletException {
-
 		try {
 
 			//The server has taken care of redirecting "/devices" and "/devices/*" to this servlet
@@ -69,6 +82,7 @@ public class DeviceServlet extends HttpServlet {
 			//No device id specified. Get out of here with a clear message.
 			if((pathInfo == null) || (pathInfo.length() == 1)) {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "On POSTing a device id is required in the URI");
+				Debuglog.write("On POSTing a device id is required in the URI");
 				return;
 			}
 
@@ -76,27 +90,51 @@ public class DeviceServlet extends HttpServlet {
 			//Validate the part that might be an id
 			if (!GeologDeviceID.isValidID(pathInfo.substring(1))) {
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST, "The supplied device id ("+ pathInfo.substring(1) + ") does not match the expected ID pattern");
+				Debuglog.write("The supplied device id ("+ pathInfo.substring(1) + ") does not match the expected ID pattern");
 				return;
 			}
 			//Get and validate the payload
 			String xmlSchemaPath = getServletContext().getRealPath("/" + getServletContext().getInitParameter("DeviceXSDFile"));
-			SAXBuilder builder;
-			builder = new SAXBuilder();
+			SAXBuilder builder = new SAXBuilder();
+/*
 			builder.setValidation(true);
 			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
 													"http://www.w3.org/2001/XMLSchema");
 			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaSource",
 													xmlSchemaPath);
+*/
 			Document doc = builder.build(request.getInputStream());
+
+// Debugging ----------------------
+			Debuglog.write("Received POST on " + pathInfo + ":");
+			
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			XMLOutputter xo = new XMLOutputter(Format.getPrettyFormat());
+			xo.output(doc, baos);
+			Debuglog.write(baos.toString());
+// --------------------------------------------
 
 			//Send the payload to the data access handler
 			GeologDeviceID id = new GeologDeviceID(pathInfo.substring(1));
-			GeologDataAccess da =	new GeologDataAccess(getServletContext());
+			GeologDataAccess da = new GeologDataAccess(getServletContext());
 			da.storeDevice(id, doc);
 		}
 		catch (Exception e) {
 			//TODO: Remove exposure of internal exceptions to the caller
 			response.sendError(500, "Internal error: " + e.getMessage());
+			Debuglog.write("Internal error: " + e.getMessage());
+			try
+			{
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);
+				e.printStackTrace(ps);
+				ps.flush();
+				Debuglog.write(baos.toString());
+			}
+			catch (Exception ex) 
+			{
+				Debuglog.write("Error writing error: " + e.getMessage());
+			}	
 		}
   }
 

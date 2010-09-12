@@ -2,6 +2,7 @@ import java.io.*;
 import org.jdom.*;
 import org.jdom.input.*;
 import org.jdom.output.*;
+import org.jdom.xpath.*;
 import org.jdom.transform.*;
 import javax.servlet.*;
 import java.util.*;
@@ -10,6 +11,7 @@ public class GeologDataAccess  {
 
 	ServletContext context;
 	Hashtable<String, GeologDeviceStatus> hashDevices;
+	Hashtable<String, Document> hashDevicesReadings;
 
 	/**
 	  The class will create relevant data access objects
@@ -28,6 +30,14 @@ public class GeologDataAccess  {
 		if (hashDevices==null){
 			hashDevices = new Hashtable<String, GeologDeviceStatus>();
 			context.setAttribute("hashDevices", hashDevices);
+		}
+
+		//Get the data object from the servlet context
+		hashDevicesReadings = (Hashtable)context.getAttribute("hashDevicesReadings");
+		//Create the data object if it wasn't there already
+		if (hashDevicesReadings==null){
+			hashDevicesReadings = new Hashtable<String, Document>();
+			context.setAttribute("hashDevicesReadings", hashDevicesReadings);
 		}
 	}
 
@@ -91,6 +101,43 @@ public class GeologDataAccess  {
 			//Check for existence of the device in the hash table
 			//if exists add to the present document
 			//if not exists insert it
+
+			if (!hashDevicesReadings.containsKey(id.toString()))
+			{
+				Namespace root = Namespace.getNamespace("http://www.pa.com/geolog");
+				Element deviceElement = new Element("device", root);
+				Namespace kml = Namespace.getNamespace("k", "http://code.google.com/kml21");
+				deviceElement.addNamespaceDeclaration(kml);
+				Document myDocument = new Document(deviceElement);
+				
+				deviceElement.setAttribute(new Attribute("id", id.toString()));
+				
+				Element glCollection = new Element("geologCollection", root); 
+				deviceElement.addContent(glCollection);
+				hashDevicesReadings.put(id.toString(), myDocument);
+			}
+			Document hashDoc = hashDevicesReadings.get(id.toString());
+			
+			Namespace root = Namespace.getNamespace("http://www.pa.com/geolog");
+			Element hashDevice = hashDoc.getRootElement();
+			Element hashColl = hashDevice.getChild("geologCollection", root);
+			
+			Element newDevice = doc.getRootElement();
+			Element newColl = newDevice.getChild("geologCollection", root);
+			
+/*
+			// Try this
+			XPath xp = XPath.newInstace("//geologCollection");
+			xp.addNamespace(root);
+			Element hashColl = (Element)xp.selectSingleNode(hashDoc.getRootElement());
+			Element newColl = (Element)xp.selectSingleNode(doc.getRootElement());
+*/			
+			List geologList = newColl.getChildren();
+			Iterator itt = geologList.iterator();
+			while (itt.hasNext())
+			{
+				hashColl.addContent((Element)((Element)itt.next()).clone());
+			}
 		}
 	}
 

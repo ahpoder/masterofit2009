@@ -15,4 +15,8 @@ public class GeologDeviceID {
 		//TODO: Do a regex pattern matching test on the supplied string
 		return true;
 	}
+	
+	public String toString() {
+		return id;
+	}
 }

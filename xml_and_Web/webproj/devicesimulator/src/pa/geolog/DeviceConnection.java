@@ -31,18 +31,37 @@ public class DeviceConnection extends Thread {
 		pw.print(payload); // here we "send" our body!
 		pw.flush();
 		pw.close();
-	}
-	
-	/*
-	   int i=1;// this will print all header parameter
+
+		int i=1;// this will print all header parameter
 		String hKey;
+		int contentLength = 0;
 		while ((hKey=conn.getHeaderFieldKey(i))!=null){
 		   String hVal = conn.getHeaderField(i);
 		   System.out.println(hKey+"="+hVal);
+		   if (hKey.equals("Content-Length"))
+		   {
+			   contentLength = Integer.valueOf(hVal); 
+		   }
 		   i++;
 		}
 		//and InputStream from here will be body
-		conn.getInputStream()
+        Reader in = new BufferedReader
+        (new InputStreamReader(conn.getInputStream()));
+        for (i = 0; i < contentLength; ++i)
+        {
+        	System.out.print((char)in.read());
+        }
+    	System.out.println();
+/*
+        while (in.ready())
+        {
+        	System.out.println((char)in.read());
+        }
+*/
+		conn.disconnect();
+	}
+	
+	/*
 	 */
 	
 	private boolean running;
