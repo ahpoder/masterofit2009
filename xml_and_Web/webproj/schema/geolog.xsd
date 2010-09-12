@@ -44,7 +44,7 @@
 	</sequence>
 	<attribute name="dateTime" use="required" type="dateTime"/>
   </complexType>
-
+  
   <complexType name="ReadingsType">
     <sequence>
 	  <element name="reading" minOccurs="0" maxOccurs="unbounded" type="g:ReadingType"/>

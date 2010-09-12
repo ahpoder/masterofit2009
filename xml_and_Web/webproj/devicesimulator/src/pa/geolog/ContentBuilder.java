@@ -71,13 +71,10 @@ public class ContentBuilder {
 		
 		Element eLocation = new Element("location", root);
 		geolog.addContent(eLocation);
-		
-		Element point = new Element("Point", kml);
-		eLocation.addContent(point);
-		
+				
 		Element coordinates = new Element("coordinates", kml);
 		coordinates.addContent("" + lattitude + "," + longitude);
-		point.addContent(coordinates);
+		eLocation.addContent(coordinates);
 		
 		StringWriter sw = new StringWriter();
 		XMLOutputter outputter = new XMLOutputter();
