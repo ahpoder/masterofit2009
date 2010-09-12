@@ -94,33 +94,6 @@
       <servlet-class>ZoneServlet</servlet-class>
     </servlet>
 
-    <servlet>
-      <servlet-name>controller</servlet-name>
-      <description>
-        This servlet plays the "controller" role in the MVC architecture
-        used in this application.  It is generally mapped to the ".do"
-        filename extension with a servlet-mapping element, and all form
-        submits in the app will be submitted to a request URI like
-        "saveCustomer.do", which will therefore be mapped to this servlet.
-
-        The initialization parameter names for this servlet are the
-        "servlet path" that will be received by this servlet (after the
-        filename extension is removed).  The corresponding value is the
-        name of the action class that will be used to process this request.
-      </description>
-      <servlet-class>com.mycompany.mypackage.ControllerServlet</servlet-class>
-      <init-param>
-        <param-name>listOrders</param-name>
-        <param-value>com.mycompany.myactions.ListOrdersAction</param-value>
-      </init-param>
-      <init-param>
-        <param-name>saveCustomer</param-name>
-        <param-value>com.mycompany.myactions.SaveCustomerAction</param-value>
-      </init-param>
-      <!-- Load this servlet at server startup time -->
-      <load-on-startup>5</load-on-startup>
-    </servlet>
-
     <!-- Define mappings that are used by the servlet container to
          translate a particular request URI (context-relative) to a
          particular servlet.  The examples below correspond to the
@@ -161,12 +134,6 @@
     <servlet-mapping>
       <servlet-name>zoneservlet</servlet-name>
       <url-pattern>/zones/*</url-pattern>
-    </servlet-mapping>
-
-
-    <servlet-mapping>
-      <servlet-name>controller</servlet-name>
-      <url-pattern>*.do</url-pattern>
     </servlet-mapping>
 
     <!-- Define the default session timeout for your application,
