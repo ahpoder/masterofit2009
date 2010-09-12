@@ -54,9 +54,9 @@ public class GeologDataAccess  {
 		Namespace root = Namespace.getNamespace("http://www.pa.com/geolog");
 		Element devicesElement = new Element("devices", root);
 		Document myDocument = new Document(devicesElement);
-		
+
 		Enumeration e = hashDevicesReadings.keys();
- 
+
 		//iterate through Hashtable keys Enumeration
 		while(e.hasMoreElements()) {
 			Element du = new Element("deviceURL", root);
@@ -66,7 +66,7 @@ public class GeologDataAccess  {
 
 		XMLOutputter xo = new XMLOutputter(Format.getPrettyFormat());
 		xo.output(myDocument, writer);
-		
+
 		//Create a well formed XML document with the relevant information
 		//even if the collection is empty
 
@@ -127,39 +127,32 @@ public class GeologDataAccess  {
 		//Critical region, as more servlets may try a concurrent context update
 		synchronized(context) {
 			//Check for existence of the device in the hash table
-			//if exists add to the present document
-			//if not exists insert it
-
 			if (!hashDevicesReadings.containsKey(id.toString()))
 			{
+				//Create and insert a well formed document without readings
 				Namespace root = Namespace.getNamespace("http://www.pa.com/geolog");
 				Element deviceElement = new Element("device", root);
 				Namespace kml = Namespace.getNamespace("k", "http://code.google.com/kml21");
 				deviceElement.addNamespaceDeclaration(kml);
 				Document myDocument = new Document(deviceElement);
-				
+
 				deviceElement.setAttribute(new Attribute("id", id.toString()));
-				
-				Element glCollection = new Element("geologCollection", root); 
+
+				Element glCollection = new Element("geologCollection", root);
 				deviceElement.addContent(glCollection);
 				hashDevicesReadings.put(id.toString(), myDocument);
 			}
+
+			//Get the document for the current device from the hashTable
 			Document hashDoc = hashDevicesReadings.get(id.toString());
-			
+
 			Namespace root = Namespace.getNamespace("http://www.pa.com/geolog");
 
 			Element hashDevice = hashDoc.getRootElement();
 			Element hashColl = hashDevice.getChild("geologCollection", root);
-			
+			//Drill down to the readings (geolog elements) of the new document
 			Element newDevice = doc.getRootElement();
 			Element newColl = newDevice.getChild("geologCollection", root);
-
-/* This does not work - why
-			XPath xp = XPath.newInstance("//geologCollection");
-			xp.addNamespace(root);
-			Element hashColl = (Element)xp.selectSingleNode(hashDoc.getRootElement());
-			Element newColl = (Element)xp.selectSingleNode(doc.getRootElement());
-*/
 			List geologList = newColl.getChildren();
 			Iterator itt = geologList.iterator();
 			while (itt.hasNext())
@@ -167,6 +160,54 @@ public class GeologDataAccess  {
 				Element e = (Element)itt.next();
 				hashColl.addContent((Element)e.clone());
 			}
-		}
+/* This does not work - why
+			XPath xp = XPath.newInstance("//geologCollection");
+			xp.addNamespace(root);
+			Element hashColl = (Element)xp.selectSingleNode(hashDoc.getRootElement());
+			Element newColl = (Element)xp.selectSingleNode(doc.getRootElement());
+*/
+/*
+/*			{
+				//Insert the new device in the hashtable
+				//TODO: Add some validation of the document
+				Debuglog.write("The device doesn't exist. Adding");
+				hashDevicesReadings.put(id.toString(), doc);
+			}
+			else
+			{
+				Debuglog.write("The device already exists. Appending readings");
+				//Add the new data to the current document
+				//Extract the geolog elements from the received document
+				//TODO: This one return nothing. WHY? Elements are returned in the test setup
+				List newgeologElements = XPath.selectNodes(doc, "//device/geologCollection/geolog");
+				//Proceed if anything's returned
+				//TODO: Change test to newgeologElements.size()>0
+				if(newgeologElements!=null){
+					//DEBUG entry below
+					Debuglog.write("XPath on the new document returned " + Integer.toString(newgeologElements.size()) + " geolog elements");
+					//Get the current document
+					Document dcur = hashDevicesReadings.get(id.toString());
+					Debuglog.write("Current document is: " + dcur.toString());
+
+					//Get the element that shall receive the new data
+					Element ecur = (Element)XPath.selectSingleNode(dcur, "//device/geologCollection");
+					if(ecur==null)
+						Debuglog.write("XPath for the geologCollection of the current document returned null");
+					else
+						Debuglog.write("The geologCollection of the current document is: " + ecur.toString());
+					//Add the new data to the current data
+					Iterator ite = newgeologElements.iterator();
+					while(ite.hasNext())
+					{
+						Element e = (Element)ite.next();
+						ecur.addContent((Element)e.clone());
+					}
+				}
+			}
+*/
+/*			{
+			}
+*/
+			} //synchronized
 	}
 }
