@@ -1,21 +1,22 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
         xmlns:g="http://www.pa.com/geolog"
-        xmlns:k="http://code.google.com/kml21"
+        xmlns:k="http://earth.google.com/kml/2.1"
 		xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
         targetNamespace="http://www.pa.com/geolog"
         elementFormDefault="qualified">
 
-<xsd:import namespace="http://code.google.com/kml21"
-            schemaLocation="http://code.google.com/intl/da-DK/apis/kml/schema/kml21.xsd"/>
+<import namespace="http://earth.google.com/kml/2.1"
+        schemaLocation="http://code.google.com/intl/da-DK/apis/kml/schema/kml21.xsd"/>
 
-<xsd:import namespace="http://schemas.xmlsoap.org/wsdl/mime/"
-			schemaLocation="http://schemas.xmlsoap.org/wsdl/mime/mime.xsd"/>
+		
+<!--import namespace="http://schemas.xmlsoap.org/wsdl/mime/"
+        schemaLocation="http://schemas.xmlsoap.org/wsdl/mime/mime.xsd"/-->
 
   <element name="devices" type="g:DevicesType"/>
 
   <complexType name="DevicesType">
     <sequence>
-	  <element name="deviceURL" type="url" minOccurs="0" maxOccurs="unbounded"/>
+	  <element name="deviceURL" type="anyURI" minOccurs="0" maxOccurs="unbounded"/>
 	</sequence>
   </complexType>
     
@@ -25,15 +26,14 @@
     <sequence>
 	  <element name="geologCollection" minOccurs="0" type="g:GeologCollectionType"/>
 	</sequence>
-	<attribute name="id" type="string"/>
-	<attribute name="owner" optional="yes" type="string"/>
+	<attribute name="id" use="required" type="string"/>
+	<attribute name="owner" type="string"/>
   </complexType>
 
   <complexType name="GeologCollectionType">
     <sequence>
 	  <element name="geolog" minOccurs="0" maxOccurs="unbounded" type="g:GeologType"/>
 	</sequence>
-	<attribute name="dateTime" type="datetime"/>
   </complexType>
 
     <complexType name="GeologType">
@@ -42,26 +42,29 @@
 	  <element name="status" minOccurs="0" type="g:StatusType"/>
 	  <element name="location" minOccurs="0" type="k:Point"/>
 	</sequence>
+	<attribute name="dateTime" use="required" type="dateTime"/>
   </complexType>
 
   <complexType name="ReadingsType">
     <sequence>
 	  <element name="reading" minOccurs="0" maxOccurs="unbounded" type="g:ReadingType"/>
 	</sequence>
-	<attribute name="id" type="string" optional="yes"/>
   </complexType>
 
   <complexType name="ReadingType">
     <sequence>
 	  <element name="key" type="string"/>
-	  <element name="value" type="CDATA"/>
-	  <element name="type" type="g:MIMEType"/>
+	  <element name="value" type="string"/>
+	  <!-- TODO For some reason CDATA does not work -->
+	  <element name="type" type="string"/>
+	  <!-- TODO change type to something more sensible, e.g. g:MIMEType -->
 	  <element name="unit" type="string"/>
 	</sequence>
+	<attribute name="id" type="string"/>
   </complexType>
 
   <simpleType name="StatusType">
-    <restriction base="xs:string">
+    <restriction base="string">
 	  <enumeration value="OK"/>
 	  <enumeration value="DISCONNECTED"/>
 	  <enumeration value="ERROR"/>
@@ -83,7 +86,7 @@
   
   <complexType name="ZonesType">
     <sequence>
-	  <element name="zoneURL" type="url"  minOccurs="0" maxOccurs="unbounded"/>
+	  <element name="zoneURL" type="anyURI"  minOccurs="0" maxOccurs="unbounded"/>
 	</sequence>
   </complexType>
 
