@@ -1,0 +1,1 @@
+java -classpath saxon.jar net.sf.saxon.Transform ..\device_post_example.xml xpath.xsl
