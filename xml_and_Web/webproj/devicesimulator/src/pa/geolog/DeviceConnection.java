@@ -11,7 +11,7 @@ public class DeviceConnection extends Thread {
 	private int id;
 	public DeviceConnection(String address, int intervalMS, int ID)
 	{
-		this.address = address;
+		this.address = address + "/geolog/devices/" + ID;
 		this.intervalMS = intervalMS;
 		this.id = ID;
 	}

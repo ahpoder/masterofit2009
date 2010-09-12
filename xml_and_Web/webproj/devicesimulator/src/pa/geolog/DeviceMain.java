@@ -32,7 +32,7 @@ public class DeviceMain {
 				{
 				  case 1:
 				  {
-					System.out.print("\nEnter address to send to (e.g. http://www.pa.com:8080/geolog/devices/27): ");
+					System.out.print("\nEnter address to send to (e.g. http://www.pa.com:8080): ");
 					String address = br.readLine();
 					System.out.print("\nEnter Device ID (must match string entered in address: ");
 					String id = br.readLine();
@@ -48,12 +48,13 @@ public class DeviceMain {
 					double dLongitude = Double.valueOf(longitude);
 					
 					String payload = ContentBuilder.buildContent(id, dStatus, dLattitude, dLongitude);
+					address = address + "/geolog/devices/" + id;
 					DeviceConnection.postInfo(address, payload);
 				  }
 				  break;
 				  case 2:
 				  {
-					System.out.print("\nEnter address to send to (e.g. http://www.pa.com:8080/geolog/devices/27): ");
+					System.out.print("\nEnter server address to send to (e.g. http://www.pa.com:8080): ");
 					String address = br.readLine();
 					System.out.print("\nEnter Device ID range (e.g. 100-200, must be integers: ");
 					String idRange = br.readLine();
