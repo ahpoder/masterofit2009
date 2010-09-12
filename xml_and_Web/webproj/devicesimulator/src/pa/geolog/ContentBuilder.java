@@ -9,7 +9,7 @@ import org.jdom.output.*;
 
 public class ContentBuilder {
 
-	public static String getNextContent(int id) {
+	public static String getNextContent(int id) throws IOException {
 		Random r = new Random();
 		double lat = rootLattitude + (r.nextDouble() - 0.5) * locationDeviation;
 		double lng = rootLongitude + (r.nextDouble() - 0.5) * locationDeviation;
@@ -17,51 +17,67 @@ public class ContentBuilder {
 	}
 
 	 private static String getDateTime() {
-		 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
+		 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-d'T'HH:mm:ss.S");
 	     Date date = new Date();
 	     return dateFormat.format(date);
 	 }
 	 
 	public static String buildContent(String id, DeviceStatus status, double lattitude, double longitude) throws IOException
 	{
-		Element deviceElement = new Element("device");
+		Namespace root = Namespace.getNamespace("http://www.pa.com/geolog");
+		Element deviceElement = new Element("device", root);
+		Namespace kml = Namespace.getNamespace("k", "http://code.google.com/kml21");
+		deviceElement.addNamespaceDeclaration(kml);
 		Document myDocument = new Document(deviceElement);
 		
 		deviceElement.setAttribute(new Attribute("id", id));
 		
-		Element glCollection = new Element("geologCollection"); 
+		Element glCollection = new Element("geologCollection", root); 
 		deviceElement.addContent(glCollection);
 		
-		Element geolog = new Element("geolog");
+		Element geolog = new Element("geolog", root);
 		glCollection.addContent(geolog);
 		
 		geolog.setAttribute("dateTime", getDateTime());
 		
-		Element readings = new Element("readings");
+		Element readings = new Element("readings", root);
 		geolog.addContent(readings);
 		
-		Element reading = new Element("reading");
+		Element reading = new Element("reading", root);
 		readings.addContent(reading);
 		
 		reading.setAttribute("id", "sensor1");
 
-		Element key = new Element("key");
+		Element key = new Element("key", root);
 		key.addContent("altitude");
 		reading.addContent(key);
 		
-		Element value = new Element("VALUE");
-		value.addContent("125.0001");
+		Element value = new Element("value", root);
+		Random r = new Random();
+		value.addContent("" + (r.nextDouble() * 250));
 		reading.addContent(value);
 		
-		Element type = new Element("type");
+		Element type = new Element("type", root);
 		type.addContent("xs:double");
 		reading.addContent(type);
 		
-		Element unit = new Element("unit");
+		Element unit = new Element("unit", root);
 		unit.addContent("m");
 		reading.addContent(unit);
 
-		// Add remaining
+		Element eStatus = new Element("status", root);
+		eStatus.addContent(status.toString());
+		geolog.addContent(eStatus);
+		
+		Element eLocation = new Element("location", root);
+		geolog.addContent(eLocation);
+		
+		Element point = new Element("Point", kml);
+		eLocation.addContent(point);
+		
+		Element coordinates = new Element("coordinates", kml);
+		coordinates.addContent("" + lattitude + "," + longitude);
+		point.addContent(coordinates);
 		
 		StringWriter sw = new StringWriter();
 		XMLOutputter outputter = new XMLOutputter();
