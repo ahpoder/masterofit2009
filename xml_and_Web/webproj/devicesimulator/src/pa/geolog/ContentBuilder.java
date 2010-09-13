@@ -26,7 +26,7 @@ public class ContentBuilder {
 	{
 		Namespace root = Namespace.getNamespace("http://www.pa.com/geolog");
 		Element deviceElement = new Element("device", root);
-		Namespace kml = Namespace.getNamespace("k", "http://code.google.com/kml21");
+		Namespace kml = Namespace.getNamespace("k", "http://earth.google.com/kml/2.1");
 		deviceElement.addNamespaceDeclaration(kml);
 		Document myDocument = new Document(deviceElement);
 		

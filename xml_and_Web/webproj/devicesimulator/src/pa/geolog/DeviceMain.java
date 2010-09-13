@@ -111,8 +111,56 @@ public class DeviceMain {
 		while (selection != 0);
 	}
 	
+	
+	
 	public static void main(String[] args) {
 		DeviceMain dm = new DeviceMain();
-		dm.runRootMenu();
+		
+		if (args.length == 0)
+		{
+			dm.runRootMenu();
+		}
+		else
+		{
+			try {
+				CommandArguments ca = new CommandArguments(args);
+				if (ca.hasHelp())
+				{
+					CommandArguments.printHelp();
+				}
+				else if (ca.hasIDRange())
+				{
+					dm.runDaemon(ca);
+				}
+				else
+				{
+					dm.runDevice(ca);
+				}
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+				CommandArguments.printHelp();
+			}
+		}
+	}
+
+
+
+	private void runDevice(CommandArguments ca) throws IOException {
+		String payload = ContentBuilder.buildContent(ca.getSingleID(), ca.getStatus(), ca.getLattitude(), ca.getLongitude());
+		DeviceConnection.postInfo(ca.getHost() + "/geolog/devices/" + ca.getSingleID(), payload);
+	}
+
+
+
+	private void runDaemon(CommandArguments ca) {
+		ContentBuilder.registerRootLocation(ca.getLattitude(), ca.getLongitude(), ca.getDeviation());
+		
+		for (int i = ca.getFromID(); i <= ca.getToID(); ++i)
+		{
+			DeviceConnection dc = new DeviceConnection(ca.getHost(), ca.getInterval() * 1000, i);
+			dc.start();
+			connections.add(dc);
+		}
 	}
 }
