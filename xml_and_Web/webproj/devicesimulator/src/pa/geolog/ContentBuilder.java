@@ -69,7 +69,7 @@ public class ContentBuilder {
 		eStatus.addContent(status.toString());
 		geolog.addContent(eStatus);
 		
-		Element eLocation = new Element("location", root);
+		Element eLocation = new Element("Point", kml);
 		geolog.addContent(eLocation);
 				
 		Element coordinates = new Element("coordinates", kml);

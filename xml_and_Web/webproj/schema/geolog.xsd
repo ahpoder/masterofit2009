@@ -40,7 +40,7 @@
     <sequence>
 	  <element name="readings" minOccurs="0" type="g:ReadingsType"/>
 	  <element name="status" minOccurs="0" type="g:StatusType"/>
-	  <element name="location" minOccurs="0" type="k:PointType"/>
+	  <element minOccurs="0" ref="k:Point"/>
 	</sequence>
 	<attribute name="dateTime" use="required" type="dateTime"/>
   </complexType>
@@ -95,7 +95,7 @@
   <complexType name="ZoneType">
     <sequence>
 	  <element name="name" type="string"/>
-	  <element name="polygon" type="k:PolygonType"/>
+	  <element ref="k:Polygon"/>
 	</sequence>
   </complexType>
   

@@ -16,9 +16,9 @@
 	    </reading>
 	  </readings>
 	  <status>OK</status>
-	  <location>
+	  <k:Point>
 		<k:coordinates>-90.86948943473118,48.25450093195546</k:coordinates>
-	  </location>
+	  </k:Point>
 	</geolog>
     <geolog dateTime="2001-10-26T21:32:52.1267">
 	  <readings>
@@ -36,9 +36,9 @@
 	    </reading>
 	  </readings>
 	  <status>OK</status>
-	  <location>
+	  <k:Point>
 		<k:coordinates>-90.86948943473118,48.25450093195546</k:coordinates>
-	  </location>
+	  </k:Point>
 	</geolog>
     <geolog dateTime="2001-10-26T22:30:15.1487">
 	  <readings>
@@ -56,9 +56,9 @@
 	    </reading>
 	  </readings>
 	  <status>OK</status>
-	  <location>
+	  <k:Point>
 		<k:coordinates>-90.86948943474879,48.25450093191546</k:coordinates>
-	  </location>
+	  </k:Point>
 	</geolog>
   </geologCollection>
 </device>
