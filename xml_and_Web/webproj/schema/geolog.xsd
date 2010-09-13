@@ -1,12 +1,12 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
         xmlns:g="http://www.pa.com/geolog"
-        xmlns:k="http://earth.google.com/kml/2.1"
+        xmlns:k="http://www.opengis.net/kml/2.2"
 		xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
         targetNamespace="http://www.pa.com/geolog"
         elementFormDefault="qualified">
 
-<import namespace="http://earth.google.com/kml/2.1"
-        schemaLocation="http://code.google.com/intl/da-DK/apis/kml/schema/kml21.xsd"/>
+<import namespace="http://www.opengis.net/kml/2.2"
+        schemaLocation="http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd"/>
 
 		
 <!--import namespace="http://schemas.xmlsoap.org/wsdl/mime/"

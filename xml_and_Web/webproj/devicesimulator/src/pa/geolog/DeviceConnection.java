@@ -64,6 +64,12 @@ public class DeviceConnection extends Thread {
 	/*
 	 */
 	
+	public void dispose()
+	{
+		running = false;
+		this.interrupt();
+	}
+	
 	private boolean running;
     public void run() {
     	running = true;
@@ -71,11 +77,14 @@ public class DeviceConnection extends Thread {
 	    	while (running)
 	    	{
 	    		postInfo(address, ContentBuilder.getNextContent(id));
-				sleep(intervalMS);
+	    		sleep(intervalMS);
 	    	}				
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			if (running)
+			{
+				e1.printStackTrace();
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

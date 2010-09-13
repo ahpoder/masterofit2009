@@ -2,6 +2,7 @@ package pa.geolog;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 public class DeviceMain {
@@ -131,6 +132,9 @@ public class DeviceMain {
 				else if (ca.hasIDRange())
 				{
 					dm.runDaemon(ca);
+					System.out.println("Hit any key to terminate");
+					System.in.read();
+					dm.terminate();
 				}
 				else
 				{
@@ -141,6 +145,15 @@ public class DeviceMain {
 				e.printStackTrace();
 				CommandArguments.printHelp();
 			}
+		}
+	}
+
+	private void terminate() {
+		Iterator<DeviceConnection> itt = connections.iterator();
+		while (itt.hasNext())
+		{
+			DeviceConnection dc = itt.next();
+			dc.dispose();
 		}
 	}
 
