@@ -5,6 +5,7 @@
         targetNamespace="http://www.pa.com/geolog"
         elementFormDefault="qualified">
 
+<!-- Import the schema for KML 2.2 -->
 <import namespace="http://www.opengis.net/kml/2.2"
         schemaLocation="http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd"/>
 
@@ -40,6 +41,7 @@
     <sequence>
 	  <element name="readings" minOccurs="0" type="g:ReadingsType"/>
 	  <element name="status" minOccurs="0" type="g:StatusType"/>
+	  <!-- Refer to the KML Point element -->
 	  <element minOccurs="0" ref="k:Point"/>
 	</sequence>
 	<attribute name="dateTime" use="required" type="dateTime"/>
