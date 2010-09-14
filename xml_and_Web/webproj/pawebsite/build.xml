@@ -126,7 +126,7 @@
 
 -->
 
-  <property name="app.name"      value="pawebservice"/>
+  <property name="app.name"      value="pawebsite"/>
   <!--property name="app.path"      value="/${app.name}"/--> <!-- see build.properties -->
   <property name="app.path"      value="/paweb"/> <!-- Notice how deployment to paweb is specified -->
   <property name="app.version"   value="0.1-dev"/>
