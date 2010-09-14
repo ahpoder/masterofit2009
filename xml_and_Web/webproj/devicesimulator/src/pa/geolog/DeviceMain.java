@@ -157,14 +157,10 @@ public class DeviceMain {
 		}
 	}
 
-
-
 	private void runDevice(CommandArguments ca) throws IOException {
 		String payload = ContentBuilder.buildContent(ca.getSingleID(), ca.getStatus(), ca.getLattitude(), ca.getLongitude());
 		DeviceConnection.postInfo(ca.getHost() + "/geolog/devices/" + ca.getSingleID(), payload);
 	}
-
-
 
 	private void runDaemon(CommandArguments ca) {
 		ContentBuilder.registerRootLocation(ca.getLattitude(), ca.getLongitude(), ca.getDeviation());
