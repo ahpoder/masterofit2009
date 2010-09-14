@@ -11,10 +11,6 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.util.Random;
-import org.jdom.*;
-import org.jdom.input.*;
-import org.jdom.output.*;
-import org.jdom.xpath.*;
 import java.util.*;
 import java.net.*;
 
@@ -35,6 +31,9 @@ public class DevicesServlet extends HttpServlet {
 			
 			conn.setRequestMethod("GET");
 			conn.setAllowUserInteraction(false); // no user interact [like pop up]
+			conn.setDoOutput(true); // want to send
+			conn.setDoInput(true);
+			conn.getOutputStream().close();
 /*
 			conn.setDoOutput(true); // want to send
 			OutputStream ost = conn.getOutputStream();
@@ -60,6 +59,7 @@ public class DevicesServlet extends HttpServlet {
 			if (contentLength <= 0)
 			{
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No content received from service");
+				conn.disconnect();
 				return;
 			}
 			
@@ -78,18 +78,32 @@ public class DevicesServlet extends HttpServlet {
 			  // Generate the transformer.
 			  Transformer transformer = tFactory.newTransformer(xslSource);
 			  // Perform the transformation, sending the output to the response.
-			  transformer.transform(xmlSource, new StreamResult(out));
+			  ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			  PrintStream ps = new PrintStream(baos);
+			  //transformer.transform(xmlSource, new StreamResult(out));
+			  transformer.transform(xmlSource, new StreamResult(ps));
 			}
 			catch (Exception e)
 			{
-			  out.write(e.getMessage());
-			  e.printStackTrace(out);    
+				Debuglog.write("Internal error: " + e.getMessage());
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);
+				e.printStackTrace(ps);
+				ps.flush();
+				Debuglog.write(baos.toString());
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error: " + e.getMessage());
 			}
 			out.close();
+			conn.disconnect();
 		}
 		catch (Exception e) {
 			//TODO: Remove exposure of internal exceptions to the caller
 			Debuglog.write("Internal error: " + e.getMessage());
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			PrintStream ps = new PrintStream(baos);
+			e.printStackTrace(ps);
+			ps.flush();
+			Debuglog.write(baos.toString());
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error: " + e.getMessage());
 		}
   }

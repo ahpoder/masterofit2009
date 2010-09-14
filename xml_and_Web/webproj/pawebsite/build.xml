@@ -128,7 +128,7 @@
 
   <property name="app.name"      value="pawebservice"/>
   <!--property name="app.path"      value="/${app.name}"/--> <!-- see build.properties -->
-  <property name="app.path"      value="/geolog"/> <!-- Notice how deployment to geolog is specified -->
+  <property name="app.path"      value="/paweb"/> <!-- Notice how deployment to paweb is specified -->
   <property name="app.version"   value="0.1-dev"/>
   <property name="build.home"    value="${basedir}/build"/>
   <!-- <property name="catalina.home" value="../../../.."/> --> <!-- see build.properties -->
@@ -163,12 +163,14 @@
   <property name="foo.jar"
            value="/path/to/foo.jar"/>
 -->
-  <!-- 20100912/PMD defined jdom.jar -->
-  <property name="jdom.jar"
-           value="lib/jdom.jar"/>
-  <property name="jaxen-1.1.2.jar"
-           value="lib/jaxen-1.1.2.jar"/>
-  <!-- 20100912/PMD defined geolog.xsd -->
+  <property name="xalan.jar"
+           value="lib/xalan.jar"/>
+  <property name="xml-apis.jar"
+           value="lib/xml-apis.jar"/>
+  <property name="serializer.jar"
+           value="lib/serializer.jar"/>
+  <property name="xercesImpl.jar"
+           value="lib/xercesImpl.jar"/>
   <property name="geolog.xsd"
            value="../schema/geolog.xsd"/>
 
@@ -193,9 +195,10 @@
     <pathelement location="${foo.jar}"/>
 -->
 
-   <!-- 20100912/PMD added ${jdom.jar} -->
-   <pathelement location="${jdom.jar}"/>
-   <pathelement location="${jaxen-1.1.2.jar}"/>
+   <pathelement location="${xalan.jar}"/>
+   <pathelement location="${xml-apis.jar}"/>
+   <pathelement location="${serializer.jar}"/>
+   <pathelement location="${xercesImpl.jar}"/>
    
     <!-- Include all elements that Tomcat exposes to applications -->
     <fileset dir="${catalina.home}/bin">
@@ -474,10 +477,11 @@
 <!--
     <copy todir="${build.home}/WEB-INF/lib" file="${foo.jar}"/>
 -->
-    <!-- 20100912/PMD added jdom.jar -->
-    <copy todir="${build.home}/WEB-INF/lib" file="${jdom.jar}"/>
-    <copy todir="${build.home}/WEB-INF/lib" file="${jaxen-1.1.2.jar}"/>
-    
+    <copy todir="${build.home}/WEB-INF/lib" file="${xalan.jar}"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${xml-apis.jar}"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${serializer.jar}"/>
+    <copy todir="${build.home}/WEB-INF/lib" file="${xercesImpl.jar}"/>
+
     <!-- 20100912/AHP added geolog.xsd -->
     <copy todir="${build.home}" file="${geolog.xsd}"/>
 

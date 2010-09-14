@@ -65,11 +65,6 @@
     <!-- Servlet initialization parameters -->
 
 		<init-param>
-		  <param-name>DevicesXSLT</param-name>
-		  <param-value>xslt/devices.xsl</param-value>
-		</init-param>
-
-		<init-param>
 		  <param-name>DeviceXSLT</param-name>
 		  <param-value>xslt/device.xsl</param-value>
 		</init-param>
@@ -81,6 +76,10 @@
 
     <servlet>
       <servlet-name>devicesservlet</servlet-name>
+		<init-param>
+		  <param-name>DevicesXSLT</param-name>
+		  <param-value>xslt/devices.xsl</param-value>
+		</init-param>
       <description>
       This is the handler of requests addressed to {context-path}
       </description>
