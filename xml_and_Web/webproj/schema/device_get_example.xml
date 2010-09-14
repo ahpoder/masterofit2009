@@ -1,4 +1,4 @@
-<device id="device1" owner="peter" xmlns="http://www.pa.com/geolog" xmlns:k="http://earth.google.com/kml/2.2">
+<device id="device1" owner="peter" xmlns="http://www.pa.com/geolog" xmlns:k="http://www.opengis.net/kml/2.2">
   <geologCollection>
     <geolog dateTime="2001-10-25T21:32:52.1267">
 	  <readings>

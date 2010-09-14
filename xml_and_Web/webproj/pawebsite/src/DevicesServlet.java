@@ -26,14 +26,27 @@ public class DevicesServlet extends HttpServlet {
                     HttpServletResponse response)
       throws IOException, ServletException {
 		try {
-			URL url = new URL("http://" + request.getServerName() + ":" + request.getServerPort() + "");
+			URL url = new URL("http://" + request.getServerName() + ":" + request.getServerPort() + "/geolog/devices");
 			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-			
 			conn.setRequestMethod("GET");
 			conn.setAllowUserInteraction(false); // no user interact [like pop up]
 			conn.setDoOutput(true); // want to send
+			conn.setRequestProperty( "Content-type", "text/xml" );
+			conn.setRequestProperty( "Content-length", "0");
+			OutputStream ost = conn.getOutputStream();
+			PrintWriter pw = new PrintWriter(ost);
+			pw.print(""); // here we "send" our body, which is empty
+			pw.flush();
+			pw.close();
+			
+/*
+			conn.setRequestMethod("GET");
+			conn.setAllowUserInteraction(false); // no user interact [like pop up]
+
+//			conn.setDoOutput(true); // want to send
 			conn.setDoInput(true);
-			conn.getOutputStream().close();
+//			conn.getOutputStream().close();
+
 /*
 			conn.setDoOutput(true); // want to send
 			OutputStream ost = conn.getOutputStream();
@@ -63,6 +76,15 @@ public class DevicesServlet extends HttpServlet {
 				return;
 			}
 			
+			Debuglog.write("XXX: " + contentLength);
+			char[] cs = new char[contentLength];
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			Debuglog.write("Read: " + br.read(cs, 0, contentLength));
+			Debuglog.write(new String(cs));
+			br.close();
+			Debuglog.write("XXX");
+
+/*
 			// The servlet returns HTML.
 			response.setContentType("text/html; charset=UTF-8");    
 			// Output goes in the response stream.
@@ -78,10 +100,7 @@ public class DevicesServlet extends HttpServlet {
 			  // Generate the transformer.
 			  Transformer transformer = tFactory.newTransformer(xslSource);
 			  // Perform the transformation, sending the output to the response.
-			  ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			  PrintStream ps = new PrintStream(baos);
-			  //transformer.transform(xmlSource, new StreamResult(out));
-			  transformer.transform(xmlSource, new StreamResult(ps));
+			  transformer.transform(xmlSource, new StreamResult(out));
 			}
 			catch (Exception e)
 			{
@@ -94,6 +113,7 @@ public class DevicesServlet extends HttpServlet {
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error: " + e.getMessage());
 			}
 			out.close();
+*/
 			conn.disconnect();
 		}
 		catch (Exception e) {
