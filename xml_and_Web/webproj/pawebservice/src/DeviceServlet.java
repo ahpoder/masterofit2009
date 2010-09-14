@@ -28,7 +28,6 @@ public class DeviceServlet extends HttpServlet {
 //					request,
 //					response);
 		try {
-			Debuglog.write("doGet called");
 			//The server has taken care of redirecting "devices" and "devices/*" to this servlet
 			//The distinction may be made on the request.getPathInfo()
 			String pathInfo = request.getPathInfo();
