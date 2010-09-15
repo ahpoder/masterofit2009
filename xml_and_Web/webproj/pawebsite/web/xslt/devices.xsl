@@ -23,7 +23,9 @@
 
   <xsl:template match="g:deviceURL">
     <li>
-	<a href="{text()}"><xsl:value-of select="text()"/></a>
+	<a href="{concat(substring-before(.,'/geolog/'), '/paweb/device?id=', substring-after(.,'/geolog/devices/'))}">
+	<xsl:text>Device with ID </xsl:text><xsl:value-of select="substring-after(.,'/geolog/devices/')"/>
+	</a>
 	</li>
   </xsl:template>
 </xsl:stylesheet>
