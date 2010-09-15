@@ -4,7 +4,7 @@
                 xmlns:fn="http://www.w3.org/2005/xpath-functions"
                 version="2.0">
 
-  <xsl:template match="/">
+  <xsl:template match="g:devices">
 	<html>
 		<head>
 			<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -15,22 +15,15 @@
 		<br/>
 		<p>On this page you can see a list of all devices registered with the service. To view details for a given device simply follow the link for that device.</p>
 		<ul>
-			<xsl:apply-templates /> 
+			<xsl:apply-templates select="g:deviceURL"/> 
 		</ul>
 		</body>
 	</html>
   </xsl:template>
 
-  <xsl:template match="//deviceURL">
+  <xsl:template match="g:deviceURL">
     <li>
-	<!--
-	<a href=&quot;
-	<xsl:value-of select="./text()"/>
-	&quot;>
-	<xsl:value-of select="./text()"/>
-	</a>
-	-->
-	<a href="dummy"><xsl:value-of select="./text()"/></a>
+	<a href="{text()}"><xsl:value-of select="text()"/></a>
 	</li>
   </xsl:template>
 </xsl:stylesheet>
