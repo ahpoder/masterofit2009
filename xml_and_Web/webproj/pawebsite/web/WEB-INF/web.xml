@@ -64,11 +64,6 @@
 
     <!-- Servlet initialization parameters -->
 
-		<init-param>
-		  <param-name>DeviceXSLT</param-name>
-		  <param-value>xslt/device.xsl</param-value>
-		</init-param>
-
 	  <init-param>
 	    <param-name>DeviceXSDFile</param-name>
 	    <param-value>geolog.xsd</param-value>
@@ -88,6 +83,10 @@
 
     <servlet>
       <servlet-name>deviceservlet</servlet-name>
+		<init-param>
+		  <param-name>DeviceXSLT</param-name>
+		  <param-value>xslt/device.xsl</param-value>
+		</init-param>
       <description>
       This is the handler of requests addressed to {context-path}/device
       </description>

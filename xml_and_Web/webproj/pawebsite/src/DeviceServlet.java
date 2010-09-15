@@ -14,44 +14,71 @@ import java.util.Random;
 import java.util.*;
 import java.net.*;
 
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.stream.StreamResult;
+
 public class DeviceServlet extends HttpServlet {
 
   public void doGet(HttpServletRequest request,
                     HttpServletResponse response)
       throws IOException, ServletException {
-/*
 		try {
-			//The server has taken care of redirecting "devices" and "devices/*" to this servlet
-			//The distinction may be made on the request.getPathInfo()
-			String pathInfo = request.getPathInfo();
-
-			//Case 1: "devices" and devices/" shall return all devices
-			if ((pathInfo == null) || (pathInfo.equals("/"))) {
-				response.setContentType("text/xml");
-				GeologDataAccess da =	new GeologDataAccess(getServletContext());
-				// Write the URL to use for details about the devices registered with the system. The serverName and port is 
-				// required to build these URLs.
-				da.writeDevices("http://" + request.getServerName() + ":" + request.getServerPort(), response.getWriter());
+			String deviceID = request.getParameter("id");
+			if (deviceID == null)
+			{
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "No device ID supplied");
 				return;
 			}
-			//Case 2: "devices/1" shall return the device with id=1
-			// Here we may assume that pathInfo holds a valid device id with a / in front
-			GeologDeviceID id = new GeologDeviceID(pathInfo.substring(1));
-			response.setContentType("text/xml");
-			GeologDataAccess da =	new GeologDataAccess(getServletContext());
-			// Write the device details in the response. If the device ID is not know 
-			// simply return false, which triggers a resource not found error response.
-			if (!da.writeDevice(id, response.getWriter()))
-			{
-				response.sendError(HttpServletResponse.SC_NOT_FOUND , "Device with ID (" + id.toString() + ") not found");
+		
+			URL url = new URL("http://" + request.getServerName() + ":" + request.getServerPort() + "/geolog/devices/" + deviceID);
+			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setAllowUserInteraction(false); // no user interact [like pop up]
+
+			// The servlet returns HTML.
+			response.setContentType("text/html; charset=UTF-8");    
+			// Output goes in the response stream.
+			PrintWriter out = response.getWriter();
+			try
+			{	
+			  TransformerFactory tFactory = TransformerFactory.newInstance();
+			  //get the real path for xsl files.
+			  String ctx = getServletContext().getRealPath("/" + getInitParameter("DeviceXSLT"));
+			  // Get the XML input document and the stylesheet.
+			  Source xmlSource = new StreamSource(conn.getInputStream());
+			  Source xslSource = new StreamSource(new File(ctx));
+			  // Generate the transformer.
+			  Transformer transformer = tFactory.newTransformer(xslSource);
+			  // Perform the transformation, sending the output to the response.
+			  transformer.transform(xmlSource, new StreamResult(out));
 			}
+			catch (Exception e)
+			{
+				Debuglog.write("Internal error: " + e.getMessage());
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				PrintStream ps = new PrintStream(baos);
+				e.printStackTrace(ps);
+				ps.flush();
+				Debuglog.write(baos.toString());
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error: " + e.getMessage());
+			}
+			out.close();
+			conn.disconnect();
+			Debuglog.write("DONE");
 		}
 		catch (Exception e) {
 			//TODO: Remove exposure of internal exceptions to the caller
 			Debuglog.write("Internal error: " + e.getMessage());
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			PrintStream ps = new PrintStream(baos);
+			e.printStackTrace(ps);
+			ps.flush();
+			Debuglog.write(baos.toString());
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error: " + e.getMessage());
 		}
-*/
   }
 
 	/**

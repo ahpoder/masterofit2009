@@ -30,28 +30,7 @@ public class DevicesServlet extends HttpServlet {
 			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setAllowUserInteraction(false); // no user interact [like pop up]
-/*
-			int i=1;// this will print all header parameter
-			String hKey;
-			int contentLength = 0;
-			Debuglog.write("YYY");
-			while ((hKey=conn.getHeaderFieldKey(i))!=null){
-			   String hVal = conn.getHeaderField(i);
-			   System.out.println(hKey+"="+hVal);
-			   if (hKey.equals("Content-Length"))
-			   {
-				   contentLength = Integer.valueOf(hVal); 
-			   }
-			   i++;
-			}
 
-			if (contentLength <= 0)
-			{
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "No content received from service");
-				conn.disconnect();
-				return;
-			}
-*/
 			// The servlet returns HTML.
 			response.setContentType("text/html; charset=UTF-8");    
 			// Output goes in the response stream.
