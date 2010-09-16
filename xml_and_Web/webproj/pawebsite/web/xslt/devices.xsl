@@ -15,7 +15,7 @@
 		<br/>
 		<p>On this page you can see a list of all devices registered with the service. To view details for a given device simply follow the link for that device.</p>
 		<ul>
-			<xsl:apply-templates select="g:deviceURL"/> 
+			<xsl:apply-templates select="//g:deviceURL"/> 
 		</ul>
 		</body>
 	</html>
