@@ -36,7 +36,7 @@ public class DeviceServlet extends HttpServlet {
 			if ((pathInfo == null) || (pathInfo.equals("/"))) {
 				response.setContentType("text/xml");
 				GeologDataAccess da =	new GeologDataAccess(getServletContext());
-				// Write the URL to use for details about the devices registered with the system. The serverName and port is 
+				// Write the URL to use for details about the devices registered with the system. The serverName and port is
 				// required to build these URLs.
 				da.writeDevices("http://" + request.getServerName() + ":" + request.getServerPort(), response.getWriter());
 				return;
@@ -46,7 +46,7 @@ public class DeviceServlet extends HttpServlet {
 			GeologDeviceID id = new GeologDeviceID(pathInfo.substring(1));
 			response.setContentType("text/xml");
 			GeologDataAccess da =	new GeologDataAccess(getServletContext());
-			// Write the device details in the response. If the device ID is not know 
+			// Write the device details in the response. If the device ID is not know
 			// simply return false, which triggers a resource not found error response.
 			if (!da.writeDevice(id, response.getWriter()))
 			{
@@ -89,18 +89,18 @@ public class DeviceServlet extends HttpServlet {
 			//Get and validate the payload
 			String xmlSchemaPath = getServletContext().getRealPath("/" + getInitParameter("DeviceXSDFile"));
 			SAXBuilder builder = new SAXBuilder();
-			
+/*
 			builder.setValidation(true);
 			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
 													"http://www.w3.org/2001/XMLSchema");
 			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaSource",
 													xmlSchemaPath);
-
+*/
 			Document doc = builder.build(request.getInputStream());
 
 // Debugging ----------------------
 			Debuglog.write("Received POST on " + pathInfo + ":");
-			
+
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			XMLOutputter xo = new XMLOutputter(Format.getPrettyFormat());
 			xo.output(doc, baos);
@@ -111,7 +111,7 @@ public class DeviceServlet extends HttpServlet {
 			GeologDeviceID id = new GeologDeviceID(pathInfo.substring(1));
 			GeologDataAccess da = new GeologDataAccess(getServletContext());
 			da.storeDevice(id, doc);
-			
+
 			Debuglog.write("POST DONE");
 		}
 		catch (Exception e) {
@@ -126,10 +126,10 @@ public class DeviceServlet extends HttpServlet {
 				ps.flush();
 				Debuglog.write(baos.toString());
 			}
-			catch (Exception ex) 
+			catch (Exception ex)
 			{
 				Debuglog.write("Error writing error: " + e.getMessage());
-			}	
+			}
 		}
   }
 
