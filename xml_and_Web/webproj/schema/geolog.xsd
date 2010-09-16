@@ -13,31 +13,43 @@
 <!--import namespace="http://schemas.xmlsoap.org/wsdl/mime/"
         schemaLocation="http://schemas.xmlsoap.org/wsdl/mime/mime.xsd"/-->
 
-  <element name="devices" type="g:DevicesType"/>
 
-  <complexType name="DevicesType">
+  <!-- The element and type for a collection of the minimal representation of a device -->
+  <element name="devices" type="g:DeviceSimpleCollectionType"/>
+  <complexType name="DeviceSimpleCollectionType">
     <sequence>
-	  <element name="deviceURL" type="anyURI" minOccurs="0" maxOccurs="unbounded"/>
-	</sequence>
+      <element name="deviceSimple" minOccurs="0" maxOccurs="unbounded" type="g:DeviceSimpleType"/>
+	  </sequence>
+  </complexType>    
+
+  <!-- The minimal representation of a device with a URL and coordinates for map presentation. 
+       All information is required. -->  
+  <complexType name="DeviceSimpleType">
+    <sequence>
+  	  <element name="deviceURL" type="anyURI" minOccurs="1"/>
+	    <!-- Refer to the KML Point element 
+	         It may happen that a device lacks information about its location -->
+	    <element ref="k:Point" minOccurs="0"/>
+	  </sequence>
   </complexType>
-    
+
   <element name="device" type="g:DeviceType"/>
 
   <complexType name="DeviceType">
     <sequence>
-	  <element name="geologCollection" minOccurs="0" type="g:GeologCollectionType"/>
-	</sequence>
-	<attribute name="id" use="required" type="string"/>
-	<attribute name="owner" type="string"/>
+	    <element name="geologCollection" minOccurs="0" type="g:GeologCollectionType"/>
+	  </sequence>
+	  <attribute name="id" use="required" type="string"/>
+	  <attribute name="owner" type="string"/>
   </complexType>
 
   <complexType name="GeologCollectionType">
     <sequence>
-	  <element name="geolog" minOccurs="0" maxOccurs="unbounded" type="g:GeologType"/>
-	</sequence>
+	    <element name="geolog" minOccurs="0" maxOccurs="unbounded" type="g:GeologType"/>
+	  </sequence>
   </complexType>
 
-    <complexType name="GeologType">
+  <complexType name="GeologType">
     <sequence>
 	  <element name="readings" minOccurs="0" type="g:ReadingsType"/>
 	  <element name="status" minOccurs="0" type="g:StatusType"/>
