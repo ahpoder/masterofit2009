@@ -58,9 +58,9 @@
 	  <element name="key" type="string"/>
 	  <element name="value" type="string"/>
 	  <!-- TODO For some reason CDATA does not work -->
-	  <element name="type" type="string"/>
+	  <element name="type" type="anyType"/>
 	  <!-- TODO change type to something more sensible, e.g. g:MIMEType -->
-	  <element name="unit" type="string"/>
+	  <element name="unit" type="anyType"/>
 	</sequence>
 	<attribute name="id" type="string"/>
   </complexType>
