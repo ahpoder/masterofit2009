@@ -75,14 +75,6 @@ public class GeologDataAccess  {
 
 		XMLOutputter xo = new XMLOutputter(Format.getPrettyFormat());
 		xo.output(myDocument, writer);
-
-		//Create a well formed XML document with the relevant information
-		//even if the collection is empty
-
-		//Run the relevant XSLT transform on the global data object
-		//String xslt =	context.getInitParameter("DeviceListXSLT");
-		//XSLTransformer t = new XSLTransformer(xslt);
-		//new XMLOutputter().output(t.transform(geologData), writer);
 	}
 
 	/**
@@ -133,6 +125,9 @@ public class GeologDataAccess  {
 	**/
 	public void storeDevice(GeologDeviceID id, Document doc)
 			throws JDOMException, IOException, ServletException {
+		// Relevant namespaces
+		Namespace root = Namespace.getNamespace("http://www.pa.com/geolog");
+		Namespace kml = Namespace.getNamespace("k", "http://www.opengis.net/kml/2.2");
 		//The way that works
 		//Critical region, as more servlets may try a concurrent context update
 		synchronized(context)
@@ -140,9 +135,6 @@ public class GeologDataAccess  {
 			//Check for existence of the device in the hash table with readings
 			if (!hashDevicesReadings.containsKey(id.toString()))
 			{
-				// Relevant namespaces
-				Namespace root = Namespace.getNamespace("http://www.pa.com/geolog");
-				Namespace kml = Namespace.getNamespace("k", "http://www.opengis.net/kml/2.2");
 
 				//Create and insert a well formed document without readings
 				Element deviceElement = new Element("device", root);
@@ -160,8 +152,6 @@ public class GeologDataAccess  {
 			//Get the document for the current device from the hashTable
 			Document hashDoc = hashDevicesReadings.get(id.toString());
 
-			Namespace root = Namespace.getNamespace("http://www.pa.com/geolog");
-
 			Element hashDevice = hashDoc.getRootElement();
 			Element hashColl = hashDevice.getChild("geologCollection", root);
 			//Drill down to the readings (geolog elements) of the new document
@@ -174,11 +164,16 @@ public class GeologDataAccess  {
 				Element e = (Element)itt.next();
 				hashColl.addContent((Element)e.clone());
 			}
-			//TODO: Get the latest status and coordinate
 
 			//Add an entry to the hash table with the current device status
 			//this will replace old values for the same key
-			hashDevices.put(id.toString(), new GeologDeviceStatus("OK", 1.2, 2.2));
+			//TODO: Write XPath to get the last (latest) coordinate
+			XPath xpCoordinates = XPath.newInstance("//k:coordinates");
+			xpCoordinates.addNamespace(kml);
+			String coordinates = xpCoordinates.valueOf(doc);
+			//TODO: Consider whether it is necessary to validate before split
+			String[] acoordinates = coordinates.split(",");
+			hashDevices.put(id.toString(), new GeologDeviceStatus("OK", Double.valueOf(acoordinates[0]), Double.valueOf(acoordinates[1])));
 		} //synchronized
 		/*
 
