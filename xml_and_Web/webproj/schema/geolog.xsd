@@ -23,13 +23,13 @@
   </complexType>    
 
   <!-- The minimal representation of a device with a URL and coordinates for map presentation. 
-       All information is required. -->  
+       -->  
   <complexType name="DeviceSimpleType">
     <sequence>
   	  <element name="deviceURL" type="anyURI" minOccurs="1"/>
 	    <!-- Refer to the KML Point element 
 	         It may happen that a device lacks information about its location -->
-	    <element ref="k:Point" minOccurs="0"/>
+	    <element ref="k:Point" minOccurs="0"/> <!-- lon,lat[,alt] inside a coordinates element -->
 	  </sequence>
   </complexType>
 

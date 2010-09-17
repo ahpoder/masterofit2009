@@ -67,8 +67,7 @@ public class GeologDataAccess  {
 			Element pt = new Element("Point", kml);
 			Element co = new Element("coordinates", kml);
 			GeologDeviceStatus deviceStatus = (GeologDeviceStatus)hashDevices.get(key);
-			//TODO: Check for order of latitude and longitude
-			co.setText(String.format("%1$f, %2$f",deviceStatus.latitude, deviceStatus.longitude));
+			co.setText(String.format("%1$f, %2$f", deviceStatus.longitude, deviceStatus.latitude));
 			pt.addContent(co);
 			ds.addContent(pt);
 			devicesElement.addContent(ds);
