@@ -167,11 +167,13 @@ public class GeologDataAccess  {
 
 			//Add an entry to the hash table with the current device status
 			//this will replace old values for the same key
-			//TODO: Write XPath to get the last (latest) coordinate
+			//TODO: Write XPath to get the last (latest) geolog
+			//and then extract the status and coordinates from this
 			XPath xpCoordinates = XPath.newInstance("//k:coordinates");
 			xpCoordinates.addNamespace(kml);
 			String coordinates = xpCoordinates.valueOf(doc);
 			//TODO: Consider whether it is necessary to validate before split
+			//as we might have a decimal separator problem depending on locale
 			String[] acoordinates = coordinates.split(",");
 			hashDevices.put(id.toString(), new GeologDeviceStatus("OK", Double.valueOf(acoordinates[0]), Double.valueOf(acoordinates[1])));
 		} //synchronized
