@@ -27,11 +27,12 @@
   <complexType name="DeviceSimpleType">
     <sequence>
   	  <element name="deviceURL" type="anyURI" minOccurs="1"/>
-	    <element name="status" minOccurs="0" type="g:StatusType"/>
 	    <!-- Refer to the KML Point element 
 	         It may happen that a device lacks information about its location -->
 	    <element ref="k:Point" minOccurs="0"/> <!-- lon,lat[,alt] inside a coordinates element -->
 	  </sequence>
+	  <attribute name="id" use="required" type="string"/>
+    <attribute name="status" use="required" type="g:StatusType"/>
   </complexType>
 
   <element name="device" type="g:DeviceType"/>

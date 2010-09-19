@@ -61,15 +61,17 @@ public class GeologDataAccess  {
 		while(e.hasMoreElements()) {
 			String key = (String)e.nextElement();
 			Element ds = new Element("deviceSimple", root);
+			ds.setAttribute(new Attribute("id", key));
 			Element du = new Element("deviceURL", root);
 			du.setText(serverPath + "/geolog/devices/" + (String)key);
 			ds.addContent(du);
-			Element st = new Element("status", root);
+			//Element st = new Element("status", root);
 			Element pt = new Element("Point", kml);
 			Element co = new Element("coordinates", kml);
 			GeologDeviceStatus deviceStatus = (GeologDeviceStatus)hashDevices.get(key);
-			st.setText(deviceStatus.status);
-			ds.addContent(st);
+			ds.setAttribute(new Attribute("status", deviceStatus.status));
+			//st.setText(deviceStatus.status);
+			//ds.addContent(st);
 			co.setText(String.format("%1$f, %2$f", deviceStatus.longitude, deviceStatus.latitude));
 			pt.addContent(co);
 			ds.addContent(pt);
