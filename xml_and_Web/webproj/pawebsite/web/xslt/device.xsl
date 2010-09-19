@@ -11,17 +11,17 @@
 			<title>PA International device details</title>
 		</head>
 		<body>
-		<h1>Welcome to the PA geolog device details for device with ID: <xsl:apply-templates select="./@id"/></h1>
+		<h1>Welcome to the PA geolog device details for device with ID: <xsl:apply-templates select="@id"/></h1>
 		<br/>
 		<p>On this page you can see the details about the select device</p>
 		<table border="1">
-			<tr><td>ID</td><td><xsl:apply-templates select="./@id"/></td></tr>
+			<tr><td>ID</td><td><xsl:apply-templates select="@id"/></td></tr>
 		</table>
 		</body>
 	</html>
   </xsl:template>
 
-  <xsl:template match="./@id">
-    <xsl:value-of select="text()"/>
+  <xsl:template match="@id">
+    <xsl:value-of select="."/>
   </xsl:template>
 </xsl:stylesheet>
