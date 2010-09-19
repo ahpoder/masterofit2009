@@ -1,6 +1,6 @@
 <device id="device1" xmlns="http://www.pa.com/geolog" xmlns:k="http://www.opengis.net/kml/2.2">
   <geologCollection>
-    <geolog dateTime="2001-10-26T21:32:52.1267">
+    <geolog dateTime="2001-10-26T21:32:52.1267+02:00">
 	  <readings>
 	    <reading id="sensor1">
 		  <key>altitude</key>
@@ -17,10 +17,10 @@
 	  </readings>
 	  <status>OK</status>
 	  <k:Point>
-		<k:coordinates>-90.86948943473118,48.25450093195546</k:coordinates>
+		<k:coordinates>-90.96948943473118,48.25450093195546</k:coordinates>
 	  </k:Point>
 	</geolog>
-    <geolog dateTime="2001-10-26T22:30:15.1487">
+    <geolog dateTime="2001-10-26T22:30:15.1487+02:00">
 	  <readings>
 	    <reading id="sensor1">
 		  <key>altitude</key>
