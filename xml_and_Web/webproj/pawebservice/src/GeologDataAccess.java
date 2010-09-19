@@ -64,9 +64,12 @@ public class GeologDataAccess  {
 			Element du = new Element("deviceURL", root);
 			du.setText(serverPath + "/geolog/devices/" + (String)key);
 			ds.addContent(du);
+			Element st = new Element("status", root);
 			Element pt = new Element("Point", kml);
 			Element co = new Element("coordinates", kml);
 			GeologDeviceStatus deviceStatus = (GeologDeviceStatus)hashDevices.get(key);
+			st.setText(deviceStatus.status);
+			ds.addContent(st);
 			co.setText(String.format("%1$f, %2$f", deviceStatus.longitude, deviceStatus.latitude));
 			pt.addContent(co);
 			ds.addContent(pt);
@@ -165,24 +168,38 @@ public class GeologDataAccess  {
 				Element e = (Element)itt.next();
 				hashColl.addContent((Element)e.clone());
 			}
+  		//Put the last geolog in e. Enter if geolog exists only
+  		if(geologList.size()>0){
+    		Element e = (Element)geologList.get(geologList.size() - 1);
+  			//Add an entry to the hash table with the current device status and coordinates
+				//It is assumed, that the last geolog is the latest.
+				//Extract the current status and coordinates
+				String status = e.getChild("status", root).getValue();
+				Element ept = e.getChild("Point", kml);
+				Element ecoordinates = ept.getChild("coordinates", kml);
+				if(ecoordinates!=null){
+  			  String coordinates = ecoordinates.getValue();
+					//TODO: Consider whether it is necessary to validate before split
+					//as we might have a decimal separator problem depending on locale
+					//Is the decimal separator defined in the kml specification?
+					String[] acoordinates = coordinates.split(",");
+					//Insert the new values into the collection
+			 		hashDevices.put(id.toString(), new GeologDeviceStatus(status, Double.valueOf(acoordinates[0]), Double.valueOf(acoordinates[1])));
+				}
 
-			//Add an entry to the hash table with the current device status and coordinates
-			//this will replace old values for the same key
-			//TODO: Consider whether the last reading will always be the latest reading
-			XPath xpStatus = XPath.newInstance("//geolog[fn:last()]/status");
+  		}
+			//This XPath will find the status of the last reading
+			//XPath xpStatus = XPath.newInstance("//geolog[fn:last()]/status");
+			//This doesn't work as fn:last() is not recognized by the xpath evaluator
 			//XPath xpCoordinates = XPath.newInstance("//geolog[fn:last()]//k:coordinates");
-			//This works
-			XPath xpCoordinates = XPath.newInstance("//k:coordinates");
-			//This doesn't work
-			//XPath xpCoordinates = XPath.newInstance("//k:coordinates[fn:last()]");
-			xpCoordinates.addNamespace(root);
-			xpCoordinates.addNamespace(kml);
-			xpCoordinates.addNamespace(fn);
-			String coordinates = xpCoordinates.valueOf(doc);
+			//This works, but is not complete
+			//XPath xpCoordinates = XPath.newInstance("//k:coordinates");
+			//xpCoordinates.addNamespace(root);
+			//xpCoordinates.addNamespace(kml);
+			//xpCoordinates.addNamespace(fn);
+			//String coordinates = xpCoordinates.valueOf(doc);
 			//TODO: Consider whether it is necessary to validate before split
 			//as we might have a decimal separator problem depending on locale
-			String[] acoordinates = coordinates.split(",");
-			hashDevices.put(id.toString(), new GeologDeviceStatus("OK", Double.valueOf(acoordinates[0]), Double.valueOf(acoordinates[1])));
 		} //synchronized
 		/*
 
