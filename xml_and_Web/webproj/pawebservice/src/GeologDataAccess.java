@@ -128,6 +128,7 @@ public class GeologDataAccess  {
 		// Relevant namespaces
 		Namespace root = Namespace.getNamespace("http://www.pa.com/geolog");
 		Namespace kml = Namespace.getNamespace("k", "http://www.opengis.net/kml/2.2");
+		Namespace fn = Namespace.getNamespace("fn", "http://www.w3.org/2005/xpath-functions");
 		//The way that works
 		//Critical region, as more servlets may try a concurrent context update
 		synchronized(context)
@@ -165,12 +166,18 @@ public class GeologDataAccess  {
 				hashColl.addContent((Element)e.clone());
 			}
 
-			//Add an entry to the hash table with the current device status
+			//Add an entry to the hash table with the current device status and coordinates
 			//this will replace old values for the same key
-			//TODO: Write XPath to get the last (latest) geolog
-			//and then extract the status and coordinates from this
+			//TODO: Consider whether the last reading will always be the latest reading
+			XPath xpStatus = XPath.newInstance("//geolog[fn:last()]/status");
+			//XPath xpCoordinates = XPath.newInstance("//geolog[fn:last()]//k:coordinates");
+			//This works
 			XPath xpCoordinates = XPath.newInstance("//k:coordinates");
+			//This doesn't work
+			//XPath xpCoordinates = XPath.newInstance("//k:coordinates[fn:last()]");
+			xpCoordinates.addNamespace(root);
 			xpCoordinates.addNamespace(kml);
+			xpCoordinates.addNamespace(fn);
 			String coordinates = xpCoordinates.valueOf(doc);
 			//TODO: Consider whether it is necessary to validate before split
 			//as we might have a decimal separator problem depending on locale
