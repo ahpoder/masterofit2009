@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 public class CommandArguments {
 	private boolean help = false;
 	public boolean hasHelp() { return help; }
-	
+
 	private String host = null;
 	public boolean hasHost() { return host != null; }
 	public String getHost() { return host; }
@@ -24,13 +24,13 @@ public class CommandArguments {
 	public int getFromID() { return fromID; }
 	public int getToID() { return toID; }
 
-	private double lattitude = Double.MAX_VALUE;
-	public boolean hasLattitude() { return lattitude != Double.MAX_VALUE; }
-	public double getLattitude() { return lattitude; }
-
 	private double longitude = Double.MAX_VALUE;
 	public boolean hasLongitude() { return longitude != Double.MAX_VALUE; }
 	public double getLongitude() { return longitude; }
+
+	private double latitude = Double.MAX_VALUE;
+	public boolean hasLatitude() { return latitude != Double.MAX_VALUE; }
+	public double getLatitude() { return latitude; }
 
 	private double deviation = 0;
 	public boolean hasDeviation() { return deviation != 0; }
@@ -89,15 +89,15 @@ public class CommandArguments {
 					id = temp;
 				}
 			}
-			else if (args[i].equals("--lattitude"))
-			{
-				++i;
-				lattitude = Double.valueOf(args[i]);
-			}
 			else if (args[i].equals("--longitude"))
 			{
 				++i;
 				longitude = Double.valueOf(args[i]);
+			}
+			else if (args[i].equals("--latitude"))
+			{
+				++i;
+				latitude = Double.valueOf(args[i]);
 			}
 			else if (args[i].equals("--deviation"))
 			{
@@ -111,11 +111,11 @@ public class CommandArguments {
 			}
 			else
 			{
-				throw new Exception("Inavlid argument found: " + args[i]);
+				throw new Exception("Invalid argument found: " + args[i]);
 			}
 		}
 	}
-	
+
 	public static void printHelp()
 	{
 		System.out.println("Usage:");
@@ -126,12 +126,12 @@ public class CommandArguments {
 		System.out.println("    --host <host>: The host containing the service, e.g. www.pa.com");
 		System.out.println("    --status <status>: The status to report, e.g. OK");
 		System.out.println("    --id <id>[-<id>]: The id (or ids) of the device(s), e.g. 27 or 10-20");
-		System.out.println("    --lattitude <lattitude>: The lattitude of the device(s), e.g. 54.124353");
+		System.out.println("    --latitude <latitude>: The latitude of the device(s), e.g. 54.124353");
 		System.out.println("    --longitude <longitude>: The longitude of the device(s), e.g. 9.124353");
-		System.out.println("    --deviation <deviation>: The range by which the lattitude and longitude is allowed to change, e.g. 0.25324");
+		System.out.println("    --deviation <deviation>: The range by which the latitude and longitude is allowed to change, e.g. 0.25324");
 		System.out.println("    --interval <seconds>: The interval between transmissions, e.g. 60");
-		System.out.println("  host, status, id, lattitude and longitude are mandatory, if the remaining");
-		System.out.println("  two arguments are omitted the only a single device packet is transmitted -");
+		System.out.println("  host, status, id, longitude and latitude are mandatory, if the remaining");
+		System.out.println("  two arguments are omitted only a single device packet is transmitted -");
 		System.out.println("  identical to interval = -1 and deviation = 0");
 	}
 }

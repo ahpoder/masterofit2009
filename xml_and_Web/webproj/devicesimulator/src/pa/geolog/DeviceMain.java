@@ -39,16 +39,16 @@ public class DeviceMain {
 					String id = br.readLine();
 					System.out.print("\nEnter Status of device (OK, DEPRECATED, ...): ");
 					String status = br.readLine();
-					System.out.print("\nEnter Lattitude of device (e.g. 57.1234): ");
-					String lattitude = br.readLine();
 					System.out.print("\nEnter Longitude of device (e.g. 57.1234): ");
 					String longitude = br.readLine();
-					
+					System.out.print("\nEnter Latitude of device (e.g. 9.1234): ");
+					String latitude = br.readLine();
+
 					DeviceStatus dStatus = DeviceStatus.valueOf(status);
-					double dLattitude = Double.valueOf(lattitude);
+					double dLatitude = Double.valueOf(latitude);
 					double dLongitude = Double.valueOf(longitude);
-					
-					String payload = ContentBuilder.buildContent(id, dStatus, dLattitude, dLongitude);
+
+					String payload = ContentBuilder.buildContent(id, dStatus, dLatitude, dLongitude);
 					address = address + "/geolog/devices/" + id;
 					DeviceConnection.postInfo(address, payload);
 				  }
@@ -59,15 +59,15 @@ public class DeviceMain {
 					String address = br.readLine();
 					System.out.print("\nEnter Device ID range (e.g. 100-200, must be integers: ");
 					String idRange = br.readLine();
-					System.out.print("\nEnter root lattitude of devices (e.g. 57.1234): ");
-					String rLattitude = br.readLine();
 					System.out.print("\nEnter root longitude of devices (e.g. 57.1234): ");
 					String rLongitude = br.readLine();
+					System.out.print("\nEnter root latitude of devices (e.g. 9.1234): ");
+					String rLatitude = br.readLine();
 					System.out.print("\nEnter location deviation (e.g. 2.74): ");
 					String deviation = br.readLine();
 					System.out.print("\nEnter transmission interval in seconds (e.g. 60): ");
 					String interval = br.readLine();
-					
+
 					StringTokenizer st = new StringTokenizer(idRange, "-");
 					if (st.countTokens() != 2)
 					{
@@ -75,15 +75,15 @@ public class DeviceMain {
 					}
 					int fromID = Integer.valueOf(st.nextToken());
 					int toID = Integer.valueOf(st.nextToken());
-					
-					double dLattitude = Double.valueOf(rLattitude);
+
 					double dLongitude = Double.valueOf(rLongitude);
+					double dLatitude = Double.valueOf(rLatitude);
 					double dDeviation = Double.valueOf(deviation);
 
-					ContentBuilder.registerRootLocation(dLattitude, dLongitude, dDeviation);
-					
+					ContentBuilder.registerRootLocation(dLongitude, dLatitude, dDeviation);
+
 					int iInterval = Integer.valueOf(interval);
-					
+
 					for (int i = fromID; i <= toID; ++i)
 					{
 						DeviceConnection dc = new DeviceConnection(address, iInterval * 1000, i);
@@ -111,12 +111,12 @@ public class DeviceMain {
 		}
 		while (selection != 0);
 	}
-	
-	
-	
+
+
+
 	public static void main(String[] args) {
 		DeviceMain dm = new DeviceMain();
-		
+
 		if (args.length == 0)
 		{
 			dm.runRootMenu();
@@ -158,13 +158,13 @@ public class DeviceMain {
 	}
 
 	private void runDevice(CommandArguments ca) throws IOException {
-		String payload = ContentBuilder.buildContent(ca.getSingleID(), ca.getStatus(), ca.getLattitude(), ca.getLongitude());
+		String payload = ContentBuilder.buildContent(ca.getSingleID(), ca.getStatus(), ca.getLongitude(), ca.getLatitude());
 		DeviceConnection.postInfo(ca.getHost() + "/geolog/devices/" + ca.getSingleID(), payload);
 	}
 
 	private void runDaemon(CommandArguments ca) {
-		ContentBuilder.registerRootLocation(ca.getLattitude(), ca.getLongitude(), ca.getDeviation());
-		
+		ContentBuilder.registerRootLocation(ca.getLongitude(), ca.getLatitude(), ca.getDeviation());
+
 		for (int i = ca.getFromID(); i <= ca.getToID(); ++i)
 		{
 			DeviceConnection dc = new DeviceConnection(ca.getHost(), ca.getInterval() * 1000, i);
