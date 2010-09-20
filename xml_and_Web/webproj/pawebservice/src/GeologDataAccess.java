@@ -50,8 +50,8 @@ public class GeologDataAccess  {
 			throws IOException, ServletException, XSLTransformException {
 
 		Namespace root = Namespace.getNamespace("http://www.pa.com/geolog");
-		Element devicesElement = new Element("devices", root);
 		Namespace kml = Namespace.getNamespace("k", "http://www.opengis.net/kml/2.2");
+		Element devicesElement = new Element("devices", root);
 		devicesElement.addNamespaceDeclaration(kml);
 		Document myDocument = new Document(devicesElement);
 
@@ -60,7 +60,7 @@ public class GeologDataAccess  {
 		{
 			Iterator it = tmDevices.keySet().iterator();
 
-			//iterate through TreeMap keys Enumeration
+			//iterate through TreeMap keys and build the output
 			while(it.hasNext()) {
 				String key = (String)it.next();
 				Element ds = new Element("deviceSimple", root);
@@ -68,14 +68,12 @@ public class GeologDataAccess  {
 				Element du = new Element("deviceURL", root);
 				du.setText(serverPath + "/geolog/devices/" + (String)key);
 				ds.addContent(du);
-				//Element st = new Element("status", root);
 				Element pt = new Element("Point", kml);
 				Element co = new Element("coordinates", kml);
 				GeologDeviceStatus deviceStatus = (GeologDeviceStatus)tmDevices.get(key);
 				ds.setAttribute(new Attribute("status", deviceStatus.status));
-				//st.setText(deviceStatus.status);
-				//ds.addContent(st);
-				co.setText(String.format("%1$f, %2$f", deviceStatus.longitude, deviceStatus.latitude));
+				//Ensure that we get a '.' as the decimal separator in the XML output
+				co.setText(String.format(Locale.US, "%1$f, %2$f", deviceStatus.longitude, deviceStatus.latitude));
 				pt.addContent(co);
 				ds.addContent(pt);
 				devicesElement.addContent(ds);
