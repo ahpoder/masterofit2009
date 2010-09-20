@@ -11,17 +11,50 @@
 			<title>PA International device details</title>
 		</head>
 		<body>
-		<h1>Welcome to the PA geolog device details for device with ID: <xsl:apply-templates select="@id"/></h1>
+		<h1>Welcome to the PA geolog device details for device with ID: <xsl:value-of select="@id"/></h1>
 		<br/>
-		<p>On this page you can see the details about the select device</p>
+		<p>On this page you can see the details of the selected device</p>
 		<table border="1">
-			<tr><td>ID</td><td><xsl:apply-templates select="@id"/></td></tr>
+			<tr>
+				<th>DateTime</th>
+				<th>Status</th>
+				<th>sensor1</th> <!-- How do we iterate sensors? Get unique sensorids ... -->
+			</tr>
+			<xsl:apply-templates mode="table" select="//g:geolog"/> 
 		</table>
 		</body>
 	</html>
   </xsl:template>
 
-  <xsl:template match="@id">
-    <xsl:value-of select="."/>
+  <!-- Format a geolog entry for display in a table 
+  			One geolog will become one row in the table -->
+  <xsl:template mode="table" match="g:geolog">
+		<tr>  	
+    	<td><xsl:value-of select="./@dateTime"/></td>
+			<xsl:apply-templates mode="table" select="g:status"/> 
+			<xsl:apply-templates mode="table" select=".//g:reading"/> 
+		</tr>
   </xsl:template>
+  
+  <!-- Format the status for display in a table 
+  			Cell color will depend on the status value -->
+  <xsl:template mode="table" match="g:status">
+		<xsl:choose>
+			<xsl:when test="compare('OK', ./text())=0">
+				<td bgcolor="green"><xsl:value-of select="."/></td>
+			</xsl:when>
+			<xsl:when test="compare('ERROR', ./text())=0">
+				<td bgcolor="red"><xsl:value-of select="."/></td>
+			</xsl:when>
+			<xsl:otherwise>
+				<td bgcolor="yellow"><xsl:value-of select="."/></td>
+			</xsl:otherwise>
+		</xsl:choose>
+  </xsl:template>
+
+  <!-- Format a reading for display in a table -->
+  <xsl:template mode="table" match="g:reading">
+   	<td><xsl:value-of select="./g:value"/><text> </text><xsl:value-of select="./g:unit"/></td>
+  </xsl:template>
+  
 </xsl:stylesheet>
