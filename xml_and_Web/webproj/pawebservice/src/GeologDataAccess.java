@@ -10,8 +10,8 @@ import java.util.*;
 public class GeologDataAccess  {
 
 	ServletContext context;
-	Hashtable<String, GeologDeviceStatus> hashDevices; // For the storage of current information
-	Hashtable<String, Document> hashDevicesReadings; // For the storage of all readings
+	TreeMap<String, GeologDeviceStatus> tmDevices; // For the storage of current information
+	TreeMap<String, Document> tmDevicesReadings; // For the storage of all readings
 
 	/**
 	  The class will create relevant data access objects
@@ -25,19 +25,19 @@ public class GeologDataAccess  {
 
 		this.context = context;
 		//Get the data object for current information from the servlet context
-		hashDevices = (Hashtable)context.getAttribute("hashDevices");
+		tmDevices = (TreeMap)context.getAttribute("tmDevices");
 		//Create the data object if it wasn't there already
-		if (hashDevices==null){
-			hashDevices = new Hashtable<String, GeologDeviceStatus>();
-			context.setAttribute("hashDevices", hashDevices);
+		if (tmDevices==null){
+			tmDevices = new TreeMap<String, GeologDeviceStatus>();
+			context.setAttribute("tmDevices", tmDevices);
 		}
 
 		//Get the data object for device readings from the servlet context
-		hashDevicesReadings = (Hashtable)context.getAttribute("hashDevicesReadings");
+		tmDevicesReadings = (TreeMap)context.getAttribute("tmDevicesReadings");
 		//Create the data object if it wasn't there already
-		if (hashDevicesReadings==null){
-			hashDevicesReadings = new Hashtable<String, Document>();
-			context.setAttribute("hashDevicesReadings", hashDevicesReadings);
+		if (tmDevicesReadings==null){
+			tmDevicesReadings = new TreeMap<String, Document>();
+			context.setAttribute("tmDevicesReadings", tmDevicesReadings);
 		}
 	}
 
@@ -55,27 +55,31 @@ public class GeologDataAccess  {
 		devicesElement.addNamespaceDeclaration(kml);
 		Document myDocument = new Document(devicesElement);
 
-		Enumeration e = hashDevices.keys();
+		//The TreeMap must not be changed while iterating
+		synchronized(context)
+		{
+			Iterator it = tmDevices.keySet().iterator();
 
-		//iterate through Hashtable keys Enumeration
-		while(e.hasMoreElements()) {
-			String key = (String)e.nextElement();
-			Element ds = new Element("deviceSimple", root);
-			ds.setAttribute(new Attribute("id", key));
-			Element du = new Element("deviceURL", root);
-			du.setText(serverPath + "/geolog/devices/" + (String)key);
-			ds.addContent(du);
-			//Element st = new Element("status", root);
-			Element pt = new Element("Point", kml);
-			Element co = new Element("coordinates", kml);
-			GeologDeviceStatus deviceStatus = (GeologDeviceStatus)hashDevices.get(key);
-			ds.setAttribute(new Attribute("status", deviceStatus.status));
-			//st.setText(deviceStatus.status);
-			//ds.addContent(st);
-			co.setText(String.format("%1$f, %2$f", deviceStatus.longitude, deviceStatus.latitude));
-			pt.addContent(co);
-			ds.addContent(pt);
-			devicesElement.addContent(ds);
+			//iterate through TreeMap keys Enumeration
+			while(it.hasNext()) {
+				String key = (String)it.next();
+				Element ds = new Element("deviceSimple", root);
+				ds.setAttribute(new Attribute("id", key));
+				Element du = new Element("deviceURL", root);
+				du.setText(serverPath + "/geolog/devices/" + (String)key);
+				ds.addContent(du);
+				//Element st = new Element("status", root);
+				Element pt = new Element("Point", kml);
+				Element co = new Element("coordinates", kml);
+				GeologDeviceStatus deviceStatus = (GeologDeviceStatus)tmDevices.get(key);
+				ds.setAttribute(new Attribute("status", deviceStatus.status));
+				//st.setText(deviceStatus.status);
+				//ds.addContent(st);
+				co.setText(String.format("%1$f, %2$f", deviceStatus.longitude, deviceStatus.latitude));
+				pt.addContent(co);
+				ds.addContent(pt);
+				devicesElement.addContent(ds);
+			}
 		}
 
 		XMLOutputter xo = new XMLOutputter(Format.getPrettyFormat());
@@ -89,12 +93,12 @@ public class GeologDataAccess  {
 	public boolean writeDevice(GeologDeviceID id, java.io.PrintWriter writer)
 			throws IOException, ServletException, XSLTransformException {
 
-		if (!hashDevicesReadings.containsKey(id.toString()))
+		if (!tmDevicesReadings.containsKey(id.toString()))
 		{
 			return false; // ERROR
 		}
 
-		Document hashDoc = hashDevicesReadings.get(id.toString());
+		Document hashDoc = tmDevicesReadings.get(id.toString());
 
 		XMLOutputter xo = new XMLOutputter(Format.getPrettyFormat());
 		xo.output(hashDoc, writer);
@@ -139,7 +143,7 @@ public class GeologDataAccess  {
 		synchronized(context)
 		{
 			//Check for existence of the device in the hash table with readings
-			if (!hashDevicesReadings.containsKey(id.toString()))
+			if (!tmDevicesReadings.containsKey(id.toString()))
 			{
 
 				//Create and insert a well formed document without readings
@@ -151,12 +155,12 @@ public class GeologDataAccess  {
 
 				Element glCollection = new Element("geologCollection", root);
 				deviceElement.addContent(glCollection);
-				hashDevicesReadings.put(id.toString(), myDocument);
+				tmDevicesReadings.put(id.toString(), myDocument);
 
 			}
 
-			//Get the document for the current device from the hashTable
-			Document hashDoc = hashDevicesReadings.get(id.toString());
+			//Get the document for the current device from the TreeMap
+			Document hashDoc = tmDevicesReadings.get(id.toString());
 
 			Element hashDevice = hashDoc.getRootElement();
 			Element hashColl = hashDevice.getChild("geologCollection", root);
@@ -186,7 +190,7 @@ public class GeologDataAccess  {
 					//Is the decimal separator defined in the kml specification?
 					String[] acoordinates = coordinates.split(",");
 					//Insert the new values into the collection
-			 		hashDevices.put(id.toString(), new GeologDeviceStatus(status, Double.valueOf(acoordinates[0]), Double.valueOf(acoordinates[1])));
+			 		tmDevices.put(id.toString(), new GeologDeviceStatus(status, Double.valueOf(acoordinates[0]), Double.valueOf(acoordinates[1])));
 				}
 
   		}
@@ -216,9 +220,9 @@ public class GeologDataAccess  {
 		}
 		synchronized(context)	{
 			//Check for existence of the device in the hash table
-			if (!hashDevicesReadings.containsKey(id.toString()))
+			if (!tmDevicesReadings.containsKey(id.toString()))
 			{
-				//Insert the new device in the hashtable
+				//Insert the new device in the TreeMap
 				//TODO: Add some validation of the document
 				Debuglog.write("The device doesn't exist. Adding");
 				//Create and insert a well formed document without readings
@@ -232,8 +236,8 @@ public class GeologDataAccess  {
 
 				Element glCollection = new Element("geologCollection", root);
 				deviceElement.addContent(glCollection);
-				hashDevicesReadings.put(id.toString(), myDocument);
-			}//if (!hashDevicesReadings.containsKey(id.toString()))
+				tmDevicesReadings.put(id.toString(), myDocument);
+			}//if (!tmDevicesReadings.containsKey(id.toString()))
 			Debuglog.write("The device already exists. Appending readings");
 			//Add the new data to the current document
 			//Extract the geolog elements from the received document
@@ -246,7 +250,7 @@ public class GeologDataAccess  {
 				//DEBUG entry below
 				Debuglog.write("XPath on the new document returned " + Integer.toString(newgeologElements.size()) + " geolog elements");
 				//Get the current document
-				Document dcur = hashDevicesReadings.get(id.toString());
+				Document dcur = tmDevicesReadings.get(id.toString());
 				Debuglog.write("Current document is: " + dcur.toString());
 
 				//Get the element that shall receive the new data
