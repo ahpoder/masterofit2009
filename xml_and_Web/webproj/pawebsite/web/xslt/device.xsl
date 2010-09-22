@@ -7,6 +7,7 @@
   <xsl:template match="g:device">
 	<html>
 		<head>
+			<link href="style.css" rel="stylesheet" type="text/css"/>
 			<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 			<title>PA International device details</title>
 		</head>
@@ -39,17 +40,20 @@
   <!-- Format the status for display in a table 
   			Cell color will depend on the status value -->
   <xsl:template mode="table" match="g:status">
+		<td class="{.}"><xsl:value-of select="."/></td>
+		<!--
 		<xsl:choose>
-			<xsl:when test="compare('OK', ./text())=0">
+			<xsl:when test="fn:compare('OK', .)=0">
 				<td bgcolor="green"><xsl:value-of select="."/></td>
 			</xsl:when>
-			<xsl:when test="compare('ERROR', ./text())=0">
+			<xsl:when test="fn:compare('ERROR', ./text())=0">
 				<td bgcolor="red"><xsl:value-of select="."/></td>
 			</xsl:when>
 			<xsl:otherwise>
 				<td bgcolor="yellow"><xsl:value-of select="."/></td>
 			</xsl:otherwise>
 		</xsl:choose>
+		-->
   </xsl:template>
 
   <!-- Format a reading for display in a table -->

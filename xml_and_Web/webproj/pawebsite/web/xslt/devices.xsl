@@ -7,6 +7,7 @@
   <xsl:template match="g:devices">
 	<html>
 		<head>
+			<link href="style.css" rel="stylesheet" type="text/css"/>
 			<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 			<title>PA International device listing</title>
 		</head>
@@ -32,20 +33,12 @@
 	</html>
   </xsl:template>
 
-	<!-- Display each device as a table row. The background color of the status column depends on the status -->
+	<!-- Display each device as a table row. 
+				The background color of the status column depends on the status 
+				through the class attribute and the CSS stylesheet -->
   <xsl:template mode="table" match="g:deviceSimple">
 		<tr>
-			<xsl:choose>
-				<xsl:when test="compare('OK', ./@status)=0">
-					<td bgcolor="green"><xsl:value-of select="./@status"/></td>
-				</xsl:when>
-				<xsl:when test="compare('ERROR', ./@status)=0">
-					<td bgcolor="red"><xsl:value-of select="./@status"/></td>
-				</xsl:when>
-				<xsl:otherwise>
-					<td bgcolor="yellow"><xsl:value-of select="./@status"/></td>
-				</xsl:otherwise>
-			</xsl:choose>
+			<td class="{./@status}"><xsl:value-of select="./@status"/></td>
 			<td><xsl:value-of select="@id"/></td> 
 			<td><xsl:apply-templates mode="websiteurl" select="."/></td> 
 			<td><xsl:apply-templates select="./g:deviceURL"/></td> 

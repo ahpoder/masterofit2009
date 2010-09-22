@@ -1,0 +1,3 @@
+td.OK {	background-color: green }
+td.ERROR { background-color: red }
+td.DISCONNECTED, td.DEPRECATED { background-color: yellow }
