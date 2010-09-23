@@ -470,7 +470,7 @@
     <!-- 20100912/PMD added jdom.jar -->
     <copy todir="${build.home}/WEB-INF/lib" file="${jdom.jar}"/>
     <copy todir="${build.home}/WEB-INF/lib" file="${jaxen-1.1.2.jar}"/>
-    <copy todir="${build.home}/WEB-INF/lib" file="${saxon.jar}"/>
+    <!--copy todir="${build.home}/WEB-INF/lib" file="${saxon.jar}"/-->
     
     <!-- 20100912/AHP added geolog.xsd -->
     <copy todir="${build.home}" file="${geolog.xsd}"/>
