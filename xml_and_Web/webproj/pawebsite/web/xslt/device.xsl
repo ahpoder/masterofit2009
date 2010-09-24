@@ -15,6 +15,7 @@
 		<h1>Welcome to the PA geolog device details for device with ID: <xsl:value-of select="@id"/></h1>
 		<br/>
 		<p>On this page you can see the details of the selected device</p>
+		<div id="deviceData">
 		<table border="1">
 			<tr>
 				<th>DateTime</th>
@@ -23,6 +24,7 @@
 			</tr>
 			<xsl:apply-templates mode="table" select="//g:geolog"/> 
 		</table>
+		</div>
 		</body>
 	</html>
   </xsl:template>

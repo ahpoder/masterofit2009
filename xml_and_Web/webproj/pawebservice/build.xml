@@ -529,5 +529,8 @@
 
   </target>
 
+  <target name="tcat" depends="clean,all,remove,install,reload"
+   description="Rebuilds all and deploy and restart service">
+  </target>
 
 </project>

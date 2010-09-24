@@ -27,6 +27,7 @@ public class DeviceServlet extends HttpServlet {
       throws IOException, ServletException {
 		try {
 			String deviceID = request.getParameter("id");
+			String displayType = request.getParameter("type");
 			if (deviceID == null)
 			{
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "No device ID supplied");
@@ -46,7 +47,23 @@ public class DeviceServlet extends HttpServlet {
 			{	
 			  TransformerFactory tFactory = TransformerFactory.newInstance();
 			  //get the real path for xsl files.
-			  String ctx = getServletContext().getRealPath("/" + getInitParameter("DeviceXSLT"));
+			  String ctx = null;
+			  if (displayType == null)
+			  {
+			    ctx = getServletContext().getRealPath("/" + getInitParameter("DeviceXSLT"));
+			  }
+			  else if (displayType.toLowerCase().equals("ajax"))
+			  {
+			    ctx = getServletContext().getRealPath("/" + getInitParameter("DeviceXSLT_AJAX"));
+			  }
+			  
+			  if (ctx == null)
+			  {
+				Debuglog.write("Internal error, invalid type");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "Invalid type supplied");
+				return;
+			  }
+				
 			  // Get the XML input document and the stylesheet.
 			  Source xmlSource = new StreamSource(conn.getInputStream());
 			  Source xslSource = new StreamSource(new File(ctx));

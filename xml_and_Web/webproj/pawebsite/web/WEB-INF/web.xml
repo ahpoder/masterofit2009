@@ -87,6 +87,10 @@
 		  <param-name>DeviceXSLT</param-name>
 		  <param-value>xslt/device.xsl</param-value>
 		</init-param>
+		<init-param>
+		  <param-name>DeviceXSLT_AJAX</param-name>
+		  <param-value>xslt/deviceAjax.xsl</param-value>
+		</init-param>
       <description>
       This is the handler of requests addressed to {context-path}/device
       </description>
