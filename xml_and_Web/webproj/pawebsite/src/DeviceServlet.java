@@ -56,6 +56,10 @@ public class DeviceServlet extends HttpServlet {
 			  {
 			    ctx = getServletContext().getRealPath("/" + getInitParameter("DeviceXSLT_AJAX"));
 			  }
+			  else if (displayType.toLowerCase().equals("graph"))
+			  {
+			    ctx = getServletContext().getRealPath("/" + getInitParameter("DeviceXSLT_GRAPH"));
+			  }
 			  
 			  if (ctx == null)
 			  {
