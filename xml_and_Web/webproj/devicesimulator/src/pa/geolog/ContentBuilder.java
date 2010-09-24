@@ -13,7 +13,7 @@ public class ContentBuilder {
 		Random r = new Random();
 		double lng = rootLongitude + (r.nextDouble() - 0.5) * locationDeviation;
 		double lat = rootLatitude + (r.nextDouble() - 0.5) * locationDeviation;
-		return buildContent("" + id, DeviceStatus.OK, lng, lat);
+		return buildContent("" + id, DeviceStatus.getRandomStatus(), lng, lat);
 	}
 
 	 private static String getDateTime() {
