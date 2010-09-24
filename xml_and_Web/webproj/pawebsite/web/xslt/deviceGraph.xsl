@@ -29,7 +29,30 @@
 		window.clearTimeout(timeout);
 		timeout = window.setTimeout(pollServer, 3000);
 	}
-	
+
+	function graphSelectionChanged() {
+		var s = document.getElementById("graphSelect");
+		var o = s.options[s.selectedIndex];
+		var selected = o.text;
+		switch (selected) {
+		  case "none":
+		  
+		    break;
+		  case "location":
+			<xsl:for-each select="//geolog/">
+				<xsl:value-of select="."/>
+			</xsl:for-each>
+			break;
+		<xsl:for-each select="//g:reading/@id[not(.=preceding::g:reading/@id)]">
+			case <xsl:value-of select="."/>:
+			<xsl:for-each select="//g:reading[@id=.]">
+				<xsl:value-of select="."/>
+			</xsl:for-each>
+			break;
+		</xsl:for-each>
+		}
+	}
+
 	function pollServer() {
 		$.get("http://" + location.host + "/paweb/device", { id: <xsl:value-of select="@id"/> }, serverResponse);
     }
@@ -43,7 +66,7 @@
 		<br/>
 		<p>On this page you can see the details for a given sensor or location over time</p>
 		Please select the sensor or location to show: 
-		<select>
+		<select id="graphSelect" onchange="graphSelectionChanged()">
 		  <option value="location">None</option> 
 		  <option value="location">Location</option> 
 			<xsl:for-each select="//g:reading/@id[not(.=preceding::g:reading/@id)]">
