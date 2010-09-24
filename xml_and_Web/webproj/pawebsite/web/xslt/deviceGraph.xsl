@@ -42,23 +42,20 @@
 		<h1>Welcome to the PA geolog device details for device with ID: <xsl:value-of select="@id"/></h1>
 		<br/>
 		<p>On this page you can see the details for a given sensor or location over time</p>
+		Please select the sensor or location to show: 
 		<select>
+		  <option value="location">None</option> 
 		  <option value="location">Location</option> 
-		  <xsl:apply-templates select="//readings/reading/@id"/> 
+			<xsl:for-each select="//g:reading/@id[not(.=preceding::g:reading/@id)]">
+			<option><xsl:value-of select="."/></option>
+			</xsl:for-each>
 		</select>
 
 		<div id="deviceData">
+			<xsl:apply-templates select="//readings"/> 
 		</div>
 		</body>
 	</html>
-  </xsl:template>
-
-  <!-- Format a geolog entry for display in a table 
-  			One geolog will become one row in the table -->
-  <xsl:template match="//readings/reading/@id">
-	<option value="{./text()}">
-		<xsl:value-of select="."/> 
-	</option>
   </xsl:template>
   
 </xsl:stylesheet>
