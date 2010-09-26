@@ -20,6 +20,12 @@ import java.net.*;
 
 public class ZoneServlet extends HttpServlet {
 
+	/**Self descriptive string.
+	*/
+	public String getServletInfo(){
+		return "Web-project Autumn 2010: PA Web-service servlet to handle zone requests (/zones and /zone/...). Author: XX, Version: XX, Copyright:XX";
+	}
+
   public void doGet(HttpServletRequest request,
                     HttpServletResponse response)
       throws IOException, ServletException {
