@@ -12,6 +12,10 @@
 			<title>PA International device details Graph</title>
 			
 <script type="text/javascript" src="js/jquery-1.4.2.js"></script>
+<!--[if IE]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+<script language="javascript" type="text/javascript" src="js/jquery.jqplot.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/jquery.jqplot.css" />
 <script type="text/javascript">
 	var timeout; // This variable is used for changing between http not ready timeout and polling timeout
 	
@@ -38,16 +42,26 @@
 		  case "none":
 		  
 		    break;
-		  case "location":
-			<xsl:for-each select="//geolog/">
-				<xsl:value-of select="."/>
-			</xsl:for-each>
+		  case "Location":
+			$.jqplot('chartdiv', [[<xsl:for-each select="//g:geolog">[<xsl:value-of select="./k:Point/k:coordinates"/>]<xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if></xsl:for-each>]]);
 			break;
 		<xsl:for-each select="//g:reading/@id[not(.=preceding::g:reading/@id)]">
-			case <xsl:value-of select="."/>:
-			<xsl:for-each select="//g:reading[@id=.]">
-				<xsl:value-of select="."/>
+			case &quot;<xsl:value-of select="."/>&quot;:
+			$.jqplot('chartdiv',  [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]]);
+			 
+			 
+			&lt;!--
+			
+			--&gt;
+			<!--$.jqplot('chartdiv', [[[0,0]
+			<xsl:for-each select="//g:geolog/">
+				,[<xsl:value-of select="./@dateTime"/>,<xsl:value-of select="./g:readings/g:reading[@id=.]/value"/>]
 			</xsl:for-each>
+			]]-->
+		  <!--$.jqplot('chartdiv', [[[0,0]<xsl:for-each select="//g:geolog/">,[xs:dateTime(<xsl:value-of select="./@dateTime"/>) - xs:dateTime('1970-01-01T00:00:00'),<xsl:value-of select="./k:Point"/>]</xsl:for-each>]]-->
+			<!--xsl:for-each select="//g:reading[@id=.]">
+				<xsl:value-of select="."/>
+			</xsl:for-each-->
 			break;
 		</xsl:for-each>
 		}
@@ -74,6 +88,8 @@
 			</xsl:for-each>
 		</select>
 
+		<div id="chartdiv" style="height:400px;width:300px; "></div>
+		
 		<div id="deviceData">
 			<xsl:apply-templates select="//readings"/> 
 		</div>
