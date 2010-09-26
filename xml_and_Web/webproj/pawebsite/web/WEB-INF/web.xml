@@ -95,6 +95,10 @@
 		  <param-name>DeviceXSLT_GRAPH</param-name>
 		  <param-value>xslt/deviceGraph.xsl</param-value>
 		</init-param>
+		<init-param>
+		  <param-name>DeviceXSLT_GMAP</param-name>
+		  <param-value>xslt/deviceGmap.xsl</param-value>
+		</init-param>
       <description>
       This is the handler of requests addressed to {context-path}/device
       </description>

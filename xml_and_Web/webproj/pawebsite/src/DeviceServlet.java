@@ -62,6 +62,10 @@ public class DeviceServlet extends HttpServlet {
 			  {
 			    ctx = getServletContext().getRealPath("/" + getInitParameter("DeviceXSLT_GRAPH"));
 			  }
+			  else if (displayType.toLowerCase().equals("gmap"))
+			  {
+			    ctx = getServletContext().getRealPath("/" + getInitParameter("DeviceXSLT_GMAP"));
+			  }
 			  
 			  if (ctx == null)
 			  {

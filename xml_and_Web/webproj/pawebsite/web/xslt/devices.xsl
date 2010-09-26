@@ -22,6 +22,8 @@
 					<th>Device ID</th>
 					<th>Web-site</th>
 					<th>AJAX Web-site</th>
+					<th>Graph Web-site</th>
+					<th>GMap Web-site</th>
 					<th>Web-service</th>
 				</tr>
 				<xsl:apply-templates mode="table" select="//g:deviceSimple"/> 
@@ -43,6 +45,8 @@
 			<td><xsl:value-of select="@id"/></td> 
 			<td><xsl:apply-templates mode="websiteurl" select="."/></td> 
 			<td><xsl:apply-templates mode="websiteAJAXurl" select="."/></td> 
+			<td><xsl:apply-templates mode="websiteGRAPHurl" select="."/></td> 
+			<td><xsl:apply-templates mode="websiteGMAPurl" select="."/></td> 
 			<td><xsl:apply-templates select="./g:deviceURL"/></td> 
 		</tr>
   </xsl:template>
@@ -55,7 +59,15 @@
 			<xsl:apply-templates mode="websiteAJAXurl" select="g:deviceURL"/>
   </xsl:template>
 
-	<!-- TODO: Can we make this nicer and less brittle? 
+  <xsl:template mode="websiteGRAPHurl" match="g:deviceSimple">
+			<xsl:apply-templates mode="websiteGRAPHurl" select="g:deviceURL"/>
+  </xsl:template>
+
+  <xsl:template mode="websiteGMAPurl" match="g:deviceSimple">
+			<xsl:apply-templates mode="websiteGMAPurl" select="g:deviceURL"/>
+  </xsl:template>
+
+  <!-- TODO: Can we make this nicer and less brittle? 
 							Is it possible to grab the web-site url from in here? -->
   <xsl:template mode="websiteurl" match="g:deviceURL">
 		<a href="{concat(substring-before(.,'/geolog/'), '/paweb/device?id=', substring-after(.,'/geolog/devices/'))}">
@@ -66,6 +78,18 @@
   <xsl:template mode="websiteAJAXurl" match="g:deviceURL">
 		<a href="{concat(substring-before(.,'/geolog/'), '/paweb/device?id=', substring-after(.,'/geolog/devices/'), '&amp;type=AJAX')}">
 			<xsl:text>AJAX Web-site</xsl:text>
+		</a>
+  </xsl:template>
+
+  <xsl:template mode="websiteGRAPHurl" match="g:deviceURL">
+		<a href="{concat(substring-before(.,'/geolog/'), '/paweb/device?id=', substring-after(.,'/geolog/devices/'), '&amp;type=GRAPH')}">
+			<xsl:text>Graph Web-site</xsl:text>
+		</a>
+  </xsl:template>
+
+  <xsl:template mode="websiteGMAPurl" match="g:deviceURL">
+		<a href="{concat(substring-before(.,'/geolog/'), '/paweb/device?id=', substring-after(.,'/geolog/devices/'), '&amp;type=GMAP')}">
+			<xsl:text>GMap Web-site</xsl:text>
 		</a>
   </xsl:template>
 
