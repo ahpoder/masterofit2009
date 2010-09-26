@@ -12,7 +12,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.util.Random;
 import java.util.*;
+import java.util.regex.*;
 import java.net.*;
+import java.text.SimpleDateFormat;
 
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Transformer;
@@ -74,7 +76,41 @@ public class DeviceServlet extends HttpServlet {
 			  // Generate the transformer.
 			  Transformer transformer = tFactory.newTransformer(xslSource);
 			  // Perform the transformation, sending the output to the response.
-			  transformer.transform(xmlSource, new StreamResult(out));
+
+			  // This is a short-hand version, but as we need to do post-processing it is not possible
+			  //transformer.transform(xmlSource, new StreamResult(out));
+			  
+			  ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			  PrintWriter ps = new PrintWriter(baos);
+			  transformer.transform(xmlSource, new StreamResult(ps));
+			  ps.flush();
+			  String result = baos.toString();
+			  if (displayType.toLowerCase().equals("graph"))
+			  {
+				Pattern p = Pattern.compile("!!DATETIME_START_TAG!!(.*?)!!DATETIME_END_TAG!!");
+				Matcher m = p.matcher(result);
+								
+				StringBuffer sb = new StringBuffer();
+				SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S");  
+ 				while (m.find()) {
+					String timestamp = m.group();
+					timestamp = timestamp.substring(22, timestamp.length() - 20);
+					
+					Date d = parser.parse(timestamp);
+					long ut = d.getTime() / 1000;
+					
+//					long startTimestamp = System.currentTimeMillis() / 1000;
+
+					Debuglog.write("Found timestamp: " + timestamp + " and converted it to: " + ut);
+					
+					m.appendReplacement(sb, new Long(ut).toString());
+					// m.group(), m.start(), m.end()
+				}
+				m.appendTail(sb);
+				result = sb.toString();
+			  }
+			  
+			  out.print(result);
 			}
 			catch (Exception e)
 			{
