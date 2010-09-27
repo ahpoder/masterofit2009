@@ -8,6 +8,15 @@
   
   <xsl:import href="date.xsl" />
   
+	<xsl:function name="getTokens" as="xs:string+">
+		<xsl:param name="str" as="xs:string" />
+		<xsl:analyze-string select="concat($str, ',')" regex='(("[^"]*")+|[^,]*),'>
+			<xsl:matching-substring>
+			<xsl:sequence select='replace(regex-group(1), "^""|""$|("")""", "$1")' />
+			</xsl:matching-substring>
+		</xsl:analyze-string>
+	</xsl:function>
+
   <xsl:template match="g:device">
 	<!--
 	<!DOCTYPE html>
@@ -20,14 +29,73 @@
 			
 <script type="text/javascript" src="js/jquery-1.4.2.js"></script>
 <!--[if IE]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&amp;language=da"></script>
 <script type="text/javascript">
 	var timeout; // This variable is used for changing between http not ready timeout and polling timeout
 	
   function initialize() {
-    var latlng = new google.maps.LatLng(-34.397, 150.644);
+    
+<!-- Experiments for determining min and max lattitude and longitude	
+	
+	!!ALL_LATTITUDES_START!!
+<xsl:for-each select="//g:geolog/k:Point/k:coordinates">
+	<xsl:variable name="cdiantes" select="getTokens(.)" as="xs:string+" />
+	// cdiantes[0] - lattitude
+	// cdiantes[1] - longitude
+	<xsl:value-of select="$cdiantes[0]"/>
+	<xsl:if test="position()!=last()">
+		<xsl:text>, </xsl:text>
+	</xsl:if>
+</xsl:for-each>
+	!!ALL_LATTITUDES_END!!
+
+	!!ALL_LONGITUDE_START!!
+<xsl:for-each select="//g:geolog/k:Point/k:coordinates">
+	<xsl:variable name="cdiantes" select="getTokens(.)" as="xs:string+" />
+	// cdiantes[0] - lattitude
+	// cdiantes[1] - longitude
+	<xsl:value-of select="$cdiantes[1]"/>
+	<xsl:if test="position()!=last()">
+		<xsl:text>, </xsl:text>
+	</xsl:if>
+</xsl:for-each>
+	!!ALL_LONGITUDE_END!!
+
+	<xsl:for-each select="$elemNames">
+		<xsl:variable name="pos" select="position()" />
+		<elem name="{.}">
+		<xsl:value-of select="$lineItems[$pos]" />
+		</elem>
+	</xsl:for-each>
+
+	<xsl:for-each select="//g:geolog/k:Point/k:coordinates">
+		<xsl:variable name="cdiantes" select="getTokens(.)" as="xs:string+" />
+		// cdiantes[0] - lattitude
+		// cdiantes[1] - longitude
+		
+	<xsl:variable name="minLatLocation">
+		<xsl:for-each select="event">
+			<xsl:sort select="@date" data-type="text" order="ascending" />
+			<xsl:if test="position() = 1">
+				<xsl:value-of select="@date" />
+			</xsl:if>
+		</xsl:for-each>
+	</xsl:variable>
+
+	<xsl:variable name="maxEventDate">
+	<xsl:for-each select="event">
+	<xsl:sort select="@date" data-type="text" order="descending" />
+	<xsl:if test="position() = 1">
+	<xsl:value-of select="@date" />
+	</xsl:if>
+	</xsl:for-each>
+	</xsl:variable>
+
+-->
+
+	var latlng = new google.maps.LatLng(!!CENTER_LATTITUDE!!, !!CENTER_LONGITUDE!!);
     var myOptions = {
-      zoom: 8,
+      zoom: !!CENTER_ZOOM!!,
       center: latlng,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };

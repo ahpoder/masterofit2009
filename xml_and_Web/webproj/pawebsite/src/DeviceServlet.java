@@ -24,6 +24,15 @@ import javax.xml.transform.stream.StreamResult;
 
 public class DeviceServlet extends HttpServlet {
 
+	public static String slurp (InputStream in) throws IOException {
+		StringBuffer out = new StringBuffer();
+		byte[] b = new byte[4096];
+		for (int n; (n = in.read(b)) != -1;) {
+			out.append(new String(b, 0, n));
+		}
+		return out.toString();
+	}
+
   public void doGet(HttpServletRequest request,
                     HttpServletResponse response)
       throws IOException, ServletException {
@@ -73,9 +82,20 @@ public class DeviceServlet extends HttpServlet {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "Invalid type supplied");
 				return;
 			  }
-				
+			  
+			  String xmlSourceText = slurp(conn.getInputStream());
+			  
+			  if (displayType.toLowerCase().equals("gmap"))
+			  {
+				// Extract necesarry info.
+			  }
+			  
 			  // Get the XML input document and the stylesheet.
-			  Source xmlSource = new StreamSource(conn.getInputStream());
+// This method is much simpler but the we cannot do any processing on the raw XML (needed in GMAP)
+//			  Source xmlSource = new StreamSource(conn.getInputStream());
+			  
+			  StringReader strReader = new StringReader(xmlSourceText);
+			  Source xmlSource = new StreamSource(strReader);
 			  Source xslSource = new StreamSource(new File(ctx));
 			  // Generate the transformer.
 			  Transformer transformer = tFactory.newTransformer(xslSource);
@@ -113,7 +133,13 @@ public class DeviceServlet extends HttpServlet {
 				m.appendTail(sb);
 				result = sb.toString();
 			  }
-			  
+			  else if (displayType.toLowerCase().equals("gmap"))
+			  {
+				result = result.replace("!!CENTER_LATTITUDE!!", "56.163906");
+				result = result.replace("!!CENTER_LONGITUDE!!", "10.228271");
+				result = result.replace("!!CENTER_ZOOM!!", "8");
+			  }
+
 			  out.print(result);
 			}
 			catch (Exception e)
