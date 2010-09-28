@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<devices xmlns="http://www.pa.com/geolog" xmlns:k="http://www.opengis.net/kml/2.2">
+  <deviceSimple id="10" status="OK">
+    <deviceURL>http://localhost:8080/geolog/devices/10</deviceURL>
+    <k:Point>
+      <k:coordinates>9.766640, 54.623585</k:coordinates>
+    </k:Point>
+  </deviceSimple>
+  <deviceSimple id="11" status="OK">
+    <deviceURL>http://localhost:8080/geolog/devices/11</deviceURL>
+    <k:Point>
+      <k:coordinates>9.097881, 54.165991</k:coordinates>
+    </k:Point>
+  </deviceSimple>
+  <deviceSimple id="12" status="OK">
+    <deviceURL>http://localhost:8080/geolog/devices/12</deviceURL>
+    <k:Point>
+      <k:coordinates>9.928594, 54.395124</k:coordinates>
+    </k:Point>
+  </deviceSimple>
+  <deviceSimple id="13" status="OK">
+    <deviceURL>http://localhost:8080/geolog/devices/13</deviceURL>
+    <k:Point>
+      <k:coordinates>9.221863, 54.440370</k:coordinates>
+    </k:Point>
+  </deviceSimple>
+  <deviceSimple id="14" status="OK">
+    <deviceURL>http://localhost:8080/geolog/devices/14</deviceURL>
+    <k:Point>
+      <k:coordinates>9.844759, 53.891783</k:coordinates>
+    </k:Point>
+  </deviceSimple>
+  <deviceSimple id="15" status="OK">
+    <deviceURL>http://localhost:8080/geolog/devices/15</deviceURL>
+    <k:Point>
+      <k:coordinates>9.360583, 54.567537</k:coordinates>
+    </k:Point>
+  </deviceSimple>
+  <deviceSimple id="16" status="DEPRECATED">
+    <deviceURL>http://localhost:8080/geolog/devices/16</deviceURL>
+    <k:Point>
+      <k:coordinates>8.928799, 54.609732</k:coordinates>
+    </k:Point>
+  </deviceSimple>
+  <deviceSimple id="17" status="OK">
+    <deviceURL>http://localhost:8080/geolog/devices/17</deviceURL>
+    <k:Point>
+      <k:coordinates>9.863265, 54.129499</k:coordinates>
+    </k:Point>
+  </deviceSimple>
+  <deviceSimple id="18" status="OK">
+    <deviceURL>http://localhost:8080/geolog/devices/18</deviceURL>
+    <k:Point>
+      <k:coordinates>9.367181, 53.782446</k:coordinates>
+    </k:Point>
+  </deviceSimple>
+  <deviceSimple id="19" status="OK">
+    <deviceURL>http://localhost:8080/geolog/devices/19</deviceURL>
+    <k:Point>
+      <k:coordinates>9.550562, 54.577149</k:coordinates>
+    </k:Point>
+  </deviceSimple>
+  <deviceSimple id="20" status="DEPRECATED">
+    <deviceURL>http://localhost:8080/geolog/devices/20</deviceURL>
+    <k:Point>
+      <k:coordinates>9.267102, 53.620810</k:coordinates>
+    </k:Point>
+  </deviceSimple>
+</devices>

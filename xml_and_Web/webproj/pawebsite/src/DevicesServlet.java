@@ -26,20 +26,51 @@ public class DevicesServlet extends HttpServlet {
                     HttpServletResponse response)
       throws IOException, ServletException {
 		try {
+			//Find out what to return
+			String returnType = request.getParameter("type");
+
 			URL url = new URL("http://" + request.getServerName() + ":" + request.getServerPort() + "/geolog/devices");
 			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setAllowUserInteraction(false); // no user interact [like pop up]
 
 			// The servlet returns HTML.
-			response.setContentType("text/html; charset=UTF-8");    
+			if (returnType == null)
+			{
+				response.setContentType("text/html; charset=UTF-8");
+			}
+			else if (returnType.toLowerCase().equals("kml"))
+			{
+				response.setContentType("text/xml; charset=UTF-8");
+			}
+			else
+			{
+				Debuglog.write("Internal error, invalid return type supplied to DevicesServlet");
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, String.format("Invalid return type supplied (%1$)", returnType));
+				return;
+			}
+
 			// Output goes in the response stream.
 			PrintWriter out = response.getWriter();
 			try
-			{	
+			{
 			  TransformerFactory tFactory = TransformerFactory.newInstance();
 			  //get the real path for xsl files.
-			  String ctx = getServletContext().getRealPath("/" + getInitParameter("DevicesXSLT"));
+			  String ctx = null;
+			  if (returnType == null)
+			  {
+			  	ctx = getServletContext().getRealPath("/" + getInitParameter("DevicesXSLT"));
+				}
+			  else if (returnType.toLowerCase().equals("kml"))
+			  {
+			    ctx = getServletContext().getRealPath("/" + getInitParameter("DevicesXSLT_KML"));
+			  }
+			  else
+			  {
+					Debuglog.write("Internal error, invalid return type supplied to DevicesServlet");
+					response.sendError(HttpServletResponse.SC_NOT_FOUND, String.format("Invalid return type supplied (%1$)", returnType));
+					return;
+			  }
 			  // Get the XML input document and the stylesheet.
 			  Source xmlSource = new StreamSource(conn.getInputStream());
 			  Source xslSource = new StreamSource(new File(ctx));

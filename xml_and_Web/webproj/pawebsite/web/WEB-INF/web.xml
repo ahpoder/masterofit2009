@@ -75,6 +75,10 @@
 		  <param-name>DevicesXSLT</param-name>
 		  <param-value>xslt/devices.xsl</param-value>
 		</init-param>
+		<init-param>
+		  <param-name>DevicesXSLT_KML</param-name>
+		  <param-value>xslt/devicesKML.xsl</param-value>
+		</init-param>
       <description>
       This is the handler of requests addressed to {context-path}
       </description>

@@ -32,6 +32,10 @@
 			<a href="http://localhost:8080/geolog/devices">
 				<xsl:text>Show this information as sent from the web-service</xsl:text>
 			</a>
+			<br/>
+			<a href="http://localhost:8080/paweb/devices?type=kml">
+				<xsl:text>Show the kml file to use for Google Earth display</xsl:text>
+			</a>
     </body>
 	</html>
   </xsl:template>
