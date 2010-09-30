@@ -116,7 +116,7 @@
 <!-- This will draw the poly-line -->
   var movementCoordinates = [
 	<xsl:for-each select="//g:geolog/k:Point/k:coordinates">
-		new google.maps.LatLng(<xsl:value-of select="."/>),
+		new google.maps.LatLng(<xsl:value-of select="."/>)
 		<xsl:if test="position()!=last()">
 			<xsl:text>, </xsl:text>
 		</xsl:if>
