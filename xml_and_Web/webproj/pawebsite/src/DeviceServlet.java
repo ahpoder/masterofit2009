@@ -137,7 +137,7 @@ public class DeviceServlet extends HttpServlet {
 			  {
 				result = result.replace("!!CENTER_LATTITUDE!!", "56.163906");
 				result = result.replace("!!CENTER_LONGITUDE!!", "10.228271");
-				result = result.replace("!!CENTER_ZOOM!!", "8");
+				result = result.replace("!!CENTER_ZOOM!!", "6");
 			  }
 
 			  out.print(result);

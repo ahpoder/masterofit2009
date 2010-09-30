@@ -101,6 +101,36 @@
     };
     var map = new google.maps.Map(document.getElementById("gmapData"),
         myOptions);
+			
+<!-- This will show the coordinates as a marker -->
+	<xsl:for-each select="//g:geolog/k:Point/k:coordinates">
+		<xsl:if test="position()=last()">
+			new google.maps.Marker({
+				  position: new google.maps.LatLng(<xsl:value-of select="."/>),
+				  map: map, 
+				  title:"Hello World!"
+				});
+		</xsl:if>
+	</xsl:for-each>
+
+<!-- This will draw the poly-line -->
+  var movementCoordinates = [
+	<xsl:for-each select="//g:geolog/k:Point/k:coordinates">
+		new google.maps.LatLng(<xsl:value-of select="."/>),
+		<xsl:if test="position()!=last()">
+			<xsl:text>, </xsl:text>
+		</xsl:if>
+	</xsl:for-each>
+   ];
+	var movementPath = new google.maps.Polyline({
+		path: movementCoordinates,
+		strokeColor: "#FF0000",
+		strokeOpacity: 1.0,
+		strokeWeight: 2
+	});
+
+	movementPath.setMap(map);
+
   }
 
 	// This function can be reused by both send chat and poll

@@ -8,11 +8,9 @@
 <!-- Import the schema for KML 2.2 -->
 <import namespace="http://www.opengis.net/kml/2.2"
         schemaLocation="http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd"/>
-
 		
 <!--import namespace="http://schemas.xmlsoap.org/wsdl/mime/"
         schemaLocation="http://schemas.xmlsoap.org/wsdl/mime/mime.xsd"/-->
-
 
   <!-- The element and type for a collection of the minimal representation of a device -->
   <element name="devices" type="g:DeviceSimpleCollectionType"/>

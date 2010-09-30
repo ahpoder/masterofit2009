@@ -39,10 +39,10 @@ public class DeviceMain {
 					String id = br.readLine();
 					System.out.print("\nEnter Status of device (OK, DEPRECATED, ...): ");
 					String status = br.readLine();
-					System.out.print("\nEnter Longitude of device (e.g. 57.1234): ");
-					String longitude = br.readLine();
-					System.out.print("\nEnter Latitude of device (e.g. 9.1234): ");
+					System.out.print("\nEnter Lattitude of device (e.g. 57.1234): ");
 					String latitude = br.readLine();
+					System.out.print("\nEnter Longitude of device (e.g. 9.1234): ");
+					String longitude = br.readLine();
 
 					DeviceStatus dStatus = DeviceStatus.valueOf(status);
 					double dLatitude = Double.valueOf(latitude);
@@ -59,10 +59,10 @@ public class DeviceMain {
 					String address = br.readLine();
 					System.out.print("\nEnter Device ID range (e.g. 100-200, must be integers: ");
 					String idRange = br.readLine();
-					System.out.print("\nEnter root longitude of devices (e.g. 57.1234): ");
-					String rLongitude = br.readLine();
-					System.out.print("\nEnter root latitude of devices (e.g. 9.1234): ");
+					System.out.print("\nEnter root lattitude of devices (e.g. 57.1234): ");
 					String rLatitude = br.readLine();
+					System.out.print("\nEnter root longitude of devices (e.g. 9.1234): ");
+					String rLongitude = br.readLine();
 					System.out.print("\nEnter location deviation (e.g. 2.74): ");
 					String deviation = br.readLine();
 					System.out.print("\nEnter transmission interval in seconds (e.g. 60): ");
@@ -80,7 +80,7 @@ public class DeviceMain {
 					double dLatitude = Double.valueOf(rLatitude);
 					double dDeviation = Double.valueOf(deviation);
 
-					ContentBuilder.registerRootLocation(dLongitude, dLatitude, dDeviation);
+					ContentBuilder.registerRootLocation(dLatitude, dLongitude, dDeviation);
 
 					int iInterval = Integer.valueOf(interval);
 
@@ -158,12 +158,12 @@ public class DeviceMain {
 	}
 
 	private void runDevice(CommandArguments ca) throws IOException {
-		String payload = ContentBuilder.buildContent(ca.getSingleID(), ca.getStatus(), ca.getLongitude(), ca.getLatitude());
+		String payload = ContentBuilder.buildContent(ca.getSingleID(), ca.getStatus(), ca.getLatitude(), ca.getLongitude());
 		DeviceConnection.postInfo(ca.getHost() + "/geolog/devices/" + ca.getSingleID(), payload);
 	}
 
 	private void runDaemon(CommandArguments ca) {
-		ContentBuilder.registerRootLocation(ca.getLongitude(), ca.getLatitude(), ca.getDeviation());
+		ContentBuilder.registerRootLocation(ca.getLatitude(), ca.getLongitude(), ca.getDeviation());
 
 		for (int i = ca.getFromID(); i <= ca.getToID(); ++i)
 		{
