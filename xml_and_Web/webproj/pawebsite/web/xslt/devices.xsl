@@ -4,40 +4,8 @@
                 xmlns:fn="http://www.w3.org/2005/xpath-functions"
                 version="2.0">
 
+<!-- The output is intended to be an HTML fragment to insert into a div tag -->
   <xsl:template match="g:devices">
-	<html>
-		<head>
-			<link href="style.css" rel="stylesheet" type="text/css"/>
-			<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-			<title>PA International device listing</title>
-			<!-- google map stuff -->
-			<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-			<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-			<script type="text/javascript">
-			function initialize() {
-				var chicago = new google.maps.LatLng(41.875696,-87.624207);
-				var myOptions = {
-					zoom: 11,
-					center: chicago,
-					mapTypeId: google.maps.MapTypeId.ROADMAP
-				}
-
-				var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-
-				var ctaLayer = new google.maps.KmlLayer('http://localhost:8080/paweb/devices?type=kml');
-				ctaLayer.setMap(map);
-				<!-- google.maps.event.addDomListener(window, 'load', initialize); -->
-			}
-			</script>
-		</head>
-		<body onload="initialize()">
-			<h1>Welcome to the PA geolog Website</h1>
-			<br/>
-			<p>On this page you can see all devices registered with the service. To view details for a given device simply follow the link for that device.</p>
-			<p>For debugging purposes there is currently a direct link to the web-service. This link will return an XML document.</p>
-			<table>
-				<tr valign="top">
-					<td>
 						<table class="reference" cellspacing="0" cellpadding="0" border="1">
 							<tr>
 								<th>Status</th>
@@ -50,22 +18,6 @@
 							</tr>
 							<xsl:apply-templates mode="table" select="//g:deviceSimple"/> 
 						</table>
-					</td>
-					<td>
-						<div id="map_canvas" style="width:500px; height:500px"></div>
-					</td>
-				</tr>
-			</table>			
-    	<br/>
-			<a href="http://localhost:8080/geolog/devices">
-				<xsl:text>Show this information as sent from the web-service</xsl:text>
-			</a>
-			<br/>
-			<a href="http://localhost:8080/paweb/devices?type=kml">
-				<xsl:text>Show the kml file to use for Google Earth display</xsl:text>
-			</a>
-    </body>
-	</html>
   </xsl:template>
 
 	<!-- Display each device as a table row. 
