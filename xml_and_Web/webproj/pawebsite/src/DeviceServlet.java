@@ -116,7 +116,8 @@ public class DeviceServlet extends HttpServlet {
 								
 				StringBuffer sb = new StringBuffer();
 				SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S");  
- 				while (m.find()) {
+ 				long firstTimeStamp = 0;
+				while (m.find()) {
 					String timestamp = m.group();
 					timestamp = timestamp.substring(22, timestamp.length() - 20);
 					
@@ -126,6 +127,12 @@ public class DeviceServlet extends HttpServlet {
 //					long startTimestamp = System.currentTimeMillis() / 1000;
 
 					Debuglog.write("Found timestamp: " + timestamp + " and converted it to: " + ut);
+
+					if (firstTimeStamp == 0)
+					{
+						firstTimeStamp = ut;
+					}
+					ut -= firstTimeStamp;
 					
 					m.appendReplacement(sb, new Long(ut).toString());
 					// m.group(), m.start(), m.end()

@@ -24,6 +24,12 @@
 	var timeout; // This variable is used for changing between http not ready timeout and polling timeout
 	var plotObject;
 	
+    function initialize() {
+		var s = document.getElementById("graphSelect");
+		s.selectedIndex = 0;
+		graphSelectionChanged();
+    }
+  
 	// This function can be reused by both send chat and poll
 	function serverResponse(data) {
 		// Create a new in-memeory div element and set its content to the repsonse.
@@ -44,23 +50,23 @@
 		var o = s.options[s.selectedIndex];
 		var selected = o.text;
 		switch (selected) {
-		  case "none":
-			$.jqplot('xxx');
-		    break;
 		<xsl:for-each select="//g:reading/@id[not(.=preceding::g:reading/@id)]">
 			case &quot;<xsl:value-of select="."/>&quot;:
-			<!-- $.jqplot('chartdiv', [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]]); -->
 				<xsl:variable name="currentID" select="." />
-				// This would have been the most elegant solution, but unfortunaltely the date:seconds do not work with the XSLT transformer we use.
+				<!-- This would have been the most elegant solution, but unfortunaltely the date:seconds do not work with the XSLT transformer we use. -->
 				<!-- $.jqplot('chartdiv', [[<xsl:for-each select="//g:geolog">[<xsl:value-of select="date:seconds(./@dateTime))"/>,<xsl:value-of select="./g:readings/g:reading[$currentID=@id]/g:value"/>]<xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if></xsl:for-each>]]); -->
-<!--
+
+			plotObject = $.jqplot('chartdiv', 
+			[[<xsl:for-each select="//g:geolog">[!!DATETIME_START_TAG!!<xsl:value-of select="./@dateTime)"/>!!DATETIME_END_TAG!!,<xsl:value-of select="./g:readings/g:reading[$currentID=@id]/g:value"/>]<xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if></xsl:for-each>]],
+			{ axes:{xaxis:{ min: 0 }} });
+
 			if (plotObject)
 			{
-				plotObject.data = [[<xsl:for-each select="//g:geolog">[!!DATETIME_START_TAG!!<xsl:value-of select="./@dateTime)"/>!!DATETIME_END_TAG!!,<xsl:value-of select="./g:readings/g:reading[$currentID=@id]/g:value"/>]<xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if></xsl:for-each>]];
-				plotObject.redraw();
+				// This is not required the first time, but every other time to ensure axis re-scale.
+				var replotOptionObj = {clear:true, resetAxes:true};
+				plotObject.replot(replotOptionObj);
 			}
--->
-			plotObject = $.jqplot('chartdiv', [[<xsl:for-each select="//g:geolog">[!!DATETIME_START_TAG!!<xsl:value-of select="./@dateTime)"/>!!DATETIME_END_TAG!!,<xsl:value-of select="./g:readings/g:reading[$currentID=@id]/g:value"/>]<xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if></xsl:for-each>]]);
+
 			break;
 		</xsl:for-each>
 		}
@@ -74,18 +80,26 @@
 </script>
 
 		</head>
-		<body>
+		<body onload="initialize()">
 		<h1>Welcome to the PA geolog device details for device with ID: <xsl:value-of select="@id"/></h1>
 		<br/>
 		<p>On this page you can see the details for a given sensor or location over time</p>
 		Please select the sensor or location to show: 
 		<select id="graphSelect" onchange="graphSelectionChanged()">
-		  <option value="none">None</option> 
 			<xsl:for-each select="//g:reading/@id[not(.=preceding::g:reading/@id)]">
 			<option><xsl:value-of select="."/></option>
 			</xsl:for-each>
-		</select>
-
+		</select><br/>
+		<br/>
+		The first sample was taken on: 
+		<xsl:value-of select="//g:geolog[1]/@dateTime"/>
+	<!--xsl:for-each select="//g:geolog">
+		<xsl:if test="position()=1">
+		</xsl:if>
+	</xsl:for-each-->
+		 and the axis shows seconds after that.
+		<br/>
+		<br/>
 		<div id="chartdiv" style="height:600px;width:800px; "></div>
 		
 		<div id="deviceData">
