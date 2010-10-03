@@ -14,80 +14,93 @@
 			var markerXML = null; //This variable is to hold the markers as output from the web-site transformer
 	        var deviceMarkers = [];
 			var map = null;
+			var infoWindow = null;
+
 			//Initialize when document is ready
 			function initialize() {
-				loadTable();
 				loadMap();
-				// Start the poll timer
-				timeout = window.setTimeout(pollServer, 6000);
+				pollServer();
 			}
 
-			//Load the transformed web-service output directly into the table div element
-			function loadTable(){
-				$('#devicesTable').load('devices');
-			}
-
-			//First time load of the map
+			//Load of the map
 			//TODO: Fix the initial zoom etc.
 			function loadMap(){
 				var myOptions = {
 				zoom: 5,
-				center: new google.maps.LatLng(9,54),
+				center: new google.maps.LatLng(54, 9),
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 				}
 
 				map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+			    infoWindow = new google.maps.InfoWindow();
 			}
 
 			//Poll the server. This function is called at regular intervals to update the table and the map
+			//TODO: Is there a problem in making two contemporary AJAX calls on $ (.load and .get)?
 			function pollServer() {
-				loadTable();
+				//Poll the server for devices. Load the output directly into the table div element
+				$('#devicesTable').load('devices');
+
 				//Poll the server for markers
 				$.get('devices?type=markers', processMarkers,"xml");
 			}
 
-			//Callback function for the marker AJAX call
+			//Callback function for the marker AJAX call in pollServer
 			function processMarkers(data) {
-				// obtain the array of markers and loop through it
+				// obtain a list of markers from the response
 				markerXML = data.documentElement.getElementsByTagName("marker");
-				displayDeviceMarkers();
-				// Re-start the timeout
+				//Extract markers from the list
+				processDeviceMarkers();
+				// When we're done processing we may re-start the timer
 				window.clearTimeout(timeout);
 				timeout = window.setTimeout(pollServer, 6000);
 			}
 
-			function displayDeviceMarkers() {
-				//Not function. How do we achieve this?
-				//map.clearOverlays();
+			function processDeviceMarkers() {
+				// Start by clearing the old markers
+				clearDeviceMarkers()
+
+				var sumlat = 0;
+				var sumlng = 0;
+				// Then add the new ones
 				for (var i = 0; i < markerXML.length; i++) {
 						// obtain the attributes of each marker
 						var lat = parseFloat(markerXML[i].getAttribute("lat"));
-						var lng = parseFloat(markerXML[i].getAttribute("lon"));
+						var lng = parseFloat(markerXML[i].getAttribute("lng"));
 						var id = markerXML[i].getAttribute("id");
-						var label = markerXML[i].getAttribute("name");
-						createDeviceMarker(new google.maps.LatLng(lat,lng),id);
+						var name = markerXML[i].getAttribute("name");
+						createDeviceMarker(new google.maps.LatLng(lat,lng),id, name);
+						sumlat += lat;
+						sumlng += lng;
 				}
+				if(markerXML.length > 0)
+					map.panTo(new google.maps.LatLng(sumlat/markerXML.length,sumlng/markerXML.length));
 			}
-			//Create a device marker
-			  function createDeviceMarker(point,id) {
 
-				var marker = new google.maps.Marker({map:map, position:point, title:id});
-//				GEvent.addListener(marker, "click", function(point) {
-//					map.setCenter(new GLatLng(marker.point.y,marker.point.x),10);
-//				});
-//				deviceMarkers[i] = marker;
-//
-//				i++;
-//				map.addOverlay(marker);
-//
-//				//  ======  The new marker "mouseover" and "mouseout" listeners  ======
-//				GEvent.addListener(marker,"mouseover", function() {
-//				  showTooltip(marker);
-//				});
-//				GEvent.addListener(marker,"mouseout", function() {
-//				  tooltip.style.visibility="hidden"
-//				});
-//			  }
+			// Remove device markers from the gmap
+			function clearDeviceMarkers() {
+			 	 infoWindow.close();
+			  for (var i = 0; i < deviceMarkers.length; i++) {
+				deviceMarkers[i].setMap(null);
+			  }
+			  deviceMarkers.length = 0;
+			}
+
+			//Create a device marker and add it to the map
+			function createDeviceMarker(point,id,name) {
+
+				var marker = new google.maps.Marker({
+					map:map,
+					position:point,
+					title:id
+				});
+				var html = "<b>" + name + "</b>"
+				google.maps.event.addListener(marker, 'click', function() {
+					infoWindow.setContent(html);
+					infoWindow.open(map, marker);
+				  });
+
+				deviceMarkers.push(marker);
 			}
 		</script>
 	</head>
