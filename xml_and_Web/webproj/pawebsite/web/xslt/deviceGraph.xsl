@@ -47,16 +47,6 @@
 		  case "none":
 			$.jqplot('xxx');
 		    break;
-		  case "Location":
-<!--
-		  if (plotObject)
-			{
-				plotObject.data = [[<xsl:for-each select="//g:geolog">[<xsl:value-of select="./k:Point/k:coordinates"/>]<xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if></xsl:for-each>]];
-				plotObject.redraw();
-			}
--->
-			plotObject = $.jqplot('chartdiv', [[<xsl:for-each select="//g:geolog">[<xsl:value-of select="./k:Point/k:coordinates"/>]<xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if></xsl:for-each>]]);
-			break;
 		<xsl:for-each select="//g:reading/@id[not(.=preceding::g:reading/@id)]">
 			case &quot;<xsl:value-of select="."/>&quot;:
 			<!-- $.jqplot('chartdiv', [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]]); -->
@@ -90,8 +80,7 @@
 		<p>On this page you can see the details for a given sensor or location over time</p>
 		Please select the sensor or location to show: 
 		<select id="graphSelect" onchange="graphSelectionChanged()">
-		  <option value="location">None</option> 
-		  <option value="location">Location</option> 
+		  <option value="none">None</option> 
 			<xsl:for-each select="//g:reading/@id[not(.=preceding::g:reading/@id)]">
 			<option><xsl:value-of select="."/></option>
 			</xsl:for-each>

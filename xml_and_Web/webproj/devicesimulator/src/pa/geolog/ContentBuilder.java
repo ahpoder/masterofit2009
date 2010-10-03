@@ -65,6 +65,27 @@ public class ContentBuilder {
 		unit.addContent("m");
 		reading.addContent(unit);
 
+		reading = new Element("reading", root);
+		readings.addContent(reading);
+
+		reading.setAttribute("id", "sensor2");
+
+		key = new Element("key", root);
+		key.addContent("temperature");
+		reading.addContent(key);
+
+		value = new Element("value", root);
+		value.addContent("" + ((r.nextDouble() - 0.5) * 80));
+		reading.addContent(value);
+
+		type = new Element("type", root);
+		type.addContent("xs:double");
+		reading.addContent(type);
+
+		unit = new Element("unit", root);
+		unit.addContent("m");
+		reading.addContent(unit);
+
 		Element eStatus = new Element("status", root);
 		eStatus.addContent(status.toString());
 		geolog.addContent(eStatus);

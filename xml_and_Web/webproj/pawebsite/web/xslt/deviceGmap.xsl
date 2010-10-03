@@ -34,65 +34,6 @@
 	var timeout; // This variable is used for changing between http not ready timeout and polling timeout
 	
   function initialize() {
-    
-<!-- Experiments for determining min and max lattitude and longitude	
-	
-	!!ALL_LATTITUDES_START!!
-<xsl:for-each select="//g:geolog/k:Point/k:coordinates">
-	<xsl:variable name="cdiantes" select="getTokens(.)" as="xs:string+" />
-	// cdiantes[0] - lattitude
-	// cdiantes[1] - longitude
-	<xsl:value-of select="$cdiantes[0]"/>
-	<xsl:if test="position()!=last()">
-		<xsl:text>, </xsl:text>
-	</xsl:if>
-</xsl:for-each>
-	!!ALL_LATTITUDES_END!!
-
-	!!ALL_LONGITUDE_START!!
-<xsl:for-each select="//g:geolog/k:Point/k:coordinates">
-	<xsl:variable name="cdiantes" select="getTokens(.)" as="xs:string+" />
-	// cdiantes[0] - lattitude
-	// cdiantes[1] - longitude
-	<xsl:value-of select="$cdiantes[1]"/>
-	<xsl:if test="position()!=last()">
-		<xsl:text>, </xsl:text>
-	</xsl:if>
-</xsl:for-each>
-	!!ALL_LONGITUDE_END!!
-
-	<xsl:for-each select="$elemNames">
-		<xsl:variable name="pos" select="position()" />
-		<elem name="{.}">
-		<xsl:value-of select="$lineItems[$pos]" />
-		</elem>
-	</xsl:for-each>
-
-	<xsl:for-each select="//g:geolog/k:Point/k:coordinates">
-		<xsl:variable name="cdiantes" select="getTokens(.)" as="xs:string+" />
-		// cdiantes[0] - lattitude
-		// cdiantes[1] - longitude
-		
-	<xsl:variable name="minLatLocation">
-		<xsl:for-each select="event">
-			<xsl:sort select="@date" data-type="text" order="ascending" />
-			<xsl:if test="position() = 1">
-				<xsl:value-of select="@date" />
-			</xsl:if>
-		</xsl:for-each>
-	</xsl:variable>
-
-	<xsl:variable name="maxEventDate">
-	<xsl:for-each select="event">
-	<xsl:sort select="@date" data-type="text" order="descending" />
-	<xsl:if test="position() = 1">
-	<xsl:value-of select="@date" />
-	</xsl:if>
-	</xsl:for-each>
-	</xsl:variable>
-
--->
-
 	var latlng = new google.maps.LatLng(!!CENTER_LATTITUDE!!, !!CENTER_LONGITUDE!!);
     var myOptions = {
       zoom: !!CENTER_ZOOM!!,
@@ -101,15 +42,43 @@
     };
     var map = new google.maps.Map(document.getElementById("gmapData"),
         myOptions);
-			
+		
+	<xsl:variable name="deviceID" select="./@id"/>
 <!-- This will show the coordinates as a marker -->
-	<xsl:for-each select="//g:geolog/k:Point/k:coordinates">
-		<xsl:if test="position()=last()">
-			new google.maps.Marker({
-				  position: new google.maps.LatLng(<xsl:value-of select="."/>),
+	<xsl:for-each select="//g:geolog">
+		<xsl:if test="position()=last()">	
+		  var image = new google.maps.MarkerImage('img/green-dot.png',
+		  // This marker is 32 pixels wide by 32 pixels tall.
+		  new google.maps.Size(32, 32),
+		  // The origin for this image is 0,0.
+		  new google.maps.Point(0,0),
+		  // The anchor for this image is the base of the flagpole at 0,32.
+		  new google.maps.Point(16, 32));
+
+			var marker = new google.maps.Marker({
+				  position: new google.maps.LatLng(<xsl:value-of select="./k:Point/k:coordinates"/>),
 				  map: map, 
-				  title:"Hello World!"
+			<xsl:if test="./g:status='OK'">
+				  icon: image,
+			</xsl:if>
+				  title:"<xsl:value-of select="$deviceID"/>"
 				});
+
+			var contentString = '<div id="test">' +
+			                    'Device: <xsl:value-of select="$deviceID"/>' +
+								'<br/>' +
+								'Status: <xsl:value-of select="./g:status"/>' +
+								'<br/>' +
+								'<a href="device?id={$deviceID}&amp;type=graph">Show readings</a>' +
+								'</div>';
+
+			var infowindow = new google.maps.InfoWindow({
+				content: contentString
+			});
+
+			google.maps.event.addListener(marker, 'click', function() {
+			  infowindow.open(map,marker);
+			});
 		</xsl:if>
 	</xsl:for-each>
 
@@ -130,7 +99,6 @@
 	});
 
 	movementPath.setMap(map);
-
   }
 
 	// This function can be reused by both send chat and poll
