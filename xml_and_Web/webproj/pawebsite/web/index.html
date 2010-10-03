@@ -12,9 +12,9 @@
 		<script type="text/javascript">
 			var timeout; // This variable is used for changing between http not ready timeout and polling timeout
 			var markerXML = null; //This variable is to hold the markers as output from the web-site transformer
-	        var deviceMarkers = [];
-			var map = null;
-			var infoWindow = null;
+	        var deviceMarkers = []; //store the markers for reference when killing them
+			var map = null; //the gmap instantiated in loadMap
+			var infoWindow = null; //the google infoWindow instantiated in loadMap
 
 			//Initialize when document is ready
 			function initialize() {
@@ -23,10 +23,10 @@
 			}
 
 			//Load of the map
-			//TODO: Fix the initial zoom etc.
+			//TODO: Make a better solution for the initial center coordinates
 			function loadMap(){
 				var myOptions = {
-				zoom: 5,
+				zoom: 7,
 				center: new google.maps.LatLng(54, 9),
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 				}
@@ -38,19 +38,23 @@
 			//Poll the server. This function is called at regular intervals to update the table and the map
 			//TODO: Is there a problem in making two contemporary AJAX calls on $ (.load and .get)?
 			function pollServer() {
-				//Poll the server for devices. Load the output directly into the table div element
+				//Poll the server for devices (html fragment)
+				//Load the output directly into the table div element
 				$('#devicesTable').load('devices');
 
-				//Poll the server for markers
-				$.get('devices?type=markers', processMarkers,"xml");
+				//Poll the server for markers.
+				//The return values are handled by processMarkers
+				$.get('devices?type=markers', processMarkerXML,"xml");
 			}
 
 			//Callback function for the marker AJAX call in pollServer
-			function processMarkers(data) {
+			function processMarkerXML(data) {
 				// obtain a list of markers from the response
 				markerXML = data.documentElement.getElementsByTagName("marker");
+
 				//Extract markers from the list
 				processDeviceMarkers();
+
 				// When we're done processing we may re-start the timer
 				window.clearTimeout(timeout);
 				timeout = window.setTimeout(pollServer, 6000);
@@ -73,6 +77,9 @@
 						sumlat += lat;
 						sumlng += lng;
 				}
+
+				//Set the map center as a simple average of the marker lat and lng respectively
+				//TODO: this is probably not a clever solution due to the cyclic behavior of coordinates
 				if(markerXML.length > 0)
 					map.panTo(new google.maps.LatLng(sumlat/markerXML.length,sumlng/markerXML.length));
 			}
