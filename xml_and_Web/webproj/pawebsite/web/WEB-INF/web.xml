@@ -79,11 +79,16 @@
 		  <param-name>DevicesXSLT_KML</param-name>
 		  <param-value>xslt/devicesKML.xsl</param-value>
 		</init-param>
+		<init-param>
+		  <param-name>DevicesXSLT_Markers</param-name>
+		  <param-value>xslt/devicesMarkers.xsl</param-value>
+		</init-param>
       <description>
       This is the handler of requests addressed to {context-path}
       </description>
       <servlet-class>DevicesServlet</servlet-class>
     </servlet>
+
 
     <servlet>
       <servlet-name>deviceservlet</servlet-name>

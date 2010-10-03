@@ -8,10 +8,10 @@
 */
 
 import java.io.*;
+import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.util.Random;
-import java.util.*;
 import java.net.*;
 
 import javax.xml.transform.TransformerFactory;
@@ -43,6 +43,10 @@ public class DevicesServlet extends HttpServlet {
 			{
 				response.setContentType("text/xml; charset=UTF-8");
 			}
+			else if (returnType.toLowerCase().equals("markers"))
+			{
+				response.setContentType("text/xml; charset=UTF-8");
+			}
 			else
 			{
 				Debuglog.write("Internal error, invalid return type supplied to DevicesServlet");
@@ -54,7 +58,8 @@ public class DevicesServlet extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			try
 			{
-			  TransformerFactory tFactory = TransformerFactory.newInstance();
+				System.setProperty("javax.xml.transform.TransformerFactory",
+					"net.sf.saxon.TransformerFactoryImpl");
 			  //get the real path for xsl files.
 			  String ctx = null;
 			  if (returnType == null)
@@ -64,6 +69,10 @@ public class DevicesServlet extends HttpServlet {
 			  else if (returnType.toLowerCase().equals("kml"))
 			  {
 			    ctx = getServletContext().getRealPath("/" + getInitParameter("DevicesXSLT_KML"));
+			  }
+			  else if (returnType.toLowerCase().equals("markers"))
+			  {
+			    ctx = getServletContext().getRealPath("/" + getInitParameter("DevicesXSLT_Markers"));
 			  }
 			  else
 			  {
@@ -75,9 +84,14 @@ public class DevicesServlet extends HttpServlet {
 			  Source xmlSource = new StreamSource(conn.getInputStream());
 			  Source xslSource = new StreamSource(new File(ctx));
 			  // Generate the transformer.
+				TransformerFactory tFactory = TransformerFactory.newInstance();
 			  Transformer transformer = tFactory.newTransformer(xslSource);
 			  // Perform the transformation, sending the output to the response.
 			  transformer.transform(xmlSource, new StreamResult(out));
+/*
+				XSLTransformer t = new XSLTransformer(xslSource);
+				t.transform(xmlSource, new StreamResult(out));
+*/
 			}
 			catch (Exception e)
 			{

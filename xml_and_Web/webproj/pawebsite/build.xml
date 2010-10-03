@@ -175,6 +175,7 @@
            value="lib/saxon.jar"/>
   <property name="geolog.xsd"
            value="../schema/geolog.xsd"/>
+           
 
 <!-- ==================== Compilation Classpath =========================== -->
 
@@ -202,7 +203,7 @@
    <pathelement location="${serializer.jar}"/>
    <pathelement location="${xercesImpl.jar}"/>
    <pathelement location="${saxon.jar}"/>
-   
+
     <!-- Include all elements that Tomcat exposes to applications -->
     <fileset dir="${catalina.home}/bin">
       <include name="*.jar"/>
