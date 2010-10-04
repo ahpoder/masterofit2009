@@ -1,7 +1,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 				xmlns:g="http://www.pa.com/geolog"
 				xmlns:k="http://www.opengis.net/kml/2.2"
-                xmlns:fn="http://www.w3.org/2005/xpath-functions"
+        xmlns:fn="http://www.w3.org/2005/xpath-functions"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 version="2.0">
   
   <!--
@@ -10,11 +11,11 @@
 -->
   <!--xsl:import href="date.xsl" /-->
   
-	<xsl:function name="getTokens" as="xs:string+">
+	<xsl:function name="g:getTokens" as="xs:string+">
 		<xsl:param name="str" as="xs:string" />
 		<xsl:analyze-string select="concat($str, ',')" regex='(("[^"]*")+|[^,]*),'>
 			<xsl:matching-substring>
-			<xsl:sequence select='replace(regex-group(1), "^""|""$|("")""", "$1")' />
+				<xsl:sequence select='replace(regex-group(1), "^""|""$|("")""", "$1")' />
 			</xsl:matching-substring>
 		</xsl:analyze-string>
 	</xsl:function>
