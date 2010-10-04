@@ -62,9 +62,17 @@
 			var marker = new google.maps.Marker({
 				  position: new google.maps.LatLng(<xsl:value-of select="fn:substring-after(./k:Point/k:coordinates,',')"/>, <xsl:value-of select="fn:substring-before(./k:Point/k:coordinates,',')"/>),
 				  map: map, 
-			<xsl:if test="./g:status='OK'">
-				  icon: image,
-			</xsl:if>
+			<xsl:choose>
+					<xsl:when test="./g:status='OK'">
+				  icon: "img/map_pin_OK.png",
+				  </xsl:when>
+					<xsl:when test="./g:status='ERROR'">
+				  icon: "img/map_pin_ERROR.png",
+				  </xsl:when>
+					<xsl:otherwise>
+				  icon: "img/map_pin_DISCONNECTED.png",
+				  </xsl:otherwise>
+			</xsl:choose>
 				  title:"<xsl:value-of select="$deviceID"/>"
 				});
 
