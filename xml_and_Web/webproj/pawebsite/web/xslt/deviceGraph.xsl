@@ -31,7 +31,7 @@
 		s.selectedIndex = 0;
 		graphSelectionChanged();
     }
-  
+
 	// This function can be reused by both send chat and poll
 	function serverResponse(data) {
 		// Create a new in-memeory div element and set its content to the repsonse.
