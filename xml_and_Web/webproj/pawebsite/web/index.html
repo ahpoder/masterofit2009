@@ -57,7 +57,7 @@
 
 				// When we're done processing we may re-start the timer
 				window.clearTimeout(timeout);
-				timeout = window.setTimeout(pollServer, 6000);
+				timeout = window.setTimeout(pollServer, 30000);
 			}
 
 			function processDeviceMarkers() {
@@ -73,13 +73,14 @@
 						var lng = parseFloat(markerXML[i].getAttribute("lng"));
 						var id = markerXML[i].getAttribute("id");
 						var name = markerXML[i].getAttribute("name");
-						createDeviceMarker(new google.maps.LatLng(lat,lng),id, name);
+						createDeviceMarker(new google.maps.LatLng(lat,lng),id, name, url);
 						sumlat += lat;
 						sumlng += lng;
 				}
 
 				//Set the map center as a simple average of the marker lat and lng respectively
 				//TODO: this is probably not a clever solution due to the cyclic behavior of coordinates
+				//Perhaps coordinates should be normalized first
 				if(markerXML.length > 0)
 					map.panTo(new google.maps.LatLng(sumlat/markerXML.length,sumlng/markerXML.length));
 			}
@@ -94,14 +95,15 @@
 			}
 
 			//Create a device marker and add it to the map
-			function createDeviceMarker(point,id,name) {
+			function createDeviceMarker(point, id, name) {
 
 				var marker = new google.maps.Marker({
 					map:map,
 					position:point,
 					title:id
 				});
-				var html = "<b>" + name + "</b>"
+
+				var html = "<b>" + name + "</b><br/><a href=devices/" + id.toString() + ">device details" + "</a>";
 				google.maps.event.addListener(marker, 'click', function() {
 					infoWindow.setContent(html);
 					infoWindow.open(map, marker);
