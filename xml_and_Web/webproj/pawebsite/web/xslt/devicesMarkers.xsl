@@ -18,6 +18,7 @@
 		<marker id="{./@id}" 
 					name="device #{./@id}" 
 					lng="{fn:substring-before(./k:Point/k:coordinates, ',')}" 
-					lat="{fn:substring-after(./k:Point/k:coordinates, ',')}"/> 
+					lat="{fn:substring-after(./k:Point/k:coordinates, ',')}"
+					status="{./@status}"/> 
   </xsl:template>
 </xsl:stylesheet>

@@ -73,7 +73,8 @@
 						var lng = parseFloat(markerXML[i].getAttribute("lng"));
 						var id = markerXML[i].getAttribute("id");
 						var name = markerXML[i].getAttribute("name");
-						createDeviceMarker(new google.maps.LatLng(lat,lng),id, name);
+						var status = markerXML[i].getAttribute("status");
+						createDeviceMarker(new google.maps.LatLng(lat,lng),id, name, status);
 						sumlat += lat;
 						sumlng += lng;
 				}
@@ -95,15 +96,25 @@
 			}
 
 			//Create a device marker and add it to the map
-			function createDeviceMarker(point, id, name) {
-
+			function createDeviceMarker(point, id, name,status) {
+				var iconpath;
+				//The iconpath might have been set by the xsl as well
+				switch (status) {
+					case "OK": { iconpath="img/map_pin_OK.png"; break; }
+					case "ERROR": { iconpath="img/map_pin_ERROR.png"; break; }
+					case "DISCONNECTED": { iconpath="img/map_pin_DISCONNECTED.png"; break; }
+					case "DEPRECATED": { iconpath="img/map_pin_DEPRECATED.png"; break; }
+					default : { iconpath="img/map_pin_ERROR.png"; break; }
+				}
 				var marker = new google.maps.Marker({
 					map:map,
 					position:point,
-					title:id
+					title:id,
+					icon:iconpath
 				});
 
-				var html = "<b>" + name + "</b><br/><a href=devices/" + id.toString() + ">device details" + "</a>";
+				var icon = marker.getIcon()
+				var html = "<b>" + name + "</b><br/><a href=device/?id=" + id.toString() + ">device details" + "</a>";
 				google.maps.event.addListener(marker, 'click', function() {
 					infoWindow.setContent(html);
 					infoWindow.open(map, marker);
@@ -116,8 +127,9 @@
 	<body onload="initialize()">
 	<h1>Welcome to the PA geolog website</h1>
 	<br/>
-	<p>For a list of registered devices please select the below link</p>
-	<a href="/paweb/devices">Devices</a>
+	<p>On this page you can see all devices registered with the service.</p>
+	<p>To view details for a given device follow the link, either from the table below or from the map on the right. Device status is signaled by the color coding.</p>
+	<p>For debugging purposes the table currently holds a direct link to the web-service. This link will return an XML document.</p>
 	<table>
 		<tr valign="top">
 			<td>
@@ -129,17 +141,12 @@
 		</tr>
 	</table>
 	<div id="result"></div>
+	<p>Other links present for debugging purposes. These links will return XML documents.</p>
 	<br/>
-		<a href="http://localhost:8080/geolog/devices">
-			<xsl:text>Show the table information as sent from the web-service</xsl:text>
-		</a>
+		<a href="http://localhost:8080/geolog/devices">Show the table information as sent from the web-service.</a>
 		<br/>
-		<a href="http://localhost:8080/paweb/devices?type=kml">
-			<xsl:text>Show the kml file to use for Google Earth display</xsl:text>
-		</a>
+		<a href="http://localhost:8080/paweb/devices?type=kml">Show the kml file to use for Google Earth display.</a>
 		<br/>
-		<a href="http://localhost:8080/paweb/devices?type=markers">
-			<xsl:text>Show the marker information to use for Google Map display</xsl:text>
-		</a>
+		<a href="http://localhost:8080/paweb/devices?type=markers">Show the marker information to use for Google Map display.</a>
 	</body>
 </html>
