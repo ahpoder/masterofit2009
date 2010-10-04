@@ -73,7 +73,7 @@
 						var lng = parseFloat(markerXML[i].getAttribute("lng"));
 						var id = markerXML[i].getAttribute("id");
 						var name = markerXML[i].getAttribute("name");
-						createDeviceMarker(new google.maps.LatLng(lat,lng),id, name, url);
+						createDeviceMarker(new google.maps.LatLng(lat,lng),id, name);
 						sumlat += lat;
 						sumlng += lng;
 				}
