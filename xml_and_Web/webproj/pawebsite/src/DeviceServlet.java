@@ -24,6 +24,11 @@ import javax.xml.transform.stream.StreamResult;
 
 public class DeviceServlet extends HttpServlet {
 
+  public void init() throws ServletException {
+        super.init();
+        System.setProperty("javax.xml.transform.TransformerFactory", "net.sf.saxon.TransformerFactoryImpl");
+  }
+
 	public static String slurp (InputStream in) throws IOException {
 		StringBuffer out = new StringBuffer();
 		byte[] b = new byte[4096];
@@ -44,18 +49,18 @@ public class DeviceServlet extends HttpServlet {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "No device ID supplied");
 				return;
 			}
-		
+
 			URL url = new URL("http://" + request.getServerName() + ":" + request.getServerPort() + "/geolog/devices/" + deviceID);
 			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setAllowUserInteraction(false); // no user interact [like pop up]
 
 			// The servlet returns HTML.
-			response.setContentType("text/html; charset=UTF-8");    
+			response.setContentType("text/html; charset=UTF-8");
 			// Output goes in the response stream.
 			PrintWriter out = response.getWriter();
 			try
-			{	
+			{
 			  TransformerFactory tFactory = TransformerFactory.newInstance();
 			  //get the real path for xsl files.
 			  String ctx = null;
@@ -75,25 +80,25 @@ public class DeviceServlet extends HttpServlet {
 			  {
 			    ctx = getServletContext().getRealPath("/" + getInitParameter("DeviceXSLT_GMAP"));
 			  }
-			  
+
 			  if (ctx == null)
 			  {
 				Debuglog.write("Internal error, invalid type");
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "Invalid type supplied");
 				return;
 			  }
-			  
+
 			  String xmlSourceText = slurp(conn.getInputStream());
-			  
+/*
 			  if (displayType.toLowerCase().equals("gmap"))
 			  {
 				// Extract necesarry info.
 			  }
-			  
+*/
 			  // Get the XML input document and the stylesheet.
 // This method is much simpler but the we cannot do any processing on the raw XML (needed in GMAP)
 //			  Source xmlSource = new StreamSource(conn.getInputStream());
-			  
+
 			  StringReader strReader = new StringReader(xmlSourceText);
 			  Source xmlSource = new StreamSource(strReader);
 			  Source xslSource = new StreamSource(new File(ctx));
@@ -103,27 +108,28 @@ public class DeviceServlet extends HttpServlet {
 
 			  // This is a short-hand version, but as we need to do post-processing it is not possible
 			  //transformer.transform(xmlSource, new StreamResult(out));
-			  
+
 			  ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			  PrintWriter ps = new PrintWriter(baos);
 			  transformer.transform(xmlSource, new StreamResult(ps));
 			  ps.flush();
 			  String result = baos.toString();
-			  if (displayType.toLowerCase().equals("graph"))
+			  if (displayType == null){}
+			  else if (displayType.toLowerCase().equals("graph"))
 			  {
 				Pattern p = Pattern.compile("!!DATETIME_START_TAG!!(.*?)!!DATETIME_END_TAG!!");
 				Matcher m = p.matcher(result);
-								
+
 				StringBuffer sb = new StringBuffer();
-				SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S");  
+				SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S");
  				long firstTimeStamp = 0;
 				while (m.find()) {
 					String timestamp = m.group();
 					timestamp = timestamp.substring(22, timestamp.length() - 20);
-					
+
 					Date d = parser.parse(timestamp);
 					long ut = d.getTime() / 1000;
-					
+
 //					long startTimestamp = System.currentTimeMillis() / 1000;
 
 					Debuglog.write("Found timestamp: " + timestamp + " and converted it to: " + ut);
@@ -133,7 +139,7 @@ public class DeviceServlet extends HttpServlet {
 						firstTimeStamp = ut;
 					}
 					ut -= firstTimeStamp;
-					
+
 					m.appendReplacement(sb, new Long(ut).toString());
 					// m.group(), m.start(), m.end()
 				}
