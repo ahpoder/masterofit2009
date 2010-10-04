@@ -22,7 +22,7 @@ public class ContentBuilder {
 	     return dateFormat.format(date);
 	 }
 
-	public static String buildContent(String id, DeviceStatus status, double latitude, double longitude) throws IOException
+	public static String buildContent(String id, DeviceStatus status, double longitude, double latitude) throws IOException
 	{
 		Namespace root = Namespace.getNamespace("http://www.pa.com/geolog");
 		Element deviceElement = new Element("device", root);
@@ -94,7 +94,7 @@ public class ContentBuilder {
 		geolog.addContent(eLocation);
 
 		Element coordinates = new Element("coordinates", kml);
-		coordinates.addContent("" + latitude + "," + longitude);
+		coordinates.addContent("" + longitude + "," + latitude );
 		eLocation.addContent(coordinates);
 
 		StringWriter sw = new StringWriter();

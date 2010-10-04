@@ -48,7 +48,7 @@ public class DeviceMain {
 					double dLatitude = Double.valueOf(latitude);
 					double dLongitude = Double.valueOf(longitude);
 
-					String payload = ContentBuilder.buildContent(id, dStatus, dLatitude, dLongitude);
+					String payload = ContentBuilder.buildContent(id, dStatus, dLongitude, dLatitude);
 					address = address + "/geolog/devices/" + id;
 					DeviceConnection.postInfo(address, payload);
 				  }
@@ -158,7 +158,7 @@ public class DeviceMain {
 	}
 
 	private void runDevice(CommandArguments ca) throws IOException {
-		String payload = ContentBuilder.buildContent(ca.getSingleID(), ca.getStatus(), ca.getLatitude(), ca.getLongitude());
+		String payload = ContentBuilder.buildContent(ca.getSingleID(), ca.getStatus(), ca.getLongitude(), ca.getLatitude());
 		DeviceConnection.postInfo(ca.getHost() + "/geolog/devices/" + ca.getSingleID(), payload);
 	}
 
