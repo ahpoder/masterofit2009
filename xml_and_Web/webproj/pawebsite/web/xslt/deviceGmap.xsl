@@ -58,8 +58,9 @@
 		  // The anchor for this image is the base of the flagpole at 0,32.
 		  new google.maps.Point(16, 32));
 
+			// Need to extract the coordinates, as the KML order is opposite the LatLng order
 			var marker = new google.maps.Marker({
-				  position: new google.maps.LatLng(<xsl:value-of select="./k:Point/k:coordinates"/>),
+				  position: new google.maps.LatLng(<xsl:value-of select="fn:substring-after(./k:Point/k:coordinates,',')"/>, <xsl:value-of select="fn:substring-before(./k:Point/k:coordinates,',')"/>),
 				  map: map, 
 			<xsl:if test="./g:status='OK'">
 				  icon: image,
@@ -88,7 +89,7 @@
 <!-- This will draw the poly-line -->
   var movementCoordinates = [
 	<xsl:for-each select="//g:geolog/k:Point/k:coordinates">
-		new google.maps.LatLng(<xsl:value-of select="."/>)
+		new google.maps.LatLng(<xsl:value-of select="fn:substring-after(.,',')"/>, <xsl:value-of select="fn:substring-before(.,',')"/>)
 		<xsl:if test="position()!=last()">
 			<xsl:text>, </xsl:text>
 		</xsl:if>
