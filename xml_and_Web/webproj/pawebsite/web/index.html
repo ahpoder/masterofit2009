@@ -103,7 +103,7 @@
 					case "OK": { iconpath="img/map_pin_OK.png"; break; }
 					case "ERROR": { iconpath="img/map_pin_ERROR.png"; break; }
 					case "DISCONNECTED": { iconpath="img/map_pin_DISCONNECTED.png"; break; }
-					case "DEPRECATED": { iconpath="img/map_pin_DEPRECATED.png"; break; }
+					case "DEPRECATED": { iconpath="img/map_pin_DISCONNECTED.png"; break; }
 					default : { iconpath="img/map_pin_ERROR.png"; break; }
 				}
 				var marker = new google.maps.Marker({
@@ -114,7 +114,7 @@
 				});
 
 				var icon = marker.getIcon()
-				var html = "<b>" + name + "</b><br/><a href=device/?id=" + id.toString() + ">device details" + "</a>";
+				var html = "<b>" + name + "</b><br/><a href=device?id=" + id.toString() + ">device details" + "</a>";
 				google.maps.event.addListener(marker, 'click', function() {
 					infoWindow.setContent(html);
 					infoWindow.open(map, marker);
