@@ -1,12 +1,14 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 				xmlns:g="http://www.pa.com/geolog"
-				xmlns:date="http://exslt.org/dates-and-times"
-                extension-element-prefixes="date"
 				xmlns:k="http://www.opengis.net/kml/2.2"
                 xmlns:fn="http://www.w3.org/2005/xpath-functions"
                 version="2.0">
   
-  <xsl:import href="date.xsl" />
+  <!-- Part of test - not used.
+				xmlns:date="http://exslt.org/dates-and-times"
+                extension-element-prefixes="date"
+
+  xsl:import href="date.xsl" /-->
   
   <xsl:template match="g:device">
 	<html>
