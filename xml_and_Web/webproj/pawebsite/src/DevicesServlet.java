@@ -22,6 +22,11 @@ import javax.xml.transform.stream.StreamResult;
 
 public class DevicesServlet extends HttpServlet {
 
+  public void init() throws ServletException {
+        super.init();
+        System.setProperty("javax.xml.transform.TransformerFactory", "net.sf.saxon.TransformerFactoryImpl");
+  }
+
   public void doGet(HttpServletRequest request,
                     HttpServletResponse response)
       throws IOException, ServletException {
@@ -58,8 +63,6 @@ public class DevicesServlet extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			try
 			{
-				System.setProperty("javax.xml.transform.TransformerFactory",
-					"net.sf.saxon.TransformerFactoryImpl");
 			  //get the real path for xsl files.
 			  String ctx = null;
 			  if (returnType == null)
@@ -88,10 +91,6 @@ public class DevicesServlet extends HttpServlet {
 			  Transformer transformer = tFactory.newTransformer(xslSource);
 			  // Perform the transformation, sending the output to the response.
 			  transformer.transform(xmlSource, new StreamResult(out));
-/*
-				XSLTransformer t = new XSLTransformer(xslSource);
-				t.transform(xmlSource, new StreamResult(out));
-*/
 			}
 			catch (Exception e)
 			{
