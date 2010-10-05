@@ -20,7 +20,9 @@
 			<tr>
 				<th>DateTime</th>
 				<th>Status</th>
-				<th>sensor1</th> <!-- How do we iterate sensors? Get unique sensorids ... -->
+				<xsl:for-each select="//g:reading/@id[not(.=preceding::g:reading/@id)]">
+				<th><xsl:value-of select="."/></th>
+				</xsl:for-each>
 			</tr>
 			<xsl:apply-templates mode="table" select="//g:geolog"/> 
 		</table>

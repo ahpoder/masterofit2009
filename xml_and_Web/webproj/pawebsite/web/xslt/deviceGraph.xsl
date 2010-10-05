@@ -4,12 +4,6 @@
                 xmlns:fn="http://www.w3.org/2005/xpath-functions"
                 version="2.0">
   
-  <!-- Part of test - not used.
-				xmlns:date="http://exslt.org/dates-and-times"
-                extension-element-prefixes="date"
-
-  xsl:import href="date.xsl" /-->
-  
   <xsl:template match="g:device">
 	<html>
 		<head>
@@ -30,6 +24,7 @@
 		var s = document.getElementById("graphSelect");
 		s.selectedIndex = 0;
 		graphSelectionChanged();
+		pollServer();
     }
 
 	// This function can be reused by both send chat and poll
@@ -51,6 +46,14 @@
 		var s = document.getElementById("graphSelect");
 		var o = s.options[s.selectedIndex];
 		var selected = o.text;
+		
+<!--
+		// 
+		// $.jqplot('chartdiv', [[<xsl:for-each select="//g:geolog">[<xsl:value-of select="date:seconds(./@dateTime))"/>,<xsl:value-of select="./g:readings/g:reading[$currentID=@id]/g:value"/>]<xsl:if test="position()!=last()"><xsl:text>, </xsl:text></xsl:if></xsl:for-each>]]);
+		//
+		
+-->
+
 		switch (selected) {
 		<xsl:for-each select="//g:reading/@id[not(.=preceding::g:reading/@id)]">
 			case &quot;<xsl:value-of select="."/>&quot;:

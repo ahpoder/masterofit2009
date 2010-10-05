@@ -38,6 +38,18 @@ public class DeviceServlet extends HttpServlet {
 		return out.toString();
 	}
 
+public static String stack2string(Exception e) {
+  try {
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    e.printStackTrace(pw);
+    return "------\r\n" + sw.toString() + "------\r\n";
+  }
+  catch(Exception e2) {
+    return "bad stack2string";
+  }
+ }
+ 
   public void doGet(HttpServletRequest request,
                     HttpServletResponse response)
       throws IOException, ServletException {
@@ -163,7 +175,7 @@ public class DeviceServlet extends HttpServlet {
 				e.printStackTrace(ps);
 				ps.flush();
 				Debuglog.write(baos.toString());
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error: " + e.getMessage());
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error: " + e.getMessage() + "|" + stack2string(e));
 			}
 			out.close();
 			conn.disconnect();
@@ -177,7 +189,7 @@ public class DeviceServlet extends HttpServlet {
 			e.printStackTrace(ps);
 			ps.flush();
 			Debuglog.write(baos.toString());
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error: " + e.getMessage());
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error2: " + e.getMessage() + "|" + stack2string(e));
 		}
   }
 

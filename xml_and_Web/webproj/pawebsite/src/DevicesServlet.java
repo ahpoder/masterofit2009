@@ -27,6 +27,18 @@ public class DevicesServlet extends HttpServlet {
         System.setProperty("javax.xml.transform.TransformerFactory", "net.sf.saxon.TransformerFactoryImpl");
   }
 
+	public static String stack2string(Exception e) {
+	  try {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		e.printStackTrace(pw);
+		return "------\r\n" + sw.toString() + "------\r\n";
+	  }
+	  catch(Exception e2) {
+		return "bad stack2string";
+	  }
+	 }
+ 
   public void doGet(HttpServletRequest request,
                     HttpServletResponse response)
       throws IOException, ServletException {
@@ -55,7 +67,7 @@ public class DevicesServlet extends HttpServlet {
 			else
 			{
 				Debuglog.write("Internal error, invalid return type supplied to DevicesServlet");
-				response.sendError(HttpServletResponse.SC_NOT_FOUND, String.format("Invalid return type supplied (%1$)", returnType));
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, String.format("Invalid return type supplied (" + returnType + ")"));
 				return;
 			}
 
@@ -100,7 +112,7 @@ public class DevicesServlet extends HttpServlet {
 				e.printStackTrace(ps);
 				ps.flush();
 				Debuglog.write(baos.toString());
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error: " + e.getMessage());
+				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error: " + e.getMessage() + "|" + stack2string(e));
 			}
 			out.close();
 			conn.disconnect();
@@ -114,7 +126,7 @@ public class DevicesServlet extends HttpServlet {
 			e.printStackTrace(ps);
 			ps.flush();
 			Debuglog.write(baos.toString());
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error: " + e.getMessage());
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal error2: " + e.getMessage() + "|" + stack2string(e));
 		}
   }
 
