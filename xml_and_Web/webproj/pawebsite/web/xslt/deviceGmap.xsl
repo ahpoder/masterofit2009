@@ -36,6 +36,53 @@
 <script type="text/javascript">
 	var timeout; // This variable is used for changing between http not ready timeout and polling timeout
 	
+	var map;
+	var polylinePath; // Used to update the current polyline
+	var variableDefinitionString; // holder stirng to allow easy comparison as document is not updated
+	<xsl:variable name="deviceID" select="./@id"/>
+<!-- This will show the coordinates as a marker -->
+/*!!!VAR_DEF_START!!!*/
+	// Need to extract the coordinates, as the KML order is opposite the LatLng order
+	<xsl:for-each select="//g:geolog">
+		<xsl:if test="position()=last()">	
+			currentMarkerPosition = new google.maps.LatLng(<xsl:value-of select="fn:substring-after(./k:Point/k:coordinates,',')"/>, <xsl:value-of select="fn:substring-before(./k:Point/k:coordinates,',')"/>);
+		</xsl:if>
+	</xsl:for-each>
+
+	currentMarker = new google.maps.Marker({
+		  position: currentMarkerPosition,
+	<xsl:choose>
+			<xsl:when test="./g:status='OK'">
+		  icon: "img/map_pin_OK.png",
+		  </xsl:when>
+			<xsl:when test="./g:status='ERROR'">
+		  icon: "img/map_pin_ERROR.png",
+		  </xsl:when>
+			<xsl:otherwise>
+		  icon: "img/map_pin_DISCONNECTED.png",
+		  </xsl:otherwise>
+	</xsl:choose>
+		  title:"<xsl:value-of select="$deviceID"/>"
+		});
+
+		contentString = '<div id="test">' +
+						'Device: <xsl:value-of select="$deviceID"/>' +
+						'<br/>' +
+						'Status: <xsl:value-of select="./g:status"/>' +
+						'<br/>' +
+						'<a href="device?id={$deviceID}&amp;type=graph">Show readings</a>' +
+						'</div>';
+
+    movementCoordinates = [
+		<xsl:for-each select="//g:geolog/k:Point/k:coordinates">
+			new google.maps.LatLng(<xsl:value-of select="fn:substring-after(.,',')"/>, <xsl:value-of select="fn:substring-before(.,',')"/>)
+			<xsl:if test="position()!=last()">
+				<xsl:text>, </xsl:text>
+			</xsl:if>
+		</xsl:for-each>
+		];
+/*!!!VAR_DEF_SLUT!!!*/
+	
   function initialize() {
 	var latlng = new google.maps.LatLng(!!CENTER_LATTITUDE!!, !!CENTER_LONGITUDE!!);
     var myOptions = {
@@ -43,11 +90,9 @@
       center: latlng,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-    var map = new google.maps.Map(document.getElementById("gmapData"),
+    map = new google.maps.Map(document.getElementById("gmapData"),
         myOptions);
 		
-	<xsl:variable name="deviceID" select="./@id"/>
-<!-- This will show the coordinates as a marker -->
 	<xsl:for-each select="//g:geolog">
 		<xsl:if test="position()=last()">	
 		  var image = new google.maps.MarkerImage('img/green-dot.png',
@@ -58,70 +103,68 @@
 		  // The anchor for this image is the base of the flagpole at 0,32.
 		  new google.maps.Point(16, 32));
 
-			// Need to extract the coordinates, as the KML order is opposite the LatLng order
-			var marker = new google.maps.Marker({
-				  position: new google.maps.LatLng(<xsl:value-of select="fn:substring-after(./k:Point/k:coordinates,',')"/>, <xsl:value-of select="fn:substring-before(./k:Point/k:coordinates,',')"/>),
-				  map: map, 
-			<xsl:choose>
-					<xsl:when test="./g:status='OK'">
-				  icon: "img/map_pin_OK.png",
-				  </xsl:when>
-					<xsl:when test="./g:status='ERROR'">
-				  icon: "img/map_pin_ERROR.png",
-				  </xsl:when>
-					<xsl:otherwise>
-				  icon: "img/map_pin_DISCONNECTED.png",
-				  </xsl:otherwise>
-			</xsl:choose>
-				  title:"<xsl:value-of select="$deviceID"/>"
-				});
-
-			var contentString = '<div id="test">' +
-			                    'Device: <xsl:value-of select="$deviceID"/>' +
-								'<br/>' +
-								'Status: <xsl:value-of select="./g:status"/>' +
-								'<br/>' +
-								'<a href="device?id={$deviceID}&amp;type=graph">Show readings</a>' +
-								'</div>';
-
-			var infowindow = new google.maps.InfoWindow({
+		  currentMarker.setMap(map);
+		  
+          var infowindow = new google.maps.InfoWindow({
 				content: contentString
 			});
 
-			google.maps.event.addListener(marker, 'click', function() {
-			  infowindow.open(map,marker);
+			google.maps.event.addListener(currentMarker, 'click', function() {
+			  infowindow.open(map,currentMarker);
 			});
 		</xsl:if>
 	</xsl:for-each>
 
 <!-- This will draw the poly-line -->
-  var movementCoordinates = [
-	<xsl:for-each select="//g:geolog/k:Point/k:coordinates">
-		new google.maps.LatLng(<xsl:value-of select="fn:substring-after(.,',')"/>, <xsl:value-of select="fn:substring-before(.,',')"/>)
-		<xsl:if test="position()!=last()">
-			<xsl:text>, </xsl:text>
-		</xsl:if>
-	</xsl:for-each>
-   ];
-	var movementPath = new google.maps.Polyline({
+	polylinePath = new google.maps.Polyline({
 		path: movementCoordinates,
 		strokeColor: "#FF0000",
 		strokeOpacity: 1.0,
 		strokeWeight: 2
 	});
 
-	movementPath.setMap(map);
+	polylinePath.setMap(map);
+	
+	var myString = document.documentElement.innerHTML;
+	myString = myString.replace(/\n/g,'\uffff');
+	var myRegexp = new RegExp("/\\*!!!VAR_DEF_START!!!\\*/(.*?)/\\*!!!VAR_DEF_SLUT!!!\\*/");
+	var match = myRegexp.exec(myString);
+	variableDefinitionString = match[1].replace(/\uffff/g,'\n');
   }
 
 	// This function can be reused by both send chat and poll
 	function serverResponse(data) {
-		// Create a new in-memeory div element and set its content to the repsonse.
-		// This is needed in order to extract sub-elements from the response.
-		var d = document.createElement("div");
-		d.innerHTML = data;
-		// Extract the first table (there should be only 1)
-		var u = d.getElementsByTagName("div");
-		//$('#deviceData').html(u[0].innerHTML);
+		var tempPosition = currentMarkerPosition;
+		
+		// Extract the new variables as a string
+		var myString = data;
+		myString = myString.replace(/\n/g,'\uffff');
+		var myRegexp = new RegExp("/\\*!!!VAR_DEF_START!!!\\*/(.*?)/\\*!!!VAR_DEF_SLUT!!!\\*/");
+		var match = myRegexp.exec(myString);
+		var newVars = match[1].replace(/\uffff/g,'\n');
+		
+		// Extrcat the old variables as a string for comparison. Unfortunately document.documentElement.innerHTML do
+		// not work as eval only update the variable not the underlying document.
+
+		if (newVars != variableDefinitionString)
+		{
+			currentMarker.setMap(null); // Clear old marker, as new marker variable will override old
+			polylinePath.setMap(null); // This does not have to be done before eval, but we do it anyway
+
+			eval(newVars);
+			
+			currentMarker.setMap(map);
+			
+			polylinePath = new google.maps.Polyline({
+				path: movementCoordinates,
+				strokeColor: "#FF0000",
+				strokeOpacity: 1.0,
+				strokeWeight: 2
+			});
+
+			polylinePath.setMap(map);
+			variableDefinitionString = newVars;
+		}
 
 		// Re-start the timeout
 		window.clearTimeout(timeout);
@@ -129,7 +172,7 @@
 	}
 
 	function pollServer() {
-		$.get("http://" + location.host + "/paweb/device", { id: <xsl:value-of select="@id"/> }, serverResponse);
+		$.get("http://" + location.host + "/paweb/device", { id: <xsl:value-of select="@id"/>, type: "gmap" }, serverResponse);
     }
 	// Start the poll timer (maybe we should check for document ready???)
 	timeout = window.setTimeout(pollServer, 3000);
