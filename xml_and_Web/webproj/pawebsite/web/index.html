@@ -114,7 +114,7 @@
 				});
 
 				var icon = marker.getIcon()
-				var html = "<b>" + name + "</b><br/><a href=device?id=" + id.toString() + ">device details" + "</a>";
+				var html = "<b>" + name + "</b><br/><a href=device?id=" + id.toString() + "&type=graph>device details" + "</a><br/><a href=device?id=" + id.toString() + "&type=gmap>device location history" + "</a>";
 				google.maps.event.addListener(marker, 'click', function() {
 					infoWindow.setContent(html);
 					infoWindow.open(map, marker);
