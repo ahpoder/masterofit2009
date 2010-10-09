@@ -54,25 +54,25 @@
   <!-- TODO: Can we make this nicer and less brittle? 
 							Is it possible to grab the web-site url from in here? -->
   <xsl:template mode="websiteurl" match="g:deviceURL">
-		<a href="{concat(substring-before(.,'/geolog/'), '/paweb/device?id=', substring-after(.,'/geolog/devices/'))}">
+		<a href="{concat('device?id=', substring-after(.,'/geolog/devices/'))}">
 			<xsl:text>Web-site</xsl:text>
 		</a>
   </xsl:template>
 
   <xsl:template mode="websiteAJAXurl" match="g:deviceURL">
-		<a href="{concat(substring-before(.,'/geolog/'), '/paweb/device?id=', substring-after(.,'/geolog/devices/'), '&amp;type=AJAX')}">
+		<a href="{concat('device?id=', substring-after(.,'/geolog/devices/'), '&amp;type=AJAX')}">
 			<xsl:text>AJAX Web-site</xsl:text>
 		</a>
   </xsl:template>
 
   <xsl:template mode="websiteGRAPHurl" match="g:deviceURL">
-		<a href="{concat(substring-before(.,'/geolog/'), '/paweb/device?id=', substring-after(.,'/geolog/devices/'), '&amp;type=GRAPH')}">
+		<a href="{concat('device?id=', substring-after(.,'/geolog/devices/'), '&amp;type=GRAPH')}">
 			<xsl:text>Graph Web-site</xsl:text>
 		</a>
   </xsl:template>
 
   <xsl:template mode="websiteGMAPurl" match="g:deviceURL">
-		<a href="{concat(substring-before(.,'/geolog/'), '/paweb/device?id=', substring-after(.,'/geolog/devices/'), '&amp;type=GMAP')}">
+		<a href="{concat('device?id=', substring-after(.,'/geolog/devices/'), '&amp;type=GMAP')}">
 			<xsl:text>GMap Web-site</xsl:text>
 		</a>
   </xsl:template>

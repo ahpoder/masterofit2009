@@ -29,7 +29,7 @@
 				<xsl:apply-templates mode="table" select="//g:deviceSimple"/> 
     	</table>
     	<br/>
-			<a href="http://localhost:8080/geolog/devices">
+			<a href="devices">
 				<xsl:text>Show this information as sent from the web-service</xsl:text>
 			</a>
     </body>
