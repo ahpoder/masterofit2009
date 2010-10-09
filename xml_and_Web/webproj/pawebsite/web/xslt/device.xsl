@@ -3,8 +3,10 @@
 				xmlns:k="http://www.opengis.net/kml/2.2"
                 xmlns:fn="http://www.w3.org/2005/xpath-functions"
                 version="2.0">
+<!-- This is the first device stylesheet generated and will simply
+     generate a list of all readings for all sensors in a table. -->
 
-  <xsl:template match="g:device">
+	<xsl:template match="g:device">
 	<html>
 		<head>
 			<link href="style.css" rel="stylesheet" type="text/css"/>
@@ -20,10 +22,12 @@
 			<tr>
 				<th>DateTime</th>
 				<th>Status</th>
+				<!-- iterate the unique reading's id and create a table heading for each -->
 				<xsl:for-each select="//g:reading/@id[not(.=preceding::g:reading/@id)]">
-				<th><xsl:value-of select="."/></th>
+					<th><xsl:value-of select="."/></th>
 				</xsl:for-each>
 			</tr>
+			<!-- Apply the template to generate the actual table of data -->
 			<xsl:apply-templates mode="table" select="//g:geolog"/> 
 		</table>
 		</div>
@@ -45,19 +49,6 @@
   			Cell color will depend on the status value -->
   <xsl:template mode="table" match="g:status">
 		<td class="{.}"><xsl:value-of select="."/></td>
-		<!--
-		<xsl:choose>
-			<xsl:when test="fn:compare('OK', .)=0">
-				<td bgcolor="green"><xsl:value-of select="."/></td>
-			</xsl:when>
-			<xsl:when test="fn:compare('ERROR', ./text())=0">
-				<td bgcolor="red"><xsl:value-of select="."/></td>
-			</xsl:when>
-			<xsl:otherwise>
-				<td bgcolor="yellow"><xsl:value-of select="."/></td>
-			</xsl:otherwise>
-		</xsl:choose>
-		-->
   </xsl:template>
 
   <!-- Format a reading for display in a table -->
