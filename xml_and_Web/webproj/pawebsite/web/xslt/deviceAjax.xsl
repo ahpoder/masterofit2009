@@ -4,6 +4,11 @@
                 xmlns:fn="http://www.w3.org/2005/xpath-functions"
                 version="2.0">
 
+<!-- This is the second device stylesheet generated and will 
+     generate the same table as device.xsl, yet it will also 
+	 generate the javascript (JQuery) code to update the table
+	 automatically using AJAX -->
+				
   <xsl:template match="g:device">
 	<html>
 		<head>
@@ -15,7 +20,7 @@
 <script type="text/javascript">
 	var timeout; // This variable is used for changing between http not ready timeout and polling timeout
 	
-	// This function can be reused by both send chat and poll
+	// This function is called when AJAX response is reveived
 	function serverResponse(data) {
 		// Create a new in-memeory div element and set its content to the repsonse.
 		// This is needed in order to extract sub-elements from the response.
@@ -23,6 +28,9 @@
 		d.innerHTML = data;
 		// Extract the first table (there should be only 1)
 		var u = d.getElementsByTagName("div");
+		// Update the table with the new one. This is done 
+		// regardless of whether there are any changes, as
+		// It is not visible anyway.
 		$('#deviceData').html(u[0].innerHTML);
 
 		// Re-start the timeout
@@ -30,10 +38,14 @@
 		timeout = window.setTimeout(pollServer, 3000);
 	}
 	
+	// This function uses JQuery to make an AJAX request for new data.
 	function pollServer() {
 		$.get("http://" + location.host + "/paweb/device", { id: <xsl:value-of select="@id"/> }, serverResponse);
     }
-	// Start the poll timer (maybe we should check for document ready???)
+	// Start the poll timer.
+	// As the time is long enough that we are sure the document is loaded
+	// before the timer expires it is OK, otherwise it should be done in
+	// body initialize callback.
 	timeout = window.setTimeout(pollServer, 3000);
 </script>
 
@@ -47,10 +59,12 @@
 			<tr>
 				<th>DateTime</th>
 				<th>Status</th>
+				<!-- iterate the unique reading's id and create a table heading for each -->
 				<xsl:for-each select="//g:reading/@id[not(.=preceding::g:reading/@id)]">
-				<th><xsl:value-of select="."/></th>
+					<th><xsl:value-of select="."/></th>
 				</xsl:for-each>
 			</tr>
+			<!-- Apply the template to generate the actual table of data -->
 			<xsl:apply-templates mode="table" select="//g:geolog"/> 
 		</table>
 		</div>
@@ -72,19 +86,6 @@
   			Cell color will depend on the status value -->
   <xsl:template mode="table" match="g:status">
 		<td class="{.}"><xsl:value-of select="."/></td>
-		<!--
-		<xsl:choose>
-			<xsl:when test="fn:compare('OK', .)=0">
-				<td bgcolor="green"><xsl:value-of select="."/></td>
-			</xsl:when>
-			<xsl:when test="fn:compare('ERROR', ./text())=0">
-				<td bgcolor="red"><xsl:value-of select="."/></td>
-			</xsl:when>
-			<xsl:otherwise>
-				<td bgcolor="yellow"><xsl:value-of select="."/></td>
-			</xsl:otherwise>
-		</xsl:choose>
-		-->
   </xsl:template>
 
   <!-- Format a reading for display in a table -->
