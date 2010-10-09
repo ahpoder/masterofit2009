@@ -9,11 +9,12 @@
 	<body>
 		<h1>Welcome to the PA geolog Web-service</h1>
 		<br/>
-		<p>You've arrived to the PA web-service discription page. This service is intended for use by clients aware of the protocol described below.</p>
+		<p>You've arrived to the PA web-service discription page. This service is intended for use by clients aware of the protocol described below.
+		<br/>All the URLs will return an XML document.</p>
 		<body class="c3"><p class="c2"><span class="c0">Web-service API</span></p
 		<table cellpadding="0" cellspacing="0" class="c4"><tbody>
 		<tr><td class="c1"><p class="c2"><span class="c0">URL (&lt;server&gt;/geolog/)</span></p></td><td class="c1"><p class="c2"><span class="c0">Request</span></p></td><td class="c1"><p class="c2"><span class="c0">Description</span></p></td></tr>
-		<tr><td class="c1"><p class="c2"><span class="c0">devices</span></p></td><td class="c1"><p class="c2"><span class="c0">GET</span></p></td><td class="c1"><p class="c2"><span class="c0">Returns a list of all devices registered with the service. This list contain device ID links only. These links must be queried for the details about the device. If authentication is employed only the devices accessible to the user are returned.</span></p></td></tr>
+		<tr><td class="c1"><p class="c2"><span class="c0"><a href="devices">devices<a/></span></p></td><td class="c1"><p class="c2"><span class="c0">GET</span></p></td><td class="c1"><p class="c2"><span class="c0">Returns a list of all devices registered with the service. This list contain device ID links only. These links must be queried for the details about the device. If authentication is employed only the devices accessible to the user are returned.</span></p></td></tr>
 		<tr><td class="c1"><p class="c2"><span class="c0">devices?status=ERROR</span></p></td><td class="c1"><p class="c2"><span class="c0">GET</span></p></td><td class="c1"><p class="c2"><span class="c0">Used to indicate that only a subset of the devices should be returned, namely the ones that are currently in an error state.</span></p></td></tr>
 		<tr><td class="c1"><p class="c2"><span class="c0">devices?...</span></p></td><td class="c1"><p class="c2"><span class="c0">GET</span></p></td><td class="c1"><p class="c2"><span class="c0">Multiple other filter possibilities exist, including limiting the amount of information returned, e.g. returning only the location and not the last readings (?noReadings=on), etc.</span></p></td></tr>
 		<tr><td class="c1"><p class="c2"><span class="c0">devices/&lt;ID&gt;</span></p></td><td class="c1"><p class="c2"><span class="c0">GET</span></p></td><td class="c1"><p class="c2"><span class="c0">Return details about this device including information about owner and its past and current readings, status and location.</span></p></td></tr>
