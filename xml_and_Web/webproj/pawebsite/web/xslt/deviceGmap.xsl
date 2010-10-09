@@ -81,18 +81,28 @@
 			</xsl:if>
 		</xsl:for-each>
 		];
+		
+	// Define the two corners of the bounding box  
+	sw = new google.maps.LatLng(!!MIN_LATTITUDE!!, !!MIN_LONGITUDE!!);  
+	ne = new google.maps.LatLng(!!MAX_LATTITUDE!!, !!MAX_LONGITUDE!!);  
 /*!!!VAR_DEF_SLUT!!!*/
 	
   function initialize() {
-	var latlng = new google.maps.LatLng(!!CENTER_LATTITUDE!!, !!CENTER_LONGITUDE!!);
     var myOptions = {
-      zoom: !!CENTER_ZOOM!!,
-      center: latlng,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(document.getElementById("gmapData"),
         myOptions);
-		
+
+	// Dynamically generating the zoom
+
+	// Create a bounding box  
+	var bounds = new google.maps.LatLngBounds(sw, ne);  
+	  
+	// Center map in the center of the bounding box  
+	// and calculate the appropriate zoom level  
+	map.fitBounds(bounds)
+
 	<xsl:for-each select="//g:geolog">
 		<xsl:if test="position()=last()">	
 		  var image = new google.maps.MarkerImage('img/green-dot.png',
@@ -163,6 +173,10 @@
 			});
 
 			polylinePath.setMap(map);
+			
+			var bounds = new google.maps.LatLngBounds(sw, ne);  
+			map.fitBounds(bounds)
+			
 			variableDefinitionString = newVars;
 		}
 

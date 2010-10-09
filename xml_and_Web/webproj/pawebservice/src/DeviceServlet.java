@@ -143,41 +143,7 @@ public class DeviceServlet extends HttpServlet {
               			HttpServletResponse response)
   		throws IOException, ServletException {
 
-		simpleResponse( "You called the DeviceServlet PUT handler. NOT IMPLEMENTED",
-							request,
-							response);
-		return;
-	}
-
-	/**
-		Internal member to create a usable output when request handlers aren't implemented
-	**/
-	private void simpleResponse( String title,
-   								HttpServletRequest request,
-   								HttpServletResponse response )
-   		throws IOException, ServletException{
-
-		response.setContentType("text/html");
-		PrintWriter out = response.getWriter();
-		out.println("<html>");
-		out.println("<head>");
-		out.println("<title>geolog</title>");
-		out.println("</head>");
-		out.println("<body>");
-		out.println("<h1>");
-		out.println( title );
-		out.println("</h1>");
-    out.println("Method: " + request.getMethod());
-		out.println("<br/>");
-    out.println("Request URI: " + request.getRequestURI());
-		out.println("<br/>");
-    out.println("Protocol: " + request.getProtocol());
-		out.println("<br/>");
-    out.println("PathInfo: " + request.getPathInfo());
-		out.println("<br/>");
-    out.println("Remote Address: " + request.getRemoteAddr());
-		out.println("</body>");
-		out.println("</html>");
+		response.sendError(HttpServletResponse.SC_NOT_FOUND, "PUT not supported");
 		return;
 	}
 }
