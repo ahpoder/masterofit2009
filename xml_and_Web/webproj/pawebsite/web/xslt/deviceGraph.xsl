@@ -88,7 +88,7 @@
 	}
 
 	function pollServer() {
-		$.get("http://" + location.host + "/paweb/device", { id: <xsl:value-of select="@id"/>, type: "graph" }, serverResponse);
+		$.get("device", { id: <xsl:value-of select="@id"/>, type: "graph" }, serverResponse);
     }
 	// Start the poll timer (maybe we should check for document ready???)
 	timeout = window.setTimeout(pollServer, 3000);
