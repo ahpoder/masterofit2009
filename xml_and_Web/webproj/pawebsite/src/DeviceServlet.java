@@ -128,7 +128,7 @@ public class DeviceServlet extends HttpServlet {
 			  double minLng = Double.MAX_VALUE;
 			  
 			  // Only GMAP require pre-processing, so we determine if this is a gmap request
-			  if (displayType.toLowerCase().equals("gmap"))
+			  if (displayType != null && displayType.toLowerCase().equals("gmap"))
 			  {
 				// The gmap has the problem that it needs to determine the maximum zoom and 
 				// optimal center for the map, and this required calculating the smallest possible
