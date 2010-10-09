@@ -132,19 +132,22 @@ public class DeviceServlet extends HttpServlet {
 			  {
 				// The gmap has the problem that it needs to determine the maximum zoom and 
 				// optimal center for the map, and this required calculating the smallest possible
-				// square that contains all points visited by the device, determining the middle of the 
-				// containing square, and then calculate the highest zoom level that will show this.
+				// square that contains all points visited by the device.
 
+				// Load the device XML into a JDOM document
 				Namespace rootNS = Namespace.getNamespace("http://www.pa.com/geolog");
 				Namespace kmlNS = Namespace.getNamespace("k", "http://www.opengis.net/kml/2.2");
 				SAXBuilder builder = new SAXBuilder();
 				StringReader sr = new StringReader(xmlSourceText);
 				Document doc = builder.build(sr);
+				
+				// Extract and iterate the geolog entries
 				Element root = doc.getRootElement();
 				Element collection = root.getChild("geologCollection", rootNS);
 				List geologs = collection.getChildren("geolog", rootNS);
 				Iterator itt = geologs.iterator();
 				while(itt.hasNext()) {
+					// Extract the individual coordinates for each entry
 					Element geolog = (Element)itt.next();
 					Element point = geolog.getChild("Point", kmlNS);
 					Element coordinate = point.getChild("coordinates", kmlNS);
@@ -154,6 +157,7 @@ public class DeviceServlet extends HttpServlet {
 					String latStr = st.nextToken().trim();
 					double lng = Double.parseDouble(lngStr);
 					double lat = Double.parseDouble(latStr);
+					// Determine the highest and lowest lattitude and longitude
 					if (lng > maxLng)
 					{
 						maxLng = lng;
@@ -171,6 +175,7 @@ public class DeviceServlet extends HttpServlet {
 						minLat = lat;
 					}
 				}
+				// If the colleciton is empty set up some dummy values
 				if (maxLat == Double.MAX_VALUE || minLat == Double.MIN_VALUE || maxLng == Double.MAX_VALUE || minLng == Double.MIN_VALUE)
 				{
 					maxLat = 55;
@@ -246,8 +251,7 @@ public class DeviceServlet extends HttpServlet {
 			  {
 				// The gmap has the problem that it needs to determine the maximum zoom and 
 				// optimal center for the map, and this required calculating the smallest possible
-				// square that contains all points visited by the device, determining the middle of the 
-				// containing square, and then calculate the highest zoom level that will show this.
+				// square that contains all points visited by the device.
 				// This is simply too complicated in XSLT, so we do it in pre-processing and just 
 				// insert it here.
 				
