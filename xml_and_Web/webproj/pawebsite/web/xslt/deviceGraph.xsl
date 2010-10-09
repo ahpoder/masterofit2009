@@ -4,6 +4,11 @@
                 xmlns:fn="http://www.w3.org/2005/xpath-functions"
                 version="2.0">
   
+<!-- This is the third device stylesheet generated and will 
+     generate the same table as device.xsl, and also update its
+	 data using AJAX, yet it will also use JQPlot to display the 
+	 data graphically. The graphical data is also updated using AJAX -->
+
   <xsl:template match="g:device">
 	<html>
 		<head>
@@ -12,8 +17,10 @@
 			<title>PA International device details Graph</title>
 			
 <script type="text/javascript" src="js/jquery-1.4.2.js"></script>
-<!--[if IE]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->
-<script language="javascript" type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+<!-- There is a problem with JQPlot on IE -->
+<!--[if IE]><script language="javascript" type="text/javascript" src="js/excanvas.js"></script><![endif]-->
+
+<!--script language="javascript" type="text/javascript" src="js/jquery-1.3.2.min.js"></script-->
 <script language="javascript" type="text/javascript" src="js/jquery.jqplot.js"></script>
 <link rel="stylesheet" type="text/css" href="css/jquery.jqplot.css" />
 
@@ -32,7 +39,7 @@
     }
 
 // This section contains a start and end tag defining the sections containing the data variables.
-// This is done so it is possible for code to extract the new data fromt the AJAX response,
+// This is done so it is possible for code to extract the new data from the AJAX response,
 // and reinitialize the javascript variables with the new data using the eval function.
 /*!!!VAR_DEF_START!!!*/
 	<!-- This foreach creates a variable for each sensor using the position as an ID (needed later) -->
@@ -119,6 +126,7 @@
 </script>
 
 		</head>
+		<!-- register the initialize function to be called when the page is fully loaded -->
 		<body onload="initialize()">
 		<h1>Welcome to the PA geolog device details for device with ID: <xsl:value-of select="@id"/></h1>
 		<br/>

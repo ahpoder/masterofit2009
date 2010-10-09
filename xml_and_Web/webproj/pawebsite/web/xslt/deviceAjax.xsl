@@ -20,7 +20,7 @@
 <script type="text/javascript">
 	var timeout; // This variable is used for changing between http not ready timeout and polling timeout
 	
-	// This function is called when AJAX response is reveived
+	// This function is called when an AJAX response is reveived
 	function serverResponse(data) {
 		// Create a new in-memeory div element and set its content to the repsonse.
 		// This is needed in order to extract sub-elements from the response.
