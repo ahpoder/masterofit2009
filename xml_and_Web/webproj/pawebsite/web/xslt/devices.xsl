@@ -25,7 +25,7 @@
 				through the class attribute and the CSS stylesheet -->
   <xsl:template mode="table" match="g:deviceSimple">
 		<tr>
-			<td class="{./@status}"><xsl:value-of select="./@status"/></td>
+			<td class="{@status}"><xsl:value-of select="@status"/></td>
 			<td><xsl:value-of select="@id"/></td> 
 			<td><xsl:apply-templates mode="websiteurl" select="."/></td> 
 			<td><xsl:apply-templates mode="websiteAJAXurl" select="."/></td> 
