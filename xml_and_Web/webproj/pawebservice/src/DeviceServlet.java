@@ -95,23 +95,14 @@ public class DeviceServlet extends HttpServlet {
 			//Get and validate the payload
 			String xmlSchemaPath = getServletContext().getRealPath("/" + getInitParameter("DeviceXSDFile"));
 			SAXBuilder builder = new SAXBuilder();
-/*
+
 			builder.setValidation(true);
 			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
 													"http://www.w3.org/2001/XMLSchema");
 			builder.setProperty("http://java.sun.com/xml/jaxp/properties/schemaSource",
 													xmlSchemaPath);
-*/
+													
 			Document doc = builder.build(request.getInputStream());
-
-// Debugging ----------------------
-			Debuglog.write("Received POST on " + pathInfo + ":");
-
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			XMLOutputter xo = new XMLOutputter(Format.getPrettyFormat());
-			xo.output(doc, baos);
-			Debuglog.write(baos.toString());
-// --------------------------------------------
 
 			//Send the payload to the data access handler
 			GeologDeviceID id = new GeologDeviceID(pathInfo.substring(1));
