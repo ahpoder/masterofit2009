@@ -47,7 +47,7 @@
      set to the current working directory.
 -->
 
-<project name="PAWebService" default="compile" basedir=".">
+<project name="PAWebSite" default="compile" basedir=".">
 
 
 
