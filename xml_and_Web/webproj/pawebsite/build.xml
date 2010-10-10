@@ -126,7 +126,7 @@
 
 -->
 
-  <property name="app.name"      value="pawebsite"/>
+  <property name="app.name"      value="paweb"/>
   <!--property name="app.path"      value="/${app.name}"/--> <!-- see build.properties -->
   <property name="app.path"      value="/paweb"/> <!-- Notice how deployment to paweb is specified -->
   <property name="app.version"   value="0.1-dev"/>
@@ -360,7 +360,7 @@
     </copy>
 
     <!-- Create application JAR file -->
-    <jar jarfile="${dist.home}/${app.name}-${app.version}.war"
+    <jar jarfile="${dist.home}/${app.name}.war"
          basedir="${build.home}"/>
 
     <!-- Copy additional files to ${dist.home} as necessary -->
