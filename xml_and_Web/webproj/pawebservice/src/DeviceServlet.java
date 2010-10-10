@@ -108,8 +108,6 @@ public class DeviceServlet extends HttpServlet {
 			GeologDeviceID id = new GeologDeviceID(pathInfo.substring(1));
 			GeologDataAccess da = new GeologDataAccess(getServletContext());
 			da.storeDevice(id, doc);
-
-			Debuglog.write("POST DONE");
 		}
 		catch (Exception e) {
 			//TODO: Remove exposure of internal exceptions to the caller
