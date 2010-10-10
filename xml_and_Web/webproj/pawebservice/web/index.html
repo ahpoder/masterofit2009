@@ -4,15 +4,27 @@
 		<title>PA Webservice description page</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 		<title>geolog web-service information</title>
-		<style type="text/css">ol{margin:0;padding:0}p{margin:0}.c1{vertical-align:top;width:156.0pt;border-style:solid;border-color:#000000;border-width:1.0pt;padding:5.0pt 5.0pt 5.0pt 5.0pt}.c2{line-height:1.15;text-indent:0pt;direction:ltr}.c0{color:#000000;font-size:11pt;font-family:Arial}.c4{border-collapse:collapse}.c3{background-color:#ffffff}</style>
+		<style type="text/css">
+			p{margin:0}
+			.c0{color:#000000;font-size:11pt;font-family:Arial}
+			.c1{vertical-align:top;width:156.0pt;border-style:solid;border-color:#000000;border-width:1.0pt;padding:5.0pt 5.0pt 5.0pt 5.0pt}
+			.c2{line-height:1.15;text-indent:0pt;direction:ltr}
+			.c4{border-collapse:collapse}
+		</style>
 	</head>
 	<body>
 		<h1>Welcome to the PA geolog Web-service</h1>
 		<br/>
 		<p>You've arrived to the PA web-service discription page. This service is intended for use by clients aware of the protocol described below.
-		<br/>All the URLs will return an XML document.</p>
-		<body class="c3"><p class="c2"><span class="c0">Web-service API</span></p
-		<table cellpadding="0" cellspacing="0" class="c4"><tbody>
+		<br/>All the URLs will return an XML document defined by <a href="geolog.xsd">this<a/> schema.</p>
+		<br/>
+		<body><p><span>The Web-service API is the URIs described in the table below.</span></p
+		<br/>
+		<table cellpadding="0" cellspacing="0" class="c4" width="100%">
+		<col width="20%"/>
+		<col width="5%"/>
+		<col width="80%"/>
+		<tbody>
 		<tr><td class="c1"><p class="c2"><span class="c0">URL (&lt;server&gt;/geolog/)</span></p></td><td class="c1"><p class="c2"><span class="c0">Request</span></p></td><td class="c1"><p class="c2"><span class="c0">Description</span></p></td></tr>
 		<tr><td class="c1"><p class="c2"><span class="c0"><a href="devices">devices<a/></span></p></td><td class="c1"><p class="c2"><span class="c0">GET</span></p></td><td class="c1"><p class="c2"><span class="c0">Returns a list of all devices registered with the service. This list contain device ID links only. These links must be queried for the details about the device. If authentication is employed only the devices accessible to the user are returned.</span></p></td></tr>
 		<tr><td class="c1"><p class="c2"><span class="c0">devices?status=ERROR</span></p></td><td class="c1"><p class="c2"><span class="c0">GET</span></p></td><td class="c1"><p class="c2"><span class="c0">Used to indicate that only a subset of the devices should be returned, namely the ones that are currently in an error state.</span></p></td></tr>
@@ -25,8 +37,6 @@
 		<tr><td class="c1"><p class="c2"><span class="c0">devices/&lt;ID&gt;</span></p></td><td class="c1"><p class="c2"><span class="c0">POST</span></p></td><td class="c1"><p class="c2"><span class="c0">Add one or more new readings/locations/status-info for the given device to the device with the given ID. If the device is new to the system it is registered with the system.</span></p></td></tr>
 		<tr><td class="c1"><p class="c2"><span class="c0">devices/&lt;ID&gt;/configuration</span></p></td><td class="c1"><p class="c2"><span class="c0">GET</span></p></td><td class="c1"><p class="c2"><span class="c0">Return the current configuration for the device</span></p></td></tr>
 		<tr><td class="c1"><p class="c2"><span class="c0">devices/&lt;ID&gt;/configuration</span></p></td><td class="c1"><p class="c2"><span class="c0">POST</span></p></td><td class="c1"><p class="c2"><span class="c0">Update the current configuration for the device. This is a POST as a device always has a configuration, and a PUT (add a new) therefore do not make sense.</span></p></td></tr>
-		<tr><td class="c1"><p class="c2"><span class="c0">devices/&lt;ID&gt;/zone</span></p></td><td class="c1"><p class="c2"><span class="c0">GET</span></p></td><td class="c1"><p class="c2"><span class="c0">Utility method. Return the zone that the device is in, if any.</span></p></td></tr>
-		<tr><td class="c1"><p class="c2"><span class="c0">devices/&lt;ID&gt;/zone</span></p></td><td class="c1"><p class="c2"><span class="c0">POST</span></p></td><td class="c1"><p class="c2"><span class="c0">Manual override method for directly assigning a zone to a device, effectively disabling the automatic zone assignment for this device.</span></p></td></tr>
 		<tr><td class="c1"><p class="c2"><span class="c0">devices/&lt;ID&gt;/owner</span></p></td><td class="c1"><p class="c2"><span class="c0">GET</span></p></td><td class="c1"><p class="c2"><span class="c0">Return the owner of the device, if any</span></p></td></tr>
 		<tr><td class="c1"><p class="c2"><span class="c0">devices/&lt;ID&gt;/owner</span></p></td><td class="c1"><p class="c2"><span class="c0">POST</span></p></td><td class="c1"><p class="c2"><span class="c0">Update the owner of the device</span></p></td></tr></tbody>
 		</table>
