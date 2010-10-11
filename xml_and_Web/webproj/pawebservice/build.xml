@@ -342,10 +342,10 @@
    description="Create binary distribution">
 
     <!-- Copy documentation subdirectories -->
-    <mkdir   dir="${dist.home}/docs"/>
+    <!--mkdir   dir="${dist.home}/docs"/>
     <copy    todir="${dist.home}/docs">
       <fileset dir="${docs.home}"/>
-    </copy>
+    </copy-->
 
     <!-- Create application JAR file -->
     <!--jar jarfile="${dist.home}/${app.name}-${app.version}.war" -->
