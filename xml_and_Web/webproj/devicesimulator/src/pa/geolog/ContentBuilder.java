@@ -17,7 +17,7 @@ public class ContentBuilder {
 	}
 
 	 private static String getDateTime() {
-		 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-d'T'HH:mm:ss.S");
+		 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S");
 	     Date date = new Date();
 	     return dateFormat.format(date);
 	 }
