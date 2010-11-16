@@ -1,0 +1,16 @@
+Fitter Status : Successful - Mon Nov 15 20:45:04 2010
+Quartus II Version : 9.1 Build 222 10/21/2009 SJ Full Version
+Revision Name : AMVE_TopLevel
+Top-level Entity Name : AMVE_TopLevel
+Family : Cyclone II
+Device : EP2C35F672C6
+Timing Models : Final
+Total logic elements : 3,235 / 33,216 ( 10 % )
+    Total combinational functions : 2,871 / 33,216 ( 9 % )
+    Dedicated logic registers : 1,864 / 33,216 ( 6 % )
+Total registers : 1864
+Total pins : 86 / 475 ( 18 % )
+Total virtual pins : 0
+Total memory bits : 52,352 / 483,840 ( 11 % )
+Embedded Multiplier 9-bit elements : 8 / 70 ( 11 % )
+Total PLLs : 1 / 4 ( 25 % )

@@ -1,0 +1,106 @@
+--------------------------------------------------------------------------------------
+Timing Analyzer Summary
+--------------------------------------------------------------------------------------
+
+Type           : Worst-case tsu
+Slack          : N/A
+Required Time  : None
+Actual Time    : 9.289 ns
+From           : AUD_DACLRCK
+To             : CPU_System:inst|CodecInterface_0:the_CodecInterface_0|CodecInterface:codecinterface_0|DacSrIn[11]
+From Clock     : --
+To Clock       : CLOCL_50
+Failed Paths   : 0
+
+Type           : Worst-case tco
+Slack          : N/A
+Required Time  : None
+Actual Time    : 13.151 ns
+From           : CPU_System:inst|cpu_0:the_cpu_0|M_alu_result[10]
+To             : LCD_EN
+From Clock     : CLOCL_50
+To Clock       : --
+Failed Paths   : 0
+
+Type           : Worst-case tpd
+Slack          : N/A
+Required Time  : None
+Actual Time    : 2.612 ns
+From           : altera_internal_jtag~TDO
+To             : altera_reserved_tdo
+From Clock     : --
+To Clock       : --
+Failed Paths   : 0
+
+Type           : Worst-case th
+Slack          : N/A
+Required Time  : None
+Actual Time    : 2.270 ns
+From           : altera_internal_jtag~TDIUTAP
+To             : CPU_System:inst|cpu_0:the_cpu_0|cpu_0_nios2_oci:the_cpu_0_nios2_oci|cpu_0_jtag_debug_module_wrapper:the_cpu_0_jtag_debug_module_wrapper|cpu_0_jtag_debug_module_tck:the_cpu_0_jtag_debug_module_tck|internal_sr[31]
+From Clock     : --
+To Clock       : altera_internal_jtag~TCKUTAP
+Failed Paths   : 0
+
+Type           : Clock Setup: 'altpll0:inst17|altpll:altpll_component|_clk0'
+Slack          : -1.901 ns
+Required Time  : 12.00 MHz ( period = 83.333 ns )
+Actual Time    : N/A
+From           : CPU_System:inst|cpu_0:the_cpu_0|M_mem_byte_en[2]
+To             : CPU_System:inst|WaveformGenerator_0:the_WaveformGenerator_0|WaveformGenerator:waveformgenerator_0|avs_s1_write1
+From Clock     : CLOCL_50
+To Clock       : altpll0:inst17|altpll:altpll_component|_clk0
+Failed Paths   : 41
+
+Type           : Clock Setup: 'CLOCL_50'
+Slack          : 6.266 ns
+Required Time  : 50.00 MHz ( period = 20.000 ns )
+Actual Time    : 72.81 MHz ( period = 13.734 ns )
+From           : CPU_System:inst|cpu_0:the_cpu_0|M_ctrl_shift_rot
+To             : CPU_System:inst|cpu_0:the_cpu_0|M_alu_result[5]
+From Clock     : CLOCL_50
+To Clock       : CLOCL_50
+Failed Paths   : 0
+
+Type           : Clock Setup: 'altera_internal_jtag~TCKUTAP'
+Slack          : N/A
+Required Time  : None
+Actual Time    : 135.65 MHz ( period = 7.372 ns )
+From           : CPU_System:inst|cpu_0:the_cpu_0|cpu_0_nios2_oci:the_cpu_0_nios2_oci|cpu_0_jtag_debug_module_wrapper:the_cpu_0_jtag_debug_module_wrapper|cpu_0_jtag_debug_module_tck:the_cpu_0_jtag_debug_module_tck|internal_sr[0]
+To             : sld_hub:auto_hub|tdo
+From Clock     : altera_internal_jtag~TCKUTAP
+To Clock       : altera_internal_jtag~TCKUTAP
+Failed Paths   : 0
+
+Type           : Clock Hold: 'altpll0:inst17|altpll:altpll_component|_clk0'
+Slack          : 0.391 ns
+Required Time  : 12.00 MHz ( period = 83.333 ns )
+Actual Time    : N/A
+From           : CPU_System:inst|CodecInterface_0:the_CodecInterface_0|CodecInterface:codecinterface_0|DacSrIn[7]
+To             : CPU_System:inst|CodecInterface_0:the_CodecInterface_0|CodecInterface:codecinterface_0|DacSrIn[7]
+From Clock     : altpll0:inst17|altpll:altpll_component|_clk0
+To Clock       : altpll0:inst17|altpll:altpll_component|_clk0
+Failed Paths   : 0
+
+Type           : Clock Hold: 'CLOCL_50'
+Slack          : 0.391 ns
+Required Time  : 50.00 MHz ( period = 20.000 ns )
+Actual Time    : N/A
+From           : CPU_System:inst|CodecInterface_0:the_CodecInterface_0|CodecInterface:codecinterface_0|InitWF8731:InitWF8731_1|I2CCtrl:I2CCtrl_1|SCL
+To             : CPU_System:inst|CodecInterface_0:the_CodecInterface_0|CodecInterface:codecinterface_0|InitWF8731:InitWF8731_1|I2CCtrl:I2CCtrl_1|SCL
+From Clock     : CLOCL_50
+To Clock       : CLOCL_50
+Failed Paths   : 0
+
+Type           : Total number of failed paths
+Slack          : 
+Required Time  : 
+Actual Time    : 
+From           : 
+To             : 
+From Clock     : 
+To Clock       : 
+Failed Paths   : 41
+
+--------------------------------------------------------------------------------------
+

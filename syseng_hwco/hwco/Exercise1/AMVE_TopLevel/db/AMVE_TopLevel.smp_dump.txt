@@ -1,0 +1,21 @@
+
+State Machine - |AMVE_TopLevel|CPU_System:inst|CodecInterface_0:the_CodecInterface_0|CodecInterface:codecinterface_0|ShiftDacDataState
+Name ShiftDacDataState.ShiftDataL ShiftDacDataState.IdleL ShiftDacDataState.ShiftDataR ShiftDacDataState.IdleR 
+ShiftDacDataState.IdleR 0 0 0 0 
+ShiftDacDataState.ShiftDataR 0 0 1 1 
+ShiftDacDataState.IdleL 0 1 0 1 
+ShiftDacDataState.ShiftDataL 1 0 0 1 
+
+State Machine - |AMVE_TopLevel|CPU_System:inst|CodecInterface_0:the_CodecInterface_0|CodecInterface:codecinterface_0|InitWF8731:InitWF8731_1|CodecPrgState
+Name CodecPrgState.Writing CodecPrgState.StartWrite CodecPrgState.Idle 
+CodecPrgState.Idle 0 0 0 
+CodecPrgState.StartWrite 0 1 1 
+CodecPrgState.Writing 1 0 1 
+
+State Machine - |AMVE_TopLevel|CPU_System:inst|CodecInterface_0:the_CodecInterface_0|CodecInterface:codecinterface_0|InitWF8731:InitWF8731_1|I2CCtrl:I2CCtrl_1|I2CCtrlPresentState
+Name I2CCtrlPresentState.Ack I2CCtrlPresentState.StopWrite I2CCtrlPresentState.Writing I2CCtrlPresentState.StartWrite I2CCtrlPresentState.Idle 
+I2CCtrlPresentState.Idle 0 0 0 0 0 
+I2CCtrlPresentState.StartWrite 0 0 0 1 1 
+I2CCtrlPresentState.Writing 0 0 1 0 1 
+I2CCtrlPresentState.StopWrite 0 1 0 0 1 
+I2CCtrlPresentState.Ack 1 0 0 0 1 

@@ -1,0 +1,14 @@
+Analysis & Synthesis Status : Successful - Mon Nov 15 20:43:47 2010
+Quartus II Version : 9.1 Build 222 10/21/2009 SJ Full Version
+Revision Name : AMVE_TopLevel
+Top-level Entity Name : AMVE_TopLevel
+Family : Cyclone II
+Total logic elements : 3,311
+    Total combinational functions : 2,867
+    Dedicated logic registers : 1,864
+Total registers : 1864
+Total pins : 86
+Total virtual pins : 0
+Total memory bits : 52,352
+Embedded Multiplier 9-bit elements : 8
+Total PLLs : 1

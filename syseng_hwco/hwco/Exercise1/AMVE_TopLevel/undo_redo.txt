@@ -1,0 +1,79 @@
+GED
+
+	Undo Commands
+	     1.	Insert Symbol
+	     2.	Properties
+	     3.	Properties
+	     4.	Properties
+	     5.	Insert Symbol
+	     6.	Insert Symbol
+	     7.	Insert Symbol
+	     8.	Move
+	     9.	Move
+	    10.	Move
+	    11.	Resize
+	    12.	Resize
+	    13.	Resize
+	    14.	Resize
+	    15.	Insert Bus
+	    16.	Delete
+	    17.	Insert Bus
+	    18.	Insert Node
+	    19.	Move
+	    20.	Move
+	    21.	Move
+	    22.	Move
+	    23.	Insert Node
+	    24.	Move
+	    25.	Insert Symbol
+	    26.	Properties
+	    27.	Properties
+	    28.	Insert Symbol
+	    29.	Insert Symbol
+	    30.	Properties
+	    31.	Properties
+	    32.	Properties
+	    33.	Properties
+	    34.	Properties
+	    35.	Properties
+	    36.	Properties
+	    37.	Properties
+	    38.	Properties
+	    39.	Move
+	    40.	Move
+	    41.	Move
+	    42.	Move
+	    43.	Move
+	    44.	Move
+	    45.	Move
+	    46.	Move
+	    47.	Move
+	    48.	Properties
+	    49.	Properties
+	    50.	Properties
+	    51.	Properties
+	    52.	Properties
+	    53.	Insert Symbol
+	    54.	Insert Symbol
+	    55.	Insert Symbol
+	    56.	Insert Symbol
+	    57.	Insert Symbol
+	    58.	Insert Symbol
+	    59.	Insert Symbol
+	    60.	Insert Symbol
+	    61.	Insert Symbol
+	    62.	Insert Symbol
+	    63.	Insert Symbol
+	    64.	Insert Symbol
+	    65.	Insert Symbol
+	    66.	Insert Symbol
+	    67.	Properties
+	    68.	Properties
+	    69.	Properties
+	    70.	Insert Symbol
+	    71.	Insert Symbol
+	    72.	Insert Symbol
+	    73.	Move
+	    74.	Insert Symbol
+
+
