@@ -1,0 +1,38 @@
+Rand makes it impossible to makes the ordering non-deterministic:
+
+This first part is deterministic: 
+
+INFO: Gas station named "Charlies"
+INFO:   Customer1 has 10 gallon tank.
+INFO:   Customer2 has 12 gallon tank.
+INFO:   Attendant takes 1.5 minutes per gallon.
+INFO:   Maximum of 10 fills per customer.
+INFO: Starting gas_station simulation
+
+Then it becomes non-deterministic, and example is:
+
+Jeg har kikket på gas_station exercise og der står følgende i initieringslisten:
+
+    m_tank1(full1),
+    m_tank2(full1),
+
+men der burde stå:
+
+    m_tank1(full1),
+    m_tank2(full2),
+
+Der er en anden fejl I ekesekveringen: Her er en kørsel:
+
+INFO: Charlies Customer2 needs gas (1) at 12 mins
+INFO: Charlies Filling tank2 (3) at 12 mins
+INFO: Charlies Customer1 needs gas (1) at 12 mins
+INFO: Charlies Filled tank1 (4) at 30 mins
+INFO: Charlies Filling tank2 (3) at 30 mins 
+
+Det giver ikke meget mening tank1 er fuld inden man begynder at fylde den, og at man laver Filling tank2 2 gange med kun et request. Ved at kikke på koden kan vi se at det er fordi der kun er 1 m_filling variabel, men to biler der kan fyldes. D.v.s. at hvis kunde 2 er ved at få benzin og kunde 1 så ankommer og vil have benzin så kan systemet ikke se forskel på om det er kunde 2 der er færdig med at få benzin eller det er kunde 1 der skal til at have benzin. 
+
+Der er 2 løsninger:
+1.	Opret 2 filling variable så det er muligt at differentiere
+2.	Lad attendant have mutially eksklusive access, så han ikke kan fylde to biler på same tid (giver mere mening).
+
+Opgaven er et glimrende eksempel på concurrency fejl, så det kan naturligvis være med vilje – den første fejl er dog næppe med vilje

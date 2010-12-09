@@ -1,0 +1,24 @@
+The order of the states are:
+
+1. STATE1 - delay 1
+2. STATE2 - delay 0
+3. STATE3 - delay 20
+4. DONE - exit before writing
+
+Text:
+
+INFO: Entering my_method with STATE1 with count == 1 at time 0.
+INFO:  Leaving my_method with STATE1
+INFO: Entering my_method with STATE1 with count == 2 at time 1.
+INFO:  Leaving my_method with STATE2
+INFO: Entering my_method with STATE2 with count == 1 at time 2.
+INFO:  Leaving my_method with STATE2
+INFO: Entering my_method with STATE2 with count == 2 at time 2.
+INFO:  Leaving my_method with STATE2
+INFO: Entering my_method with STATE2 with count == 3 at time 2.
+INFO:  Leaving my_method with STATE3
+INFO: Entering my_method with STATE3 with count == 1 at time 2.
+INFO:  Leaving my_method with STATE3
+INFO: Entering my_method with STATE3 with count == 2 at time 20000002.
+INFO:  Leaving my_method with STATE4
+

@@ -1,0 +1,27 @@
+The order of the states are:
+
+1. INIT - delay 5
+2. FIVE1 - delay 5
+3. FIVE2 - delay 0
+4. ZERO1 - delay 0
+5. ZERO2 - delay 5
+6. STOP - infinite
+
+Text:
+
+From Init:
+0 Initializing
+0 Preparing to wait 5
+From FIVE1
+5 Delayed five
+5 Preparing to wait 5
+From FIVE2:
+10 Delayed five
+10 Preparing to wait 0
+From ZERO1:
+10 Delayed one delta cycle
+10 Preparing to wait 0
+From ZERO2:
+10 Delayed one delta cycle
+10 Preparing to stop after 5
+15 Stopping
