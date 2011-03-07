@@ -10,22 +10,30 @@
 ADCSource::ADCSource(sc_module_name nm) :
   sc_module(nm), counter(0)
 {
-  SC_METHOD( SampleReady);
-  sensitive << clk_in;
-  dont_initialize();
+  SC_THREAD( thrd_SampleReady);
+  sensitive << AudioClk_in.pos();
+  //dont_initialize();
 }
 
-void ADCSource::SampleReady(void)
+void ADCSource::thrd_SampleReady(void)
 {
-  if (clk_in.read() == true)
+  while(true)
   {
-//    sc_uint<SAMPLE_BITS> d = rand()&0xfff;
-    sc_uint < SAMPLE_BITS > d = counter;
-    counter += 1;
+    wait();
+    ready_out->write(SC_LOGIC_0);
+    sc_uint<SAMPLE_BITS> d = rand()&0xfff;
+//    sc_uint < SAMPLE_BITS > d = counter;
+//    counter += 1;
+    //Simulate ADC internal propagation delay
+    wait(500, SC_NS);
+    //wait(SC_ZERO_TIME);
     data_out->write(d);
-    busy_out->write(SC_LOGIC_1);
+#if (MY_DEBUG_1)
+    cout << endl << "ADC_data_out: " << d << endl;
+#endif
+    //delay due communication on wires
+    wait(10, SC_NS);
+    ready_out->write(SC_LOGIC_1);
   }
-  else
-    busy_out->write(SC_LOGIC_0);
 }
 

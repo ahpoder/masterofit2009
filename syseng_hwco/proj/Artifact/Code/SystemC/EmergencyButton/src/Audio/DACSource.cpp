@@ -6,37 +6,27 @@
  */
 
 #include "DACSource.h"
-#include "EmBtnTop.h"
+//#include "EmBtnTop.h"
+#include <iostream>
+#include <iomanip>
+using namespace std;
 
-#define PER_DIV 1  // How fast to simulate reading buffer based on sample periode
+
 DACSource::DACSource(sc_module_name nm) :
   sc_module(nm)
 {
-  SC_THREAD( Simulate);
-  sensitive << ready_in;
+  SC_THREAD( thrd_getData);
+  sensitive << AudioClk_in.neg();
   dont_initialize();
 }
 
-void DACSource::Simulate(void)
+void DACSource::thrd_getData(void)
 {
-  while (1)
+  while (true)
   {
-    wait(SAMPLE_PERIODE_DEC, SC_NS);
-
-    // Poll for data in buffer
-    while (ready_in->read() == true)
-    {
-      // Read all data in buffer
-      read_out->write(true);
-      wait(1, SC_NS);// Wait for data to be ready
-      cout << "Data : " << data_in->read() << ", ";
-      wait(20, SC_NS);
-      read_out->write(false);
-      wait(20, SC_NS);
-    }
-
-    // Newline if buffer is empty
-    cout << " ... \n";
+    wait();
+    //Simulate DAC's internal propagation delay
+    wait(20, SC_NS);
+    //cout << data_in->read();
   }
-
 }
