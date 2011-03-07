@@ -5,7 +5,7 @@
  *      Author: saa
  */
 
-#include "EmBtnTop.h"
+#include "AudioTop.h"
 //#include <systemc.h>
 
 #if defined(_MSC_VER) || defined (__CYGWIN__)
@@ -25,9 +25,9 @@ int sc_main(int argc, char **argv)
   cout << "\n\tEclipse 3.3 and Cygwin - build with SystemC Ver.:" SC_RELEASE_STRING << "\n\n";
 #endif
 
-  EmBtnTop EmBtnTop("EmergencyButtonTest");
+  AudioTop AudioTop("EmergencyButtonTest");
 
-  sc_start(50000, SC_NS);
+  sc_start(3, SC_MS);
 
   return 0;
 }
