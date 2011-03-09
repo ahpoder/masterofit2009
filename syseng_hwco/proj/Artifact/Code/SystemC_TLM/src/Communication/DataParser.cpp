@@ -1,12 +1,13 @@
 #include <Communication/DataParser.h>
 
+#include <util.h>
+
 SC_HAS_PROCESS(DataParser);
 
 DataParser::DataParser(sc_module_name nm) :
 	sc_module(nm)
 {
-  SC_THREAD(audio_data_parser_thread);
-  SC_THREAD(control_data_parser_thread);
+  SC_THREAD(data_parser_thread);
 }
 
 DataParser::~DataParser()
@@ -14,42 +15,37 @@ DataParser::~DataParser()
 
 }
 
-void DataParser::audio_data_parser_thread()
+void DataParser::data_parser_thread()
 {
-  std::vector<int> tmp_dataFromISM;
+  ISMDataFrame tmp_dataFromISM;
+  int temp;
+  int i;
+  const unsigned char* ismData;
   while(true)
   {
-	// wait for data
-	wait(audio_data_from_ism.data_written_event());
-
-	tmp_dataFromISM = audio_data_from_ism.read();
-	// package data if needed
-	audio_data_to_Audio.write(tmp_dataFromISM);
-  }
-}
-
-void DataParser::control_data_parser_thread()
-{
-  std::vector<unsigned char> tmp_result;
-  while(true)
-  {
-	// wait for data
-	wait(control_data_from_ism.data_written_event());
-
-
-	tmp_result = control_data_from_ism.read();
-
-	// Package data if needed
-    std::string tmp_dataToControl;
-    std::vector<unsigned char>::iterator itt = tmp_result.begin();
-	while (itt != tmp_result.end())
+	tmp_dataFromISM = data_from_ism.read();
+	switch (tmp_dataFromISM.getFrameType())
 	{
-	  char tmp = *itt;
-	  tmp_dataToControl += tmp;
-	  ++itt;
-	}
+	case FT_AUDIO:
+	{
+		GSM0610DataFrame audioFrame;
+		ismData = tmp_dataFromISM.getBuffer();
 
-	// Output microphone data
-	control_data_to_control.write(tmp_dataToControl);
+		for (i = 0; i < tmp_dataFromISM.length(); i += 4)
+		{
+			memcpy(&temp, ismData + i, 4);
+			temp = ntohl(temp);
+			audioFrame.push_back(temp);
+		}
+		audio_data_to_Audio.write(audioFrame);
+	}
+		break;
+	case FT_CONTROL:
+		break;
+	case FT_FIRMWARE:
+		break;
+	case FT_UNKNOWN:
+		break;
+	}
   }
 }

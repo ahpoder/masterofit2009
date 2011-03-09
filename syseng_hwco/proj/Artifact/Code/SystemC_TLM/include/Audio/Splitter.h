@@ -1,26 +1,22 @@
-#ifndef ECHOCANCELLATION_H
-#define ECHOCANCELLATION_H
-//----------------------------------------------------------------------------------------------
-// top.h (systemc)
-//
-//	Author: KBE / 2010.09.12
-//----------------------------------------------------------------------------------------------
+#ifndef SPLITTER_H
+#define SPLITTER_H
+
 #include <systemc.h>
 
-class EchoCancellation : public sc_module
+class Splitter : public sc_module
 {
 public:
-  sc_fifo_in<int> data_from_adc;
-  sc_fifo_in<int> data_from_splitter;
+  sc_fifo_in<int> data_from_decoding;
 
-  sc_fifo_out<int> data_from_echocancellation;
+  sc_fifo_out<int> data_to_dac;
+  sc_fifo_out<int> data_to_echocancellation;
 
 private:
-  void echo_cancellation_thread();
+  void splitter_thread();
 
 public:
-	SC_CTOR(EchoCancellation);
-	~EchoCancellation();
+	SC_CTOR(Splitter);
+	~Splitter();
 };
 
 #endif

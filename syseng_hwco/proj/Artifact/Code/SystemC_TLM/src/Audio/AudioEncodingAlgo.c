@@ -1,4 +1,4 @@
-#include "EchoCancellationAlgo.h"
+#include "AudioEncodingAlgo.h"
 
 #define DATA_FRAME_SIZE 128
 

@@ -38,7 +38,7 @@ void ADCSim::adc_reader_thread()
 	tmp_val_speaker = data_from_speakers.read();
 
 	// Output microphone data
-	data_from_adc.write(tmp_val_microphone + tmp_val_speaker);
+	data_to_echo_cancellation.write(tmp_val_microphone + tmp_val_speaker);
 
 	wait(); // wait for next Audio clock
   }

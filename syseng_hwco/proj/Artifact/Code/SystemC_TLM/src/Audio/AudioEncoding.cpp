@@ -25,8 +25,6 @@ void AudioEncoding::audio_encoding_thread()
   int tmp_result_buffer_length;
   while(true)
   {
-	wait(data_from_echocancellation.data_written_event());
-
 	tmp_val_echo_cancel = data_from_echocancellation.read();
 
 	// Audio Encoding algorithm
@@ -35,12 +33,9 @@ void AudioEncoding::audio_encoding_thread()
 
 	if (tmp_result_buffer != 0)
 	{
-	  std::vector<int> tmp_result(tmp_result_buffer_length);
-	  for (int i = 0; i < tmp_result_buffer_length; ++i)
-	  {
-		  tmp_result.push_back(tmp_result_buffer[i]);
-	  }
-	  data_from_audioencoding.write(tmp_result);
+	  GSM0610DataFrame tmp_result;
+	  tmp_result.push_back_all(tmp_result_buffer, tmp_result_buffer_length);
+	  data_to_communication.write(tmp_result);
 	}
 
 	wait(); // wait for next value from echo cancellation

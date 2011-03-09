@@ -3,7 +3,8 @@
 
 #include <systemc.h>
 
-#include <vector>
+#include <stl/circular.h>
+#include <GSM0610DataFrame.h>
 
 class AudioDecoding : public sc_module
 {
@@ -11,18 +12,29 @@ public:
   // Clock
   sc_in_clk AudioClk;
 
-  sc_fifo_in<std::vector<int> > data_from_communication;
+  sc_fifo_in<GSM0610DataFrame> data_from_communication;
 
   sc_fifo_out<int> data_to_splitter;
 
 private:
-  GSM0610DataFrame buffer[10]; // Buffer can hold 10 frames from ISM.
+  sc_mutex receiveBufferLock;
+  circular_buffer<GSM0610DataFrame> receiveBuffer; // Buffer can hold 10 frames from ISM.
+  void audio_receiving_thread();
+
   void audio_decoding_thread();
 
-  // Double buffered for quick switch. A full decoded buffer is
+// Double buffered for quick switch. A full decoded buffer is
   // always available
-  int playbackBuffer1[1280]; // Buffer can hold a single decoded frame
-  int playbackBuffer2[1280]; // Buffer can hold a single decoded frame
+  sc_event buffersChanged;
+  sc_mutex playbackBufferLock; // Only when the buffer is switched or validity is updated
+  	  	  	  	  	  	  	  // is there a need to have a mutual exclusion
+
+  int playbackBufferLength[2];
+  int playbackBuffer[2][1280]; // Buffer can hold a single decoded frame
+  	  	  	  	  	  	  	  	// and there is 2 to use double buffering
+
+  int audioBufferOffset;
+  int activeAudioBuffer;
   void audio_playback_thread();
 
 public:

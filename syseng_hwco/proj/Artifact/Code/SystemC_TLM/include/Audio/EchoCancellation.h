@@ -13,7 +13,7 @@ public:
   sc_fifo_in<int> data_from_adc;
   sc_fifo_in<int> data_from_splitter;
 
-  sc_fifo_out<int> data_from_echocancellation;
+  sc_fifo_out<int> data_to_audio_encoding;
 
 private:
   void echo_cancellation_thread();

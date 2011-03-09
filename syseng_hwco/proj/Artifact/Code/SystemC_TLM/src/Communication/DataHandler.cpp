@@ -1,5 +1,7 @@
 #include <Communication/DataHandler.h>
 
+#include <util.h>
+
 SC_HAS_PROCESS(DataHandler);
 
 DataHandler::DataHandler(sc_module_name nm) :
@@ -16,20 +18,33 @@ DataHandler::~DataHandler()
 
 void DataHandler::audio_data_handler_thread()
 {
-  std::vector<int> tmp_dataFromAudio;
+  unsigned char buffer[1500];
+  GSM0610DataFrame tmp_dataFromAudio;
+  ISMDataFrame tmp_data_to_ism;
+  int i;
+  int temp;
   while(true)
   {
-	// wait for data
-	wait(data_from_audio.data_written_event());
-
 	tmp_dataFromAudio = data_from_audio.read();
-	// package data if needed
-	audio_data_to_ism.write(tmp_dataFromAudio);
+
+	tmp_data_to_ism.setFrameType(FT_AUDIO);
+
+	for (i = 0; i < tmp_dataFromAudio.length(); ++i)
+	{
+		temp = tmp_dataFromAudio.at(i);
+		temp = htonl(temp);
+		memcpy((buffer + (i*4)), &temp, 4);
+	}
+
+	tmp_data_to_ism.setFrameContent(buffer, tmp_dataFromAudio.length() * 4);
+
+	data_to_ism.write(tmp_data_to_ism);
   }
 }
 
 void DataHandler::control_data_handler_thread()
 {
+	/*
   std::string tmp_dataFromControl;
   while(true)
   {
@@ -53,4 +68,5 @@ void DataHandler::control_data_handler_thread()
 	// Output microphone data
 	control_data_to_ism.write(tmp_result);
   }
+*/
 }

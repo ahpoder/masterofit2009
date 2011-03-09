@@ -1,6 +1,6 @@
-#ifndef AUDIOENCODINGALGO_H
-#define AUDIOENCODINGALGO_H
+#ifndef AUDIODECODINGALGO_H
+#define AUDIODECODINGALGO_H
 
-int* performAudioEncoding(int value, int* length);
+int performAudioDecoding(const int* encodedData, int length, int* resultBuffer, int resultBufferLengt);
 
 #endif

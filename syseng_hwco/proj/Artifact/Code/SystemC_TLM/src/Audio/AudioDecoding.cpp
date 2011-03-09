@@ -8,8 +8,12 @@ extern "C"
 SC_HAS_PROCESS(AudioDecoding);
 
 AudioDecoding::AudioDecoding(sc_module_name nm) :
-	sc_module(nm)
+	sc_module(nm), receiveBuffer(10),
+	audioBufferOffset(0), activeAudioBuffer(0)
 {
+	playbackBufferLength[0] = playbackBufferLength[1] = -1;
+
+  SC_THREAD(audio_receiving_thread);
   SC_THREAD(audio_decoding_thread);
   SC_THREAD(audio_playback_thread);
 }
@@ -19,61 +23,79 @@ AudioDecoding::~AudioDecoding()
 
 }
 
-void AudioDecoding::audio_decoding_thread()
+void AudioDecoding::audio_receiving_thread()
 {
-  std::vector<int> ;
-  int* tmp_result_buffer;
-  int tmp_result_buffer_length;
+  GSM0610DataFrame tmp_data_frame;
   while(true)
   {
-	wait(data_from_communication.data_written_event());
+	tmp_data_frame = data_from_communication.read();
+	receiveBufferLock.lock();
+	receiveBuffer.push_back(tmp_data_frame);
+	receiveBufferLock.unlock();
+	buffersChanged.notify(SC_ZERO_TIME);
+  }
+}
 
-	tmp_val_echo_cancel = data_from_communication.read();
-
-	// Audio Encoding algorithm
-	// Insert delay For audio encoding
-	tmp_result_buffer = performAudioEncoding(tmp_val_echo_cancel, &tmp_result_buffer_length);
-
-	if (tmp_result_buffer != 0)
+void AudioDecoding::audio_decoding_thread()
+{
+  GSM0610DataFrame tmp_data_frame;
+  int i;
+  int bufferToUse;
+  while(true)
+  {
+	wait(buffersChanged);
+	if (!receiveBuffer.empty())
 	{
-	  std::vector<int> tmp_result(tmp_result_buffer_length);
-	  for (int i = 0; i < tmp_result_buffer_length; ++i)
-	  {
-		  tmp_result.push_back(tmp_result_buffer[i]);
-	  }
-	  data_from_audioencoding.write(tmp_result);
-	}
+		bufferToUse = -1;
+		// Always look at the active buffer first, in case it is empty
+		if (playbackBufferLength[activeAudioBuffer] == -1)
+		{
+			bufferToUse = activeAudioBuffer;
+		}
+		else if (playbackBufferLength[activeAudioBuffer == 0 ? 1 : 0] == -1)
+		{
+			bufferToUse = activeAudioBuffer == 0 ? 1 : 0;
+		}
 
-	wait(); // wait for next value from echo cancellation
+		if (bufferToUse != -1)
+		{
+			receiveBufferLock.lock();
+			tmp_data_frame = receiveBuffer.front();
+			receiveBuffer.pop_front();
+			receiveBufferLock.unlock();
+
+			playbackBufferLock.lock();
+
+			// TODO add wait
+			playbackBufferLength[i] = performAudioDecoding(tmp_data_frame.getBuffer(), tmp_data_frame.length(), playbackBuffer[i], sizeof(playbackBuffer[i]));
+
+			playbackBufferLock.unlock();
+		}
+	}
   }
 }
 
 void AudioDecoding::audio_playback_thread()
 {
-  int tmp_val_echo_cancel;
-  int* tmp_result_buffer;
-  int tmp_result_buffer_length;
+  int tmp_val_splitter = 0;
   while(true)
   {
 	wait(AudioClk);
 
-	if ()
-	tmp_val_echo_cancel = data_from_communication.read();
-
-	// Audio Encoding algorithm
-	// Insert delay For audio encoding
-	tmp_result_buffer = performAudioEncoding(tmp_val_echo_cancel, &tmp_result_buffer_length);
-
-	if (tmp_result_buffer != 0)
+	if (playbackBufferLength[activeAudioBuffer] > 0)
 	{
-	  std::vector<int> tmp_result(tmp_result_buffer_length);
-	  for (int i = 0; i < tmp_result_buffer_length; ++i)
-	  {
-		  tmp_result.push_back(tmp_result_buffer[i]);
-	  }
-	  data_from_audioencoding.write(tmp_result);
+		tmp_val_splitter = playbackBuffer[activeAudioBuffer][audioBufferOffset];
 	}
+	data_to_splitter.write(tmp_val_splitter);
 
-	wait(); // wait for next value from echo cancellation
+	if (++audioBufferOffset == playbackBufferLength[activeAudioBuffer])
+	{
+		playbackBufferLock.lock();
+		audioBufferOffset = 0;
+		playbackBufferLength[activeAudioBuffer] = -1;
+		activeAudioBuffer = activeAudioBuffer == 0 ? 1 : 0;
+		playbackBufferLock.unlock();
+		buffersChanged.notify(SC_ZERO_TIME);
+	}
   }
 }

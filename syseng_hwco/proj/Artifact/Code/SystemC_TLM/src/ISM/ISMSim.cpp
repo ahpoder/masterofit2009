@@ -6,80 +6,61 @@ SC_HAS_PROCESS(ISMSim);
 ISMSim::ISMSim(sc_module_name nm) :
 	sc_module(nm), clkDivisionCounter(10) // Start by reaing a value
 {
-  SC_THREAD(ism_audio_sender_thread);
-  SC_THREAD(ism_control_sender_thread);
+  SC_THREAD(ism_sender_thread);
+  SC_THREAD(ism_reader_thread);
 
-  SC_THREAD(ism_audio_reader_thread);
-  SC_THREAD(ism_control_reader_thread);
-  SC_THREAD(ism_firmware_reader_thread);
-
-  fp_ism_audio_input = fopen(INPUT_FILE_AUDIO_ISM, "r");
-  fp_ism_audio_output = fopen(OUTPUT_FILE_AUDIO_ISM, "w");
+  fp_ism_input = fopen(INPUT_FILE_ISM, "r");
+  fp_ism_output = fopen(OUTPUT_FILE_ISM, "w");
 }
 
 ISMSim::~ISMSim()
 {
-  fclose(fp_ism_audio_input);
-  fclose(fp_ism_audio_output);
+  fclose(fp_ism_input);
+  fclose(fp_ism_output);
 }
 
-void ISMSim::ism_audio_sender_thread()
+void ISMSim::ism_sender_thread()
 {
-  std::vector<int> tmp_dataFromCommunication;
+  unsigned char sendBuf[1504];
+  int length;
+  int i;
+  ISMDataFrame tmp_dataFromCommunication;
   while(true)
   {
-	// This wait serves no purpose, as the read is blocking!
-	wait(audio_data_from_communication.data_written_event());
+	tmp_dataFromCommunication = data_from_communication.read();
 
-	tmp_dataFromCommunication = audio_data_from_communication.read();
-
-	std::vector<int>::iterator itt = tmp_dataFromCommunication.begin();
-	while (itt != tmp_dataFromCommunication.end())
+	length = tmp_dataFromCommunication.serialize(sendBuf, sizeof(sendBuf));
+	while (i < length)
 	{
-	  fprintf(fp_ism_audio_output,"%d\r\n", *itt);
-      ++itt;
+	  fprintf(fp_ism_output,"%d\r\n", sendBuf[i]);
+	  ++i;
 	}
   }
 }
 
-void ISMSim::ism_control_sender_thread()
+void ISMSim::ism_reader_thread()
 {
-
-}
-
-void ISMSim::ism_audio_reader_thread()
-{
-  int tmp_val_audio;
-  int i;
+  unsigned char buffer[(128 * 4) + 4];
 
   // Read 128 integers
   while(true)
   {
 	if (clkDivisionCounter++ == 10)
 	{
-		std::vector<int> tmp_dataFromISMFile;
-		for (i = 0; i < 128; ++i)
+		ISMDataFrame tmp_dataFromISMFile;
+		int length = fread(buffer, 1, sizeof(buffer), fp_ism_input);
+		if (length > 4) // minimum a header
 		{
-			if (fscanf(fp_ism_audio_input, "%d", &tmp_val_audio) == EOF)
-			{
-				sc_stop();
-				return;
-			}
-			tmp_dataFromISMFile.push_back(tmp_val_audio);
+			tmp_dataFromISMFile.deserialize(buffer, length);
+			clkDivisionCounter = 0;
+			data_to_communication.write(tmp_dataFromISMFile);
 		}
-		clkDivisionCounter = 0;
-		audio_data_to_communication.write(tmp_dataFromISMFile);
+		else
+		{
+			sc_stop();
+			return;
+		}
 	}
 	wait(AudioClk);
   }
-}
-
-void ISMSim::ism_control_reader_thread()
-{
-
-}
-
-void ISMSim::ism_firmware_reader_thread()
-{
-
 }
