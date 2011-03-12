@@ -1,0 +1,9 @@
+TODO liste:
+
+1. Requirements mapped to architecture (SysML)
+
+2. Refferences
+
+3. Conclusion
+
+4. What have we leaned, not learned. What was the most interesting part
