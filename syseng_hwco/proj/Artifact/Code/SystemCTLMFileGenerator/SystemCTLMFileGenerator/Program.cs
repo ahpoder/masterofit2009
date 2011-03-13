@@ -8,6 +8,8 @@ namespace SystemCTLMFileGenerator
 {
     class Program
     {
+        const int FRAME_SIZE = 32;
+        
         static void PrintUsage()
         {
             System.Console.WriteLine("Usage:");
@@ -31,8 +33,8 @@ namespace SystemCTLMFileGenerator
          * .
          * .
          * .
-         * 10 x 2147483640
-         * 10 x -2147483648
+         * 10 x 32767
+         * 10 x -32767
          * 
          * ISM input (with header and correct endian):
          * 5
@@ -42,8 +44,8 @@ namespace SystemCTLMFileGenerator
          * .
          * .
          * .
-         * 2147483645
-         * -2147483645
+         * 32767
+         * -32767
          */
 
         static void Main(string[] args)
@@ -56,10 +58,10 @@ namespace SystemCTLMFileGenerator
 
             int duration = int.Parse(args[0]);
 
-            int count = (duration * 44000) / 10; // divided by 10 is due to encoding
+            int count = (duration * 8000) / 10; // divided by 10 is due to encoding
 
             StreamWriter adcFile = new StreamWriter(File.OpenWrite("microphone_data.txt"));
-            int value = 0;
+            short value = 0;
             bool positive = true;
             for (int i = 0; i < count; ++i)
             {
@@ -77,7 +79,7 @@ namespace SystemCTLMFileGenerator
                     value = (value * -1) + 10;
                     positive = true;
                 }
-                if (i % 4400 == 0)
+                if (i % 800 == 0)
                     System.Console.Write('.');
             }
             adcFile.Close();
@@ -85,20 +87,21 @@ namespace SystemCTLMFileGenerator
 
             FileStream ismFile = File.OpenWrite("ism_input_data.txt");
 
-            int packages = count / 128;
+            int packages = count / 32;
 
             ASCIIEncoding ae = new ASCIIEncoding();
             for (int i = 0; i < packages; ++i)
             {
                 ismFile.WriteByte(ae.GetBytes(new char[] { 'a' })[0]);
-                byte[] b = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)128));
+                ismFile.WriteByte(0);
+                byte[] b = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)32));
                 ismFile.Write(b, 0, 2);
                 value = 5;
                 positive = true;
-                for (int j = 0; j < 128; ++j)
+                for (int j = 0; j < 32; ++j)
                 {
-                    b = BitConverter.GetBytes(IPAddress.HostToNetworkOrder(value));
-                    ismFile.Write(b, 0, 4);
+                    b = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)value));
+                    ismFile.Write(b, 0, 2);
                     if (positive)
                     {
                         value *= -1;
@@ -113,7 +116,7 @@ namespace SystemCTLMFileGenerator
                 System.Console.Write('.');
             }
 
-            int remaining = count % 128;
+            int remaining = count % 32;
             if (remaining != 0)
             {
                 remaining = (remaining / 10) + 1;
