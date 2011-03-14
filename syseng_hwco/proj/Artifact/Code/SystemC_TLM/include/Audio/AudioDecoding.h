@@ -12,13 +12,14 @@ public:
   // Clock
   sc_in_clk AudioClk;
 
-  sc_fifo_in<GSM0610DataFrame> data_from_communication;
+  sc_fifo_in<GSM0610DataFrame*> data_from_communication;
 
-  sc_fifo_out<int> data_to_splitter;
+  sc_fifo_out<short> data_to_splitter;
 
 private:
   sc_mutex receiveBufferLock;
-  circular_buffer<GSM0610DataFrame> receiveBuffer; // Buffer can hold 10 frames from ISM.
+  // Here is a memory leak if the buffer overflows
+  circular_buffer<GSM0610DataFrame*> receiveBuffer; // Buffer can hold 10 frames from ISM.
   void audio_receiving_thread();
 
   void audio_decoding_thread();
@@ -30,7 +31,7 @@ private:
   	  	  	  	  	  	  	  // is there a need to have a mutual exclusion
 
   int playbackBufferLength[2];
-  int playbackBuffer[2][1280]; // Buffer can hold a single decoded frame
+  short playbackBuffer[2][160]; // Buffer can hold a single decoded frame
   	  	  	  	  	  	  	  	// and there is 2 to use double buffering
 
   int audioBufferOffset;

@@ -15,14 +15,15 @@ public:
   // Clock - used to
   sc_in_clk AudioClk;
 
-  sc_fifo_in<ISMDataFrame> data_from_communication;
+  sc_fifo_in<ISMDataFrame*> data_from_communication;
 
-  sc_fifo_out<ISMDataFrame> data_to_communication;
+  sc_fifo_out<ISMDataFrame*> data_to_communication;
 
 private:
   void ism_sender_thread();
 
   int clkDivisionCounter;
+  bool readData();
   void ism_reader_thread();
 
   FILE* fp_ism_output;

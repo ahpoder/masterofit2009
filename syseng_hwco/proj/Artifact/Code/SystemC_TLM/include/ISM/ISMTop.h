@@ -18,7 +18,7 @@ public:
 private:
   ISMSim* ismSim;
 
-  sc_fifo<ISMDataFrame> ismToCommunicationFifo;
+  sc_fifo<ISMDataFrame*> ismToCommunicationFifo;
 
 public:
 	SC_CTOR(ISMTop);

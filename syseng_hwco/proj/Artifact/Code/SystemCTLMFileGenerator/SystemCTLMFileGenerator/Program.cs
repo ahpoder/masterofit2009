@@ -13,11 +13,11 @@ namespace SystemCTLMFileGenerator
         static void PrintUsage()
         {
             System.Console.WriteLine("Usage:");
-            System.Console.WriteLine("  SystemCTLMFileGenerator <duration>");
+            System.Console.WriteLine("  SystemCTLMFileGenerator <duration in ms>");
             System.Console.WriteLine("Example:");
             System.Console.WriteLine("  SystemCTLMFileGenerator 60");
             System.Console.WriteLine();
-            System.Console.WriteLine("  Will generate files with a predefined pattern for 60 seconds at 44kHz:");
+            System.Console.WriteLine("  Will generate files with a predefined pattern for 60 milli seconds at 44kHz:");
         }
 
         /*
@@ -36,7 +36,7 @@ namespace SystemCTLMFileGenerator
          * 10 x 32767
          * 10 x -32767
          * 
-         * ISM input (with header and correct endian):
+         * ISM input:
          * 5
          * -5
          * 15
@@ -58,7 +58,7 @@ namespace SystemCTLMFileGenerator
 
             int duration = int.Parse(args[0]);
 
-            int count = (duration * 8000) / 10; // divided by 10 is due to encoding
+            int count = (duration * 8) / 10; // divided by 10 is due to encoding
 
             StreamWriter adcFile = new StreamWriter(File.OpenWrite("microphone_data.txt"));
             short value = 0;
@@ -76,7 +76,7 @@ namespace SystemCTLMFileGenerator
                 }
                 else
                 {
-                    value = (value * -1) + 10;
+                    value = (short)((value * -1) + 10);
                     positive = true;
                 }
                 if (i % 800 == 0)
@@ -85,59 +85,24 @@ namespace SystemCTLMFileGenerator
             adcFile.Close();
             System.Console.WriteLine(Environment.NewLine + "Finished creating ADC File");
 
-            FileStream ismFile = File.OpenWrite("ism_input_data.txt");
-
-            int packages = count / 32;
-
-            ASCIIEncoding ae = new ASCIIEncoding();
-            for (int i = 0; i < packages; ++i)
+            value = 5;
+            positive = true;
+            StreamWriter ismFile = new StreamWriter(File.OpenWrite("ism_input_data.txt"));
+            for (int i = 0; i < count; ++i)
             {
-                ismFile.WriteByte(ae.GetBytes(new char[] { 'a' })[0]);
-                ismFile.WriteByte(0);
-                byte[] b = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)32));
-                ismFile.Write(b, 0, 2);
-                value = 5;
-                positive = true;
-                for (int j = 0; j < 32; ++j)
+                ismFile.WriteLine(value);
+                if (positive)
                 {
-                    b = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)value));
-                    ismFile.Write(b, 0, 2);
-                    if (positive)
-                    {
-                        value *= -1;
-                        positive = false;
-                    }
-                    else
-                    {
-                        value = (value * -1) + 10;
-                        positive = true;
-                    }
+                    value *= -1;
+                    positive = false;
                 }
-                System.Console.Write('.');
-            }
-
-            int remaining = count % 32;
-            if (remaining != 0)
-            {
-                remaining = (remaining / 10) + 1;
-                ismFile.WriteByte(ae.GetBytes(new char[] { 'a' })[0]);
-                byte[] b = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)remaining));
-                ismFile.Write(b, 0, 2);
-                for (int j = 0; j < remaining; ++j)
+                else
                 {
-                    b = BitConverter.GetBytes(IPAddress.HostToNetworkOrder(value));
-                    ismFile.Write(b, 0, 4);
-                    if (positive)
-                    {
-                        value *= -1;
-                        positive = false;
-                    }
-                    else
-                    {
-                        value = (value * -1) + 10;
-                        positive = true;
-                    }
+                    value = (short)((value * -1) + 10);
+                    positive = true;
                 }
+                if (i % 800 == 0)
+                    System.Console.Write('.');
             }
             ismFile.Close();
             System.Console.WriteLine(Environment.NewLine + "Finished creating ISM File");

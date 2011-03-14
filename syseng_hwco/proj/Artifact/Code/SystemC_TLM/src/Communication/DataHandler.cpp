@@ -18,25 +18,15 @@ DataHandler::~DataHandler()
 
 void DataHandler::audio_data_handler_thread()
 {
-  unsigned char buffer[1500];
-  GSM0610DataFrame tmp_dataFromAudio;
-  ISMDataFrame tmp_data_to_ism;
-  int i;
-  int temp;
   while(true)
   {
-	tmp_dataFromAudio = data_from_audio.read();
+	std::auto_ptr<GSM0610DataFrame> ptr(data_from_audio.read());
 
-	tmp_data_to_ism.setFrameType(FT_AUDIO);
+//	printf("DataHandler::audio_data_handler_thread\r\n");
 
-	for (i = 0; i < tmp_dataFromAudio.length(); ++i)
-	{
-		temp = tmp_dataFromAudio.at(i);
-		temp = htonl(temp);
-		memcpy((buffer + (i*4)), &temp, 4);
-	}
-
-	tmp_data_to_ism.setFrameContent(buffer, tmp_dataFromAudio.length() * 4);
+    ISMDataFrame* tmp_data_to_ism = new ISMDataFrame();
+	tmp_data_to_ism->setFrameType(FT_AUDIO);
+	tmp_data_to_ism->setFrameContent(ptr->getBuffer(), ptr->length());
 
 	data_to_ism.write(tmp_data_to_ism);
   }

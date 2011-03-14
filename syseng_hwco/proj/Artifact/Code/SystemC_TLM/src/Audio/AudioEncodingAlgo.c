@@ -1,16 +1,23 @@
 #include "AudioEncodingAlgo.h"
 
-#define DATA_FRAME_SIZE 128
+#include <util.h>
+
+#include <string.h>
+
+#define DATA_FRAME_SIZE 32
 
 static int dataCount = 0;
 static int bufferCount = 0;
-static int encodingBuffer[DATA_FRAME_SIZE];
+static unsigned char encodingBuffer[DATA_FRAME_SIZE];
 
-int* performAudioEncoding(int value, int* length)
+unsigned char* performAudioEncoding(short value, int* length)
 {
-  if (dataCount % 10)
+  short temp;
+  if (dataCount % 10 == 0)
   {
-	encodingBuffer[bufferCount++] = value;
+	temp = htons(value);
+	memcpy(encodingBuffer + bufferCount, &temp, 2);
+	bufferCount += 2;
   }
   ++dataCount;
   if (bufferCount == DATA_FRAME_SIZE)

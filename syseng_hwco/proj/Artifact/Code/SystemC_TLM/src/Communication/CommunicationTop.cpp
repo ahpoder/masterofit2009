@@ -10,7 +10,9 @@
 SC_HAS_PROCESS(CommunicationTop);
 
 CommunicationTop::CommunicationTop(sc_module_name nm) :
-	sc_module(nm)
+	sc_module(nm),
+	communicationToISMFifo("CommunicationToISMFifo"),
+	communicationToAudioFifo("CommunicationToAudioFifo")
 {
   dataHandler = new DataHandler("DataHandler");
   dataParser = new DataParser("DataParser");

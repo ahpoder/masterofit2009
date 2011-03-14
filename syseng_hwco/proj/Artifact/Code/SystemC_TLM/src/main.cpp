@@ -18,7 +18,9 @@ int sc_main( int argc, char **argv)
 	// Setup the remaining clock
 	ismTop.setClock(&audioTop.AudioClock);
 
-	sc_start( 100, SC_SEC );
+	printf("Beginning simulation\r\n");
+
+	sc_start( 1000, SC_SEC );
 
 	return 0;
 }

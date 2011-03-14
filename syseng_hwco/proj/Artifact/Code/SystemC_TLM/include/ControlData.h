@@ -1,12 +1,12 @@
-#ifndef GSM0610DATAFRAME_H
-#define GSM0610DATAFRAME_H
+#ifndef CONTORLDATAFRAME_H
+#define CONTORLDATAFRAME_H
 
 #include <systemc.h>
 
-class GSM0610DataFrame
+class ControlDataFrame
 {
 public:
-  GSM0610DataFrame();
+	ControlDataFrame();
   bool push_back(int value);
   bool push_back_all(int* buffer, int length);
   int at(int index);
@@ -16,7 +16,7 @@ public:
 
 public:
   // Required by SystemC
-  GSM0610DataFrame& operator=(const GSM0610DataFrame& rhs)
+  ControlDataFrame& operator=(const ControlDataFrame& rhs)
   {
 	idx = rhs.idx;
 	if (idx > 0)
@@ -25,7 +25,7 @@ public:
 	}
 	return *this;
   }
-  bool operator==(const GSM0610DataFrame& rhs) const
+  bool operator==(const ControlDataFrame& rhs) const
   {
 	if (idx == rhs.idx)
 	{
@@ -35,11 +35,11 @@ public:
 	}
     return false;
   }
-  friend std::ostream& operator<<(std::ostream& file, const GSM0610DataFrame& trans);
-  friend void sc_trace(sc_trace_file*& tf, const GSM0610DataFrame& trans, std::string nm);
+  friend std::ostream& operator<<(std::ostream& file, const ControlDataFrame& trans);
+  friend void sc_trace(sc_trace_file*& tf, const ControlDataFrame& trans, std::string nm);
 private:
   int idx;
-  int buffer[128];
+  int buffer[];
 };
 
 #endif

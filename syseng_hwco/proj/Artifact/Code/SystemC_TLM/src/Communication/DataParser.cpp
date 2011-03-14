@@ -1,6 +1,7 @@
 #include <Communication/DataParser.h>
 
 #include <util.h>
+#include <memory>
 
 SC_HAS_PROCESS(DataParser);
 
@@ -17,26 +18,19 @@ DataParser::~DataParser()
 
 void DataParser::data_parser_thread()
 {
-  ISMDataFrame tmp_dataFromISM;
-  int temp;
-  int i;
   const unsigned char* ismData;
   while(true)
   {
-	tmp_dataFromISM = data_from_ism.read();
-	switch (tmp_dataFromISM.getFrameType())
+    std::auto_ptr<ISMDataFrame> ptr(data_from_ism.read());
+//	printf("DataParser::data_parser_thread\r\n");
+
+	switch (ptr->getFrameType())
 	{
 	case FT_AUDIO:
 	{
-		GSM0610DataFrame audioFrame;
-		ismData = tmp_dataFromISM.getBuffer();
-
-		for (i = 0; i < tmp_dataFromISM.length(); i += 4)
-		{
-			memcpy(&temp, ismData + i, 4);
-			temp = ntohl(temp);
-			audioFrame.push_back(temp);
-		}
+		GSM0610DataFrame* audioFrame = new GSM0610DataFrame();
+		ismData = ptr->getBuffer();
+		audioFrame->push_back_all(ismData, ptr->length());
 		audio_data_to_Audio.write(audioFrame);
 	}
 		break;

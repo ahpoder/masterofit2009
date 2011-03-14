@@ -10,8 +10,15 @@
 SC_HAS_PROCESS(AudioTop);
 
 AudioTop::AudioTop(sc_module_name nm) :
-		                                   // 23us = 44kHz
-	sc_module(nm), AudioClock("AudioClock", sc_time(23, SC_US) )
+		                                   // 125us = 8kHz
+	sc_module(nm), AudioClock("AudioClock", sc_time(125, SC_US) ),
+	adcToEchoFifo("ADCToEchoFifo"),
+	echoToEncodingFifo("EchoToEncodingFifo"),
+	encodingToCommunicationFifo("EncodingToCommunicationFifo"),
+	decodingToSplitterFifo("DecodingToSplitterFifo"),
+	splitterToDACFifo("SplitterToDACFifo"),
+	splitterToEchoFifo("SplitterToEchoFifo"),
+	speakerToMicrophoneFifo("SpeakerToMicrophoneFifo")
 {
   adcSim = new ADCSim("ADCSim");
   dacSim = new DACSim("DACSim");

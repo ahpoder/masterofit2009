@@ -11,11 +11,11 @@ public:
   // Clock
   sc_in_clk AudioClk;
 
-  sc_fifo_out<int> data_to_echo_cancellation;
+  sc_fifo_out<short> data_to_echo_cancellation;
 
   // This is to simulate that the data from the Speakers are
   // also picked up by the microphone
-  sc_fifo_in<int> data_from_speakers;
+  sc_fifo_in<short> data_from_speakers;
 
 private:
   void adc_reader_thread();

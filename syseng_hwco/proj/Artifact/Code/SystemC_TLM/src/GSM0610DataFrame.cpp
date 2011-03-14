@@ -2,31 +2,33 @@
 
 #include <string.h>
 
+#define DATA_FRAME_SIZE 32
+
 GSM0610DataFrame::GSM0610DataFrame()
   : idx(0)
 {
   memset(buffer, 0x00, sizeof(buffer));
 }
 
-bool GSM0610DataFrame::push_back(int value)
+bool GSM0610DataFrame::push_back(unsigned char value)
 {
-  if (idx == 128)
+  if (idx == DATA_FRAME_SIZE)
     return false;
   buffer[idx++] = value;
   return true;
 }
 
-bool GSM0610DataFrame::push_back_all(int* cpBuffer, int length)
+bool GSM0610DataFrame::push_back_all(const unsigned char* cpBuffer, int length)
 {
   int cpLength = length;
-  if ((cpLength + idx) > 128)
-	cpLength = 128 - idx;
+  if ((cpLength + idx) > DATA_FRAME_SIZE)
+	cpLength = DATA_FRAME_SIZE - idx;
   memcpy(buffer, cpBuffer, length);
   idx += length;
   return cpLength == length;
 }
 
-int GSM0610DataFrame::at(int index)
+unsigned char GSM0610DataFrame::at(int index)
 {
   if (index < idx && index >= 0)
 	return buffer[index];
@@ -38,14 +40,14 @@ int GSM0610DataFrame::length()
 	return idx;
 }
 
-const int* GSM0610DataFrame::getBuffer()
+const unsigned char* GSM0610DataFrame::getBuffer()
 {
   return buffer;
 }
 
 int GSM0610DataFrame::capacity()
 {
-	return 128;
+	return DATA_FRAME_SIZE;
 }
 
 std::ostream& operator<<(std::ostream& os, const GSM0610DataFrame& trans)

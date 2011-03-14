@@ -7,11 +7,11 @@ class GSM0610DataFrame
 {
 public:
   GSM0610DataFrame();
-  bool push_back(int value);
-  bool push_back_all(int* buffer, int length);
-  int at(int index);
+  bool push_back(unsigned char value);
+  bool push_back_all(const unsigned char* buffer, int length);
+  unsigned char at(int index);
   int length();
-  const int* getBuffer();
+  const unsigned char* getBuffer();
   int capacity();
 
 public:
@@ -39,7 +39,7 @@ public:
   friend void sc_trace(sc_trace_file*& tf, const GSM0610DataFrame& trans, std::string nm);
 private:
   int idx;
-  int buffer[128];
+  unsigned char buffer[32];
 };
 
 #endif

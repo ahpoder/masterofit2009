@@ -1,6 +1,6 @@
 #ifndef AUDIOENCODINGALGO_H
 #define AUDIOENCODINGALGO_H
 
-int* performAudioEncoding(int value, int* length);
+unsigned char* performAudioEncoding(short value, int* length);
 
 #endif

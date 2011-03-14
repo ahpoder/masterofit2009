@@ -29,15 +29,15 @@ private:
   AudioDecoding* audioDecoding;
   AudioEncoding* audioEncoding;
 
-  sc_fifo<int> adcToEchoFifo;
-  sc_fifo<int> echoToEncodingFifo;
-  sc_fifo<GSM0610DataFrame> encodingToCommunicationFifo;
+  sc_fifo<short> adcToEchoFifo;
+  sc_fifo<short> echoToEncodingFifo;
+  sc_fifo<GSM0610DataFrame*> encodingToCommunicationFifo;
 
-  sc_fifo<int> decodingToSplitterFifo;
-  sc_fifo<int> splitterToDACFifo;
-  sc_fifo<int> splitterToEchoFifo;
+  sc_fifo<short> decodingToSplitterFifo;
+  sc_fifo<short> splitterToDACFifo;
+  sc_fifo<short> splitterToEchoFifo;
 
-  sc_fifo<int> speakerToMicrophoneFifo; // To simulate feedback noise
+  sc_fifo<short> speakerToMicrophoneFifo; // To simulate feedback noise
 
   friend class CommunicationTop;
 

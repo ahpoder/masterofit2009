@@ -21,9 +21,9 @@ private:
   DataHandler* dataHandler;
   DataParser* dataParser;
 
-  sc_fifo<ISMDataFrame> communicationToISMFifo;
+  sc_fifo<ISMDataFrame*> communicationToISMFifo;
 
-  sc_fifo<GSM0610DataFrame> communicationToAudioFifo;
+  sc_fifo<GSM0610DataFrame*> communicationToAudioFifo;
 //  sc_fifo<ControlData> communicationToControlFifo;
 //  sc_fifo<FirmwareData> communicationToFirmwareFifo;
 

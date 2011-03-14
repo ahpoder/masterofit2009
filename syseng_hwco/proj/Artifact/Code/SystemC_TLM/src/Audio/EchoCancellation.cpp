@@ -28,6 +28,8 @@ void EchoCancellation::echo_cancellation_thread()
 	tmp_val_adc = data_from_adc.read();
 	tmp_val_splitter = data_from_splitter.read();
 
+//	printf("EchoCancellation::echo_cancellation_thread\r\n");
+
 	// EchoCancellation algorithm
 	// Insert delay in Echo cancellation
 	tmp_val_result = performEchoCancellation(tmp_val_adc, tmp_val_splitter);

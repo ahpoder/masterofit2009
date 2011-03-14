@@ -1,12 +1,12 @@
-#ifndef GSM0610DATAFRAME_H
-#define GSM0610DATAFRAME_H
+#ifndef FIRMWAREDATAFRAME_H
+#define FIRMWAREDATAFRAME_H
 
 #include <systemc.h>
 
-class GSM0610DataFrame
+class FirmwareDataFrame
 {
 public:
-  GSM0610DataFrame();
+	FirmwareDataFrame();
   bool push_back(int value);
   bool push_back_all(int* buffer, int length);
   int at(int index);
@@ -16,7 +16,7 @@ public:
 
 public:
   // Required by SystemC
-  GSM0610DataFrame& operator=(const GSM0610DataFrame& rhs)
+  FirmwareDataFrame& operator=(const FirmwareDataFrame& rhs)
   {
 	idx = rhs.idx;
 	if (idx > 0)
@@ -25,7 +25,7 @@ public:
 	}
 	return *this;
   }
-  bool operator==(const GSM0610DataFrame& rhs) const
+  bool operator==(const FirmwareDataFrame& rhs) const
   {
 	if (idx == rhs.idx)
 	{
@@ -35,8 +35,8 @@ public:
 	}
     return false;
   }
-  friend std::ostream& operator<<(std::ostream& file, const GSM0610DataFrame& trans);
-  friend void sc_trace(sc_trace_file*& tf, const GSM0610DataFrame& trans, std::string nm);
+  friend std::ostream& operator<<(std::ostream& file, const FirmwareDataFrame& trans);
+  friend void sc_trace(sc_trace_file*& tf, const FirmwareDataFrame& trans, std::string nm);
 private:
   int idx;
   int buffer[128];

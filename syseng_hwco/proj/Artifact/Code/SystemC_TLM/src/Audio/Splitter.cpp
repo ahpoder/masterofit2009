@@ -20,6 +20,8 @@ void Splitter::splitter_thread()
   {
 	tmp_val_audio_decoder = data_from_decoding.read();
 
+//	printf("Splitter::splitter_thread\r\n");
+
 	data_to_dac.write(tmp_val_audio_decoder);
 	data_to_echocancellation.write(tmp_val_audio_decoder);
   }

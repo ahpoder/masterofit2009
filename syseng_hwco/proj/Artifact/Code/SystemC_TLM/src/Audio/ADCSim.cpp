@@ -8,6 +8,7 @@ ADCSim::ADCSim(sc_module_name nm) :
 {
   SC_THREAD(adc_reader_thread);
   sensitive << AudioClk;
+  dont_initialize();
 
   fp_microphone = fopen(INPUT_FILE_MICROPHONE, "r");
 }
@@ -19,27 +20,28 @@ ADCSim::~ADCSim()
 
 void ADCSim::adc_reader_thread()
 {
-  int tmp_val_microphone;
-  int tmp_val_speaker;
+  short tmp_val_microphone;
+  short tmp_val_speaker;
   while(true)
   {
-	if (fscanf(fp_microphone, "%d", &tmp_val_microphone) == EOF)
+    wait(); // wait for next Audio clock
+//    wait(125, SC_US); // wait for next Audio clock
+
+//    printf("ADCSim::adc_reader_thread\r\n");
+
+	if (fscanf(fp_microphone, "%hd", &tmp_val_microphone) == EOF)
 	{
+		printf("No more audio input\r\n");
 		sc_stop();
 		break;
-	};
+	}
 
 	// This is to ensure that the speaker is allowed to
 	// write first. There can never be more than 1 value
 	// in the fifo, so a fifo is total overkill.
-	if (data_from_speakers.num_available() == 0)
-		wait(data_from_speakers.data_written_event());
-
 	tmp_val_speaker = data_from_speakers.read();
 
 	// Output microphone data
 	data_to_echo_cancellation.write(tmp_val_microphone + tmp_val_speaker);
-
-	wait(); // wait for next Audio clock
   }
 }

@@ -1,26 +1,25 @@
 #include "AudioDecodingAlgo.h"
 
-#define DATA_FRAME_SIZE 128
+#define DATA_FRAME_SIZE 32
 
-int performAudioDecoding(const int* encodedData, int encDataLength, int* resultBuffer, int resultBufferLengt)
+#include <string.h>
+
+int performAudioDecoding(const unsigned char* encodedData, int encDataLength, short* resultBuffer, int resultBufferLengt)
 {
-  int i;
+  int i, j;
+  short temp;
 
-  if (resultBufferLengt < 10*encDataLength)
+  if (resultBufferLengt < 5*encDataLength)
 	  return -1;
 
-  for (i = 0; i < encDataLength; ++i)
+  for (i = 0; i < encDataLength; i += 2)
   {
-	  resultBuffer[i * 10 + 0] = encodedData[i];
-	  resultBuffer[i * 10 + 1] = encodedData[i];
-	  resultBuffer[i * 10 + 2] = encodedData[i];
-	  resultBuffer[i * 10 + 3] = encodedData[i];
-	  resultBuffer[i * 10 + 4] = encodedData[i];
-	  resultBuffer[i * 10 + 5] = encodedData[i];
-	  resultBuffer[i * 10 + 6] = encodedData[i];
-	  resultBuffer[i * 10 + 7] = encodedData[i];
-	  resultBuffer[i * 10 + 8] = encodedData[i];
-	  resultBuffer[i * 10 + 9] = encodedData[i];
+	  memcpy(&temp, encodedData + i, 2);
+	  temp = ntohs(temp);
+	  for (j = 0; j < 10; ++j)
+	  {
+		resultBuffer[j + 10 * (i/2)] = temp;
+	  }
   }
-  return encDataLength * 10;
+  return encDataLength * 5;
 }

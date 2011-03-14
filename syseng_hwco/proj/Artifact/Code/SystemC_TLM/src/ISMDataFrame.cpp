@@ -15,6 +15,11 @@ void ISMDataFrame::setFrameType(FrameType fType)
   type = fType;
 }
 
+void ISMDataFrame::push_back(unsigned char val)
+{
+  buffer[idx++] = val;
+}
+
 void ISMDataFrame::setFrameContent(const unsigned char* data, int length)
 {
   memcpy(buffer, data, length);

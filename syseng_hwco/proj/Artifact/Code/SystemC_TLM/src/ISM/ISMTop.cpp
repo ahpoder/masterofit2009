@@ -7,7 +7,8 @@
 #include <ISM/ISMSim.h>
 
 ISMTop::ISMTop(sc_module_name nm) :
-	sc_module(nm)
+	sc_module(nm),
+	ismToCommunicationFifo("ISMToCommunicationFifo")
 {
   ismSim = new ISMSim("ISMSim");
 

@@ -19,10 +19,12 @@ DACSim::~DACSim()
 
 void DACSim::dac_writer_thread()
 {
-  int tmp_val_speaker;
+  short tmp_val_speaker;
   while(true)
   {
 	tmp_val_speaker = data_from_splitter.read();
+
+//	printf("DACSim::dac_writer_thread\r\n");
 
     fprintf(fp_speaker, "%d\r\n", tmp_val_speaker);
 

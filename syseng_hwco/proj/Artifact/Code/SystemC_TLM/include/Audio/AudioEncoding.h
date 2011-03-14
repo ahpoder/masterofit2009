@@ -10,9 +10,9 @@
 class AudioEncoding : public sc_module
 {
 public:
-  sc_fifo_in<int> data_from_echocancellation;
+  sc_fifo_in<short> data_from_echocancellation;
 
-  sc_fifo_out<GSM0610DataFrame> data_to_communication;
+  sc_fifo_out<GSM0610DataFrame*> data_to_communication;
 
 private:
   void audio_encoding_thread();

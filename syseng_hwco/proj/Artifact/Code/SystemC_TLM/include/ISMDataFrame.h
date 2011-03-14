@@ -16,6 +16,7 @@ class ISMDataFrame
 public:
   ISMDataFrame();
   void setFrameType(FrameType fType);
+  void push_back(unsigned char val);
   void setFrameContent(const unsigned char* data, int length);
   FrameType getFrameType();
   int length();
