@@ -36,7 +36,8 @@ void AudioDecoding::audio_receiving_thread()
 	printf("AudioDecoding::audio_receiving_thread: %d\r\n", receiveBuffer.capacity() - receiveBuffer.size());
 	if (receiveBuffer.capacity() - receiveBuffer.size() == 0)
 	{
-		printf("Overflow\r\n");
+		printf("Audio receive buffer Overflow\r\n");
+		sc_stop();
 		break;
 	}
 
@@ -88,6 +89,7 @@ void AudioDecoding::audio_decoding_thread()
 	else
 	{
 		printf("No data to decode\r\n");
+		return;
 	}
   }
 }
