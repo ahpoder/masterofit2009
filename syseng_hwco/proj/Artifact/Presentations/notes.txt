@@ -6,9 +6,3 @@
 4. Lessons learned
 5. The learning objectives
 
-
-Manglende forkortelser:
-
-MARTE
-RTL, CAM, BCAM, CCAM, ISS
-PCM
