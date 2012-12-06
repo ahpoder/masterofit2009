@@ -1,0 +1,107 @@
+Find the ID of the film "The Rock" from 1996? (Use find()):
+	db.movies.find({ title: "The Rock" },{_id: 1}) - no such movie found.
+	A little searching using db.movies.find({ title: /Rock/ }) revelas a Rock, The, and inserting this we get:
+	db.movies.find({ title: "Rock, The (1996)" },{_id: 1}) - id = 733
+
+Find how many 5-star ratings "The Rock" has received received? (Use find())
+	db.ratings.count({ rating: 5, movie_id: 733 }) = 299
+
+Calculate a document/cursor describing the distribution of ratings of The Rock? (That is, how many 1, 2, 3, 4, 5 star ratings?) (Use mapReduce())
+	var mapFunction1 = function() {
+						   var value = 1;
+						   emit(this.rating, value);
+					   };
+	var reduceFunction1 = function(key, values) {
+							  return Array.sum(values);
+						  };
+	db.ratings.mapReduce(
+						 mapFunction1,
+						 reduceFunction1,
+						 { out: "ratings_distribution", query: { movie_id: 733 } }
+					   )
+
+Calculate the average rating of The Rock? (Use mapReduce(). You may calculate it on either the original ratings collection or on the output collection from the previous mapReduce.) [I get 3.723]
+	var mapFunction1 = function() {
+						   emit(this.movie_id, this.rating);
+					   };
+	var reduceFunction1 = function(key, values) {
+							  return Array.sum(values) / values.length;
+						  };
+	db.ratings.mapReduce(
+						 mapFunction1,
+						 reduceFunction1,
+						 { out: { inline: 1 }, query: { movie_id: 733 } }
+					   )
+	= 3.6444281524926687
+
+Count how many movies are classifed as 'Animation' movies?
+	db.movies.count( { genres: { $all: [ "Animation" ] } } ) = 205
+
+Generate a collection "drama" containing all titles of movies classified as genre Drama.
+	var x = db.movies.find( { genres: { $all: [ "Drama" ] } }, { _id: 0,title: 1 } )
+	for (var i = 0; i < x.length(); ++i) {
+		db.drama_movies.insert( {
+			movie : x[i]
+		});
+	}
+
+How many users have profession 'writer' (occupation=20)?
+	db.users.count({ occupation: 20 }) = 281
+What is the distribution of ratings for The Rock given by writers? (Tricky :)
+	var x = db.users.find({ occupation: 20 },{_id:1})
+
+// Attempt one - n possible as x may not be used in this way
+	var mapFunction1 = function() {
+						   emit(this.rating, value);
+					   };
+	var reduceFunction1 = function(key, values) {
+							  return Array.sum(values);
+						  };
+	db.ratings.mapReduce(
+						 mapFunction1,
+						 reduceFunction1,
+						 { out: "ratings_distribution", query: { movie_id: 733, user_id: { $in: x } } }
+					   )
+
+// Attempt two - n possible as x may not be used in this way
+	var mergeUsersAndRatings = function() {
+		var counts = {  };
+		var values = {  };
+		for (var k = 1; k < 6; ++k) {
+		    values["rating." + k] = 0;
+			values["count." + k] = 0;
+		}
+		
+		var x = db.users.find({ occupation: 20 },{_id:1})
+		var y = db.ratings.find( { movie_id: 733 }, { _id:0,user_id:1,rating:1 } )
+		var n = 0;
+	   for (var i = 0; i < y.length(); ++i) {
+		var found = 0;
+			for (var j = 0; j < x.length() && found == 0; ++j) {
+				if (y[i].user_id == x[j]._id) {
+					found = 1;
+					var rating = y[i].rating;
+					values["rating." + rating] += rating;
+					values["count." + rating] += 1;
+					++n;
+				}
+			}
+		}
+		for (var k = 1; k < 6; ++k) {
+		    values["average." + k] = values["rating." + k] / values["count." + k];
+		}
+
+		return values;
+	   }
+	// not a very efficient method, but it works
+	
+The MovieLens data is obviously normalized and thus the worst possible format for a document-based NoSQL database. Design a new 'schema' in JSON that would be much more effecient for Mongo.
+
+Hand-craft a small set of documents (5-10) using your new schema which examplify MovieLens data, put them into a new collection, and redesign the above queries so they operate on the new schema.
+
+Optional: Design a (set of) map-reduce functions that will translate the three MovieLens collections into a single collection with your newly defined schema (denormalization). (Tricky, I haven't been able to do it (yet) :)
+
+Optional: Use two/more machines to explore the auto-sharding facilities in MongoDB.
+
+Optional: Use three machines to explore the replication facilities in MongoDB.
+Optional: Read the MovieLens data into a SQL database of your choice and compare performance between SELECTS and Map-Reduce. (Postings on the web generally state that Map Reduce is slow in Mongo.)

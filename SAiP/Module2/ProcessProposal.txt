@@ -1,0 +1,12 @@
+Hej Henrik,
+
+Jeg har lige et generelt spørgsmål til de arkitektur evaluerings metoder vi har undersøgt. QAW og ATAM er begge engangsprojekter, hvor der udarbejdes en rapport, men de indeholder ingen process for det videre forløb. Der er derfor en meget reel risiko for at rapporten bare havner i en skuffe. aSQA er anderledes, da den fokuserer på processen og et værktøj til at forsøge at holde fokus igennem udviklingsprojektet. Ulempen er, som du selv nævnte, disse komponenter som er meget svære for stakeholders at forholde sig til.
+
+Det som aSQA basalt set gør er at tildele en vigtighed og en færdighedsgrad til en given komponent. I et utility tree tildeler man nogle af de samme kriterier via vigtighed og kompleksitet. Faktisk kan man sige at det er de samme kriterier, da kompleksiteten altid vil falde efterhånden som opgaven færdiggøres og ende med en kompleksitet 0 når opgaven er færdig (ingen kompleksistet da der ingen udestående opgave er og dermed ingen risk).
+
+Er der nogen der har overvejet at anvende utility tree som et process værktøj? Utility tree skal jo per definition være overskueligt. F.eks. kan det hænges op ved siden af sprint boarded (hvis man anvender scrum), og så kan man ved hver retrospektive opdatere kompleksitet (færdighedsg (man kan evt. anvende 0 - 5 i stedet for H,M,L for at opnå en numerisk sammenligning samt et 0 til at indikere done) og ved hver planning kan man overveje hvilke der skal med i sprintet via denne vigtighed og færdighedsgrad. Jeg ville nok vælge at sige at kompleksiteten skal forblive høj så længe der er dark horses, da det er vigtigt at få afklaret disse før et realistisk estimat kan gives. Man kunne f.eks. vedtage at 5 og 4 betyder at der er betydelige risici og 3 - 0 er rent færdighedsgrad.
+
+På den måde arbejder man med de scenarier der blev udarbejdet under ATAM og/eller QAW til daglig, og de gemmes derfor ikke i en skuffe. Samtidig er det nemt for udviklerne at se hvad der er vigtigt for stakeholders, og de får derfor et større forhold til målet (og ikke bare udviklingsopgaven). Endelig er det "nemt" for arkitekten at overskue om der er nogle områder som bliver negliseret (og han bliver mindet om det hver dag).
+
+Kan du se nogle problemer med denne fremgangsmåde som jeg ikke lige har tænkt på?
+

@@ -1,0 +1,114 @@
+Software Architecture in Practice
+
+Big data example - Using MongoDB
+
+by Henrik B Christensen, AU 2012
+
+================================
+
+To experiment with MongoDB's facilities we need a somewhat large
+database. The guide below details the process to get data into
+Mongo DB. It is based on chapter 6 from the Wiley book "Professional
+NoSQL" by Shashank Tiwari. I can highly recommend the book if you
+want to get hands on.
+
+Getting the Data into Mongo
+===========================
+
+Raw data files
+--------------
+The data source is a set of movie ratings, published by Movielens.
+The data can be found at grouplens.org/node/73.
+
+Download MovieLens 1M Data Set (.zip) and unpack it in some
+suitable place.
+
+However - on my Windows platform I ran into encoding problems and
+resorted to (manual!) removing the offending characters from the
+movies.dat file (sorry to all the french movies). 
+
+I have permission by John Riedl to host an edited version of this file
+on a password protected site, so download it from the link provided in
+the mandatory exercise description.
+
+Get the Raw-Mongo converter script
+----------------------------------
+
+This is available at the book's web site: wrox.com. Please follow
+this link:
+
+http://www.wrox.com/WileyCDA/WroxTitle/Professional-NoSQL.productCd-047094224X,descCd-DOWNLOAD.html
+
+and click the 'click to download'.
+
+In the zip file, open folder 'ch06/ch06' and get the ruby script
+
+movielens_dataloader.rb
+
+and copy it to the folder where you have your movie lens .dat files.
+
+Get Ruby
+--------
+
+Sigh - the script uses the Ruby language. 
+
+I used 
+
+http://rubyinstaller.org/downloads/
+
+and selected the RubyInstaller for version 1.9.3
+  (I selected that the installer should add ruby to the PATH).
+
+Get Mongo driver for Ruby
+-------------------------
+
+Open a shell and use the ruby package installer to get 
+the drivers by issuing these commands in the shell:
+
+ gem update --system   (Ubuntu will not let you do that, works anyway)
+ gem install mongo     (prefix with 'sudo' on Ubuntu)
+ gem install bson
+ gem install bson_ext	(fails on Ubuntu, works anyway)
+
+It is explained in detail at
+
+http://www.mongodb.org/display/DOCS/Ruby+Language+Center
+
+Start Mongo DB
+--------------
+
+On Windows, run the mongod.exe.
+
+More detail at
+
+http://www.mongodb.org/display/DOCS/Starting+and+Stopping+Mongo
+
+Convert the raw data
+--------------------
+
+Open a shell in the folder containing the three .dat files from
+MovieLens. Now convert each of the .dat files like this
+
+ruby movielens_dataloader.rb users.dat
+ruby movielens_dataloader.rb movies-edit.dat
+ruby movielens_dataloader.rb ratings.dat
+
+(the ratings.dat is the big one and takes some time to chew.)
+
+Done!
+
+Validating the DB
+=================
+
+Open the mongo console (mongo.exe in Windows). The database
+is called 'mydb', so tell the mongo JavaScript shell to use that
+
+use mydb
+
+To see how many ratings there are:
+
+db.ratings.count();
+
+I get about 1 mio ratings.
+
+
