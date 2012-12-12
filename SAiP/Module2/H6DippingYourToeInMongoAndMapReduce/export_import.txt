@@ -1,0 +1,7 @@
+mongoexport --db mydb --collection users --out mydb_users.json
+mongoexport --db mydb --collection ratings --out mydb_ratings.json
+mongoexport --db mydb --collection movies --out mydb_movies.json
+
+mongoimport --db mydb --collection users --file f:mydb_users.json
+mongoimport --db mydb --collection ratings --file f:mydb_ratings.json
+mongoimport --db mydb --collection movies --file f:mydb_users.json
