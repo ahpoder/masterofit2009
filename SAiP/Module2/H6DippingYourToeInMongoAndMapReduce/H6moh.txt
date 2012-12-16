@@ -1,0 +1,35 @@
+
+Opg 1
+db.movies.find({ title: "The Rock" },{_id: 1})
+
+Hvorfor lige:   _id:1 
+Burde være nok med:    db.movies.find({ title: "The Rock" })
+
+
+Opg 3
+> var mapfunc1 = function(){emit(this.rating,1);  };
+> var reduceFunk1 =function(key,rating){return Array.sum(rating) };
+> db.ratings.mapReduce(mapfunc1,reduceFunk1,{out:"opg3",query:{movie_id:733}})
+
+opg 4
+ db.opg3.group({
+		initial:{count:0,sum:0},
+		reduce:function(rec,out){out.count+=rec.value;out.sum+=rec._id*rec.value;}, 
+		finalize:function(out){out.avg= out.sum/out.count;}
+	         })
+
+opg 5
+db.movies.find( { genres: { $all: [ "Animation" ] } } ).count()
+Men jeg får 105 ????
+
+Opg 6
+var mapfunc3 = function(){emit(this._id,this);  };
+var reduceFunk3 =function(id,value){return value };
+
+db.movies.mapReduce(mapfunc3,reduceFunk3,{out:"drama",query:{ genres: { $all:
+[ "Drama" ] } }   })
+
+Opg 7
+ db.users.find({occupation:20}).count()
+
+opg 8
