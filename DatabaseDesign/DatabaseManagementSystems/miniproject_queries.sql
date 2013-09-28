@@ -126,3 +126,4 @@ UPDATE customerinvoices SET paied=true WHERE invoiceno IN (SELECT cinvoiceid AS 
 -- WHERE is not needed as there can be only one
 END TRANSACTION;
 
+DROP TEMPORARY TABLE tempidcollection;
