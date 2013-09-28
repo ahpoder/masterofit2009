@@ -92,7 +92,7 @@ namespace DatabaseContentGenerator
                 }
 
                 sw.WriteLine("-- Drop reference tables");
-                sw.WriteLine("DROP TEMPORARY TABLE tempproductidrefs;");
+                sw.WriteLine("DROP TABLE tempproductidrefs;");
 
                 sw.Close();
                 MessageBox.Show("Database population file generated");
