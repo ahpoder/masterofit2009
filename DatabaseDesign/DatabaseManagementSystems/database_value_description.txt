@@ -1,3 +1,11 @@
-100000 products distributes on 5000 product lines and 20 brands
-
-No transactions
+100000 products
+5000 productlines + 1 no-line
+20 brands + 1 no-brand
+All products has size 0 - 79 (XXS - XXXL)
+All products hsa a colour ("red", "white", "green", "blue", "lightblue", "baige", "black", "multicoloured")
+10 manufactorers with random currency
+10000 pricing plans without discount
+10000 pricing plans with discount
+2000 of the pricing plans has quantity discounts.
+Each product is produced by 1 or 2 manufactorers with random pricing plans.
+Each product has been belivered between 1 and 15 times and in each order is between 1 and 10 products

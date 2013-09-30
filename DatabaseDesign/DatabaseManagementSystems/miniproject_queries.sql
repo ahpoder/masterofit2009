@@ -71,7 +71,7 @@ END TRANSACTION;
 BEGIN TRANSACTION;
 INSERT INTO manufactorerdeliveries VALUES ('CN34554345', 'DHL-274622', CURRENT_DATE + integer '13');
 UPDATE manufactorerorders SET freightno='DHL-274622' WHERE orderid IN (SELECT morderid FROM tempidcollection);
-UPDATE products SET instock=instock+1200 WHERE pid IN (SELECT productid AS pid FROM tempidcollection);
+--UPDATE products SET instock=instock+1200 WHERE pid IN (SELECT productid AS pid FROM tempidcollection);
 END TRANSACTION;
 
 -- create web-shop
@@ -121,9 +121,9 @@ BEGIN TRANSACTION;
 INSERT INTO customerdeliveries (deliverydate, freightno) VALUES (CURRENT_DATE + integer '23', 'UPS-2635343');
 UPDATE tempidcollection SET cdeliveryid=LASTVAL();
 UPDATE customerorders SET deliveryid=tempidcollection.cdeliveryid FROM customerorders aco INNER JOIN tempidcollection ON aco.orderid=tempidcollection.corderid;
-UPDATE products SET instock=instock-1 WHERE pid IN (SELECT productid AS pid FROM tempidcollection);
+-- UPDATE products SET instock=instock-1 WHERE pid IN (SELECT productid AS pid FROM tempidcollection);
 UPDATE customerinvoices SET paied=true WHERE invoiceno IN (SELECT cinvoiceid AS invoiceno FROM tempidcollection);
 -- WHERE is not needed as there can be only one
 END TRANSACTION;
 
-DROP TEMPORARY TABLE tempidcollection;
+DROP TABLE tempidcollection;

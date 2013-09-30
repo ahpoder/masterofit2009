@@ -227,3 +227,43 @@ FOREIGN KEY (orderid) REFERENCES customerorders(orderid),
 FOREIGN KEY (productid) REFERENCES products(pid),
 FOREIGN KEY (priceingplanid) REFERENCES pricingplans(id)
 );
+
+CREATE FUNCTION trigfunc_manufactorer_order() RETURNS trigger AS $$
+  BEGIN
+	UPDATE products SET instock=p.instock+mop.count FROM manufactorerorders mo INNER JOIN manufactorerorderedproducts mop ON mo.orderid=mop.orderid INNER JOIN products p ON mop.productid=p.pid WHERE mo.orderid=NEW.orderid;
+    return NEW;
+  END
+$$ LANGUAGE plpgsql;
+
+-- This trigger is only for debugging as we would like to insert an order directly (not via update)
+CREATE TRIGGER insert_in_stock_manufactorer
+  AFTER INSERT ON manufactorerorders
+  FOR EACH ROW 
+  WHEN (NEW.freightno IS NOT NULL)
+  EXECUTE PROCEDURE trigfunc_manufactorer_order();
+
+CREATE TRIGGER update_in_stock_manufactorer
+  AFTER UPDATE ON manufactorerorders
+  FOR EACH ROW 
+  WHEN (NEW.freightno IS NOT NULL AND OLD.freightno IS NULL)
+  EXECUTE PROCEDURE trigfunc_manufactorer_order();
+
+CREATE FUNCTION trigfunc_customer_order() RETURNS trigger AS $$
+  BEGIN
+	UPDATE products SET instock=p.instock-cop.count FROM customerorders co INNER JOIN customerorderproducts cop ON co.orderid=cop.orderid INNER JOIN products p ON cop.productid=p.pid WHERE co.orderid=NEW.orderid;
+    return NEW;
+  END
+$$ LANGUAGE plpgsql;
+
+-- This trigger is only for debugging as we would like to insert an order directly (not via update)
+CREATE TRIGGER insert_in_stock_customer
+  AFTER INSERT ON customerorders
+  FOR EACH ROW 
+  WHEN (NEW.deliveryid IS NOT NULL)
+  EXECUTE PROCEDURE trigfunc_customer_order();
+
+CREATE TRIGGER update_in_stock_customer
+  AFTER UPDATE ON customerorders
+  FOR EACH ROW 
+  WHEN (NEW.deliveryid IS NOT NULL AND OLD.deliveryid IS NULL)
+  EXECUTE PROCEDURE trigfunc_customer_order();

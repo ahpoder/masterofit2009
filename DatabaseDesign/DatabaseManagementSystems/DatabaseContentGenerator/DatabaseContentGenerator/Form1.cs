@@ -22,7 +22,12 @@ namespace DatabaseContentGenerator
         {
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
+                int startID = string.IsNullOrEmpty(textBox1.Text) ? 1000 : int.Parse(textBox1.Text);
+
                 var r = new Random();
+
+                var productsQuery = new StringBuilder();
+
                 FileStream fs = File.Open(saveFileDialog1.FileName, FileMode.Create, FileAccess.Write, FileShare.None);
                 var sw = new StreamWriter(fs);
                 sw.WriteLine("\\c webshoptest1");
@@ -30,7 +35,7 @@ namespace DatabaseContentGenerator
                 sw.WriteLine("-- We do not use temp tables, but rather directly insert the SERIAL number directly - higher performance");
 
                 sw.WriteLine("-- Create products");
-                sw.WriteLine("SELECT setval('products_pid_seq', 999);");
+                sw.WriteLine("SELECT setval('products_pid_seq', " + (startID - 1) + ");");
                 sw.Write("INSERT INTO products (name,weight) VALUES ");
                 for (int i = 0; i < 100000; ++i)
                 {
@@ -60,31 +65,31 @@ namespace DatabaseContentGenerator
                 {
                     int productlineid = r.Next(5001);
                     if (productlineid < 5000)
-                        sw.Write("(" + (i + 1000) + ", 'productline'," + productLines[productlineid] + "),");
+                        sw.Write("(" + (i + startID) + ", 'productline'," + productLines[productlineid] + "),");
                     int brandid = r.Next(21);
                     if (brandid < 20)
-                        sw.Write("(" + (i + 1000) + ", 'brand'," + brands[brandid] + "),");
+                        sw.Write("(" + (i + startID) + ", 'brand'," + brands[brandid] + "),");
                     int size = r.Next(80);
                     if (size < 10)
-                        sw.Write("(" + (i + 1000) + ", 'size','XXS'),");
+                        sw.Write("(" + (i + startID) + ", 'size','XXS'),");
                     else if (size < 20)
-                        sw.Write("(" + (i + 1000) + ", 'size','XS'),");
+                        sw.Write("(" + (i + startID) + ", 'size','XS'),");
                     else if (size < 30)
-                        sw.Write("(" + (i + 1000) + ", 'size','S'),");
+                        sw.Write("(" + (i + startID) + ", 'size','S'),");
                     else if (size < 40)
-                        sw.Write("(" + (i + 1000) + ", 'size','M'),");
+                        sw.Write("(" + (i + startID) + ", 'size','M'),");
                     else if (size < 50)
-                        sw.Write("(" + (i + 1000) + ", 'size','L'),");
+                        sw.Write("(" + (i + startID) + ", 'size','L'),");
                     else if (size < 60)
-                        sw.Write("(" + (i + 1000) + ", 'size','XL'),");
+                        sw.Write("(" + (i + startID) + ", 'size','XL'),");
                     else if (size < 70)
-                        sw.Write("(" + (i + 1000) + ", 'size','XXL'),");
+                        sw.Write("(" + (i + startID) + ", 'size','XXL'),");
                     else
-                        sw.Write("(" + (i + 1000) + ", 'size','XXXL'),");
-                    sw.Write("(" + (i + 1000) + ", 'sizemeasurement'," + size + "),");
-                    sw.Write("(" + (i + 1000) + ", 'colour','" + colours[r.Next(colours.Length)] + "'),");
+                        sw.Write("(" + (i + startID) + ", 'size','XXXL'),");
+                    sw.Write("(" + (i + startID) + ", 'sizemeasurement'," + size + "),");
+                    sw.Write("(" + (i + startID) + ", 'colour','" + colours[r.Next(colours.Length)] + "'),");
                 }
-                sw.WriteLine("(" + (100000 + 1000) + ", 'colour','" + colours[r.Next(colours.Length)] + "');");
+                sw.WriteLine("(" + (100000 + startID) + ", 'colour','" + colours[r.Next(colours.Length)] + "');");
 
                 var currency = new string[] { "DKK", "EUR", "USD", "GBP", "AUD", "INR", "AED", "CAD", "CHF", "CNY" };
 
@@ -101,7 +106,7 @@ namespace DatabaseContentGenerator
 
                 var termsofdelivery = new string[] { "abLager", "SideOfShip", "3month", "14dg", "7dg", "1dg" };
 
-                sw.WriteLine("SELECT setval('pricingplans_id_seq', 999);");
+                sw.WriteLine("SELECT setval('pricingplans_id_seq', " + (startID + 1) + ");");
                 sw.Write("INSERT INTO pricingplans (price,discount,deliveryconditions) VALUES ");
                 for (int i = 0; i < 10000; ++i)
                 {
@@ -119,15 +124,91 @@ namespace DatabaseContentGenerator
                 sw.Write("INSERT INTO quantitydiscounts VALUES ");
                 for (int i = 0; i < 2000; ++i)
                 {
-                    sw.Write("(" + ((i * 10) + 1000) + ",10,0.1),");
-                    sw.Write("(" + ((i * 10) + 1000) + ",50,0.2),");
-                    sw.Write("(" + ((i * 10) + 1000) + ",100,0.3),");
-                    sw.Write("(" + ((i * 10) + 1000) + ",500,0.4),");
-                    sw.Write("(" + ((i * 10) + 1000) + ",1000,0.5),");
+                    sw.Write("(" + ((i * 10) + startID) + ",10,0.1),");
+                    sw.Write("(" + ((i * 10) + startID) + ",50,0.2),");
+                    sw.Write("(" + ((i * 10) + startID) + ",100,0.3),");
+                    sw.Write("(" + ((i * 10) + startID) + ",500,0.4),");
+                    sw.Write("(" + ((i * 10) + startID) + ",1000,0.5),");
                 }
-                sw.Write("(1001,10,0.1);");
+                sw.WriteLine("(" + (startID + 1) + ",10,0.1);");
 
                 sw.WriteLine("-- Create manufactorer products");
+
+                var mp = new Dictionary<string, List<int>>();
+
+                sw.Write("INSERT INTO manufactorerproducts VALUES ");
+                for (int i = startID; i < (100000 + startID - 1); ++i)
+                {
+                    int id = r.Next(11);
+                    string m1 = "MA010203" + id.ToString("00");
+                    sw.Write("('" + m1 + "'," + i + "," + r.Next(startID, 20000 + startID) + "),");
+                    List<int> pids;
+                    if (!mp.TryGetValue(m1, out pids))
+                    {
+                        pids = new List<int>();
+                        mp.Add(m1, pids);
+                    }
+                    pids.Add(i);
+                    if (r.Next(100) < 10)
+                    {
+                        int id2 = r.Next(10);
+                        if (id != id2)
+                        {
+                            string m2 = "MA010203" + id2.ToString("00");
+                            sw.Write("('" + m2 + "'," + i + "," + r.Next(startID, 20000 + startID) + "),");
+                            if (!mp.TryGetValue(m2, out pids))
+                            {
+                                pids = new List<int>();
+                                mp.Add(m2, pids);
+                            }
+                            pids.Add(i);
+                        }
+                    }
+                }
+                sw.WriteLine("('MA01020310'," + (100000 + startID - 1) + "," +
+                            r.Next(startID, 20000 + startID) + ");");
+                List<int> pidsX;
+                if (!mp.TryGetValue("MA01020310", out pidsX))
+                {
+                    pidsX = new List<int>();
+                    mp.Add("MA01020310", pidsX);
+                }
+
+                sw.WriteLine("-- We cheat and create the orders in reverse order to be able to create the order in one go");
+
+                sw.WriteLine("-- Create manufactorer orders"); // This should match the producted products
+
+                sw.WriteLine("SELECT setval('manufactorerorders_orderid_seq', " + (startID - 1) + ");");
+                var oids = new Dictionary<int, List<int>>();
+                sw.Write("INSERT INTO manufactorerorders VALUES ");
+                var manufactorerOrderProducts = new StringBuilder("INSERT INTO manufactorerorderedproducts VALUES ");
+                var manufactorerCOC = new StringBuilder("INSERT INTO manufactorerorderconfirmations VALUES ");
+                var manufactorerInvoice = new StringBuilder("INSERT INTO manufactorerinvoices VALUES ");
+                var manufactorerDelivery = new StringBuilder("INSERT INTO manufactorerdeliveries VALUES ");
+                int orderid = startID;
+                foreach (KeyValuePair<string,List<int>> mm in mp)
+                {
+                    int ordercount = r.Next(15) + 1;
+                    for (int j = 0; j < ordercount; ++j)
+                    {
+                        int productcount = r.Next(10) + 1;
+                        sw.Write("(" + );
+                        foreach (int pid in mm.Value)
+                        {
+                            
+                        }
+                    }
+                }
+
+                // Product updates will be very slow.
+
+INSERT INTO manufactorerorders (manufactorerid,orderdate) VALUES ('CN34554345',CURRENT_DATE); 
+-- This is a trick to the code can be executed in sequence, but in reality it would be an insert with a select of the id followed by another INSERT controlled by the application
+UPDATE tempidcollection SET morderid=LASTVAL();
+INSERT INTO manufactorerorderedproducts (orderid,productid,priceingplanid,count) SELECT morderid, productid, mpricingplanid, 1200 FROM tempidcollection;
+
+
+                sw.Write("INSERT INTO manufactorerorderedproducts VALUES ");
 
                 sw.Close();
                 MessageBox.Show("Database population file generated");
