@@ -61,7 +61,7 @@ manufactorerid  VARCHAR(128),
 invoiceno VARCHAR(128) NOT NULL,
 invoicedate DATE NOT NULL,
 paybefore DATE NOT NULL,
-paied BOOLEAN NOT NULL DEFAULT false,
+paid BOOLEAN NOT NULL DEFAULT false,
 PRIMARY KEY(manufactorerid,invoiceno),
 FOREIGN KEY (manufactorerid) REFERENCES manufactorer(vatno)
 );
@@ -111,20 +111,24 @@ FOREIGN KEY (productid) REFERENCES products(pid),
 FOREIGN KEY (priceingplanid) REFERENCES pricingplans(id)
 );
 
--- trigger for inserting the products in the warehouse???
+CREATE TYPE termsofpayment AS ENUM ('prepay', '10dgNet', '14dgNet', '30dgNet', 'LbMntPlus15dg');
 
-CREATE TABLE phones (
-pid INTEGER PRIMARY KEY,
-phone VARCHAR(32)
+CREATE TABLE webshops (
+  id SERIAL PRIMARY KEY,
+  vatno VARCHAR(64) NOT NULL,
+  name VARCHAR(128) NOT NULL,
+  paymentcurrency currency NOT NULL,
+  invoiceaddress VARCHAR(256) NOT NULL,
+  paymentconditions termsofpayment NOT NULL DEFAULT '30dgNet'
 );
 
 CREATE TYPE apartmentlocations AS ENUM ('left', 'middle', 'right');
 CREATE TYPE countries AS ENUM ('Denmark', 'England', 'USA');
-CREATE TYPE termsofpayment AS ENUM ('prepay', '10dgNet', '14dgNet', '30dgNet', 'LbMntPlus15dg');
 
 -- We do not store the city as it may be derived form the postal code and there are lots of online services for that, and that way we do not risk an inconsistency.
 CREATE TABLE customers (
 id SERIAL PRIMARY KEY,
+webshopid INTEGER NOT NULL,
 firstname VARCHAR(128) NOT NULL,
 middlename VARCHAR(128) NULL,
 sirname VARCHAR(128) NOT NULL,
@@ -136,9 +140,15 @@ streetname VARCHAR(128) NOT NULL,
 postalcode VARCHAR(32) NOT NULL,
 region VARCHAR(64) NULL,
 country countries NOT NULL,
-phones INTEGER NULL,
 paymentconditions termsofpayment NOT NULL DEFAULT 'prepay',
-FOREIGN KEY(phones) REFERENCES phones(pid)
+FOREIGN KEY(webshopid) REFERENCES webshops(id)
+);
+
+CREATE TABLE customerphones (
+cid INTEGER,
+phone VARCHAR(32),
+PRIMARY KEY (cid,phone),
+FOREIGN KEY (cid) REFERENCES customers(id)
 );
 
 -- partly for fun and partly because we control the IDs we reverse the dependency and make the ids unique.
@@ -159,7 +169,7 @@ CREATE TABLE customerinvoices (
 invoiceno SERIAL PRIMARY KEY,
 invoicedate DATE NOT NULL,
 paybefore DATE NULL,
-paied BOOLEAN NOT NULL DEFAULT false
+paid BOOLEAN NOT NULL DEFAULT false
 );
 
 -- freightno is null is the delivery is picked up at the warehouse
@@ -183,15 +193,6 @@ FOREIGN KEY(netsid) REFERENCES netspayments(netsid),
 FOREIGN KEY(cocid) REFERENCES customerorderconfirmations(cocno),
 FOREIGN KEY(invoiceid) REFERENCES customerinvoices(invoiceno),
 FOREIGN KEY(deliveryid) REFERENCES customerdeliveries(deliveryid)
-);
-
-CREATE TABLE webshops (
-  id SERIAL PRIMARY KEY,
-  vatno VARCHAR(64) NOT NULL,
-  name VARCHAR(128) NOT NULL,
-  paymentcurrency currency NOT NULL,
-  invoiceaddress VARCHAR(256) NOT NULL,
-  paymentconditions termsofpayment NOT NULL DEFAULT '30dgNet'
 );
 
 -- be very very careful. Inserting into this relation will change an existing pricing plan - can it be prevented?
@@ -236,12 +237,6 @@ CREATE FUNCTION trigfunc_manufactorer_order() RETURNS trigger AS $$
 $$ LANGUAGE plpgsql;
 
 -- This trigger is only for debugging as we would like to insert an order directly (not via update)
-CREATE TRIGGER insert_in_stock_manufactorer
-  AFTER INSERT ON manufactorerorders
-  FOR EACH ROW 
-  WHEN (NEW.freightno IS NOT NULL)
-  EXECUTE PROCEDURE trigfunc_manufactorer_order();
-
 CREATE TRIGGER update_in_stock_manufactorer
   AFTER UPDATE ON manufactorerorders
   FOR EACH ROW 
@@ -256,12 +251,6 @@ CREATE FUNCTION trigfunc_customer_order() RETURNS trigger AS $$
 $$ LANGUAGE plpgsql;
 
 -- This trigger is only for debugging as we would like to insert an order directly (not via update)
-CREATE TRIGGER insert_in_stock_customer
-  AFTER INSERT ON customerorders
-  FOR EACH ROW 
-  WHEN (NEW.deliveryid IS NOT NULL)
-  EXECUTE PROCEDURE trigfunc_customer_order();
-
 CREATE TRIGGER update_in_stock_customer
   AFTER UPDATE ON customerorders
   FOR EACH ROW 
