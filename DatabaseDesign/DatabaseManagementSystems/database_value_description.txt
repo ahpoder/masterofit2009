@@ -15,12 +15,3 @@ Each webshop has between 50 and 10000 customers
 Each customer has purchased between 0 and 100 products
 Each order from the customer consists of between 1 and 10 products.
 Each product is purchased in a quantity og 1 to 3 units
-
-
-
-
-psql:C:/Users/ahp/Documents/tempdb.sql:27: ERROR:  insert or update on table "ma
-nufactorerorders" violates foreign key constraint "manufactorerorders_manufactor
-erid_fkey3"
-DETAIL:  Key (manufactorerid, freightno)=(MA01020305, UPSMA01020306_0) is not pr
-esent in table "manufactorerdeliveries".

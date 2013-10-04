@@ -1,0 +1,2 @@
+From: http://jcsites.juniata.edu/faculty/rhodes/dbms/ermodel.htm
+No optional attributes - does not exist
