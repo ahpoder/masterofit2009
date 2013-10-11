@@ -11,7 +11,7 @@ Each product is produced by 1 or 2 manufactorers with random pricing plans.
 Each product has been belivered between 1 and 15 times and in each order is between 1 and 10 products
 There are 60 webshops
 Each webshop carries between 1000 and 10000 products
-Each webshop has between 50 and 10000 customers
+Each webshop has between 50 and 1000 customers
 Each customer has purchased between 0 and 100 products
 Each order from the customer consists of between 1 and 10 products.
 Each product is purchased in a quantity og 1 to 3 units

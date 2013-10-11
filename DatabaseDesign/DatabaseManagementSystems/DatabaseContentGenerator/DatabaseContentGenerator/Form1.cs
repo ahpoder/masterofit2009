@@ -266,10 +266,10 @@ namespace DatabaseContentGenerator
 
                 var countries = new string[] { "Denmark", "England", "USA" };
 
+                int customerid = startID;
                 for (int i = startID; i < (startID + 60); ++i)
                 {
                     var customerids = new List<int>();
-                    int customerid = startID;
                     int customercount = r.Next(50, 1000);
                     for (int j = 0; j < customercount; ++j)
                     {
