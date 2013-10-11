@@ -1,4 +1,3 @@
-DROP DATABASE webshoptest1;
 CREATE DATABASE webshoptest1;
 \c webshoptest1
 
