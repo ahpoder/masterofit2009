@@ -1,3 +1,4 @@
+DROP DATABASE webshoptest1;
 CREATE DATABASE webshoptest1;
 \c webshoptest1
 
@@ -141,6 +142,14 @@ region VARCHAR(64) NULL,
 country countries NOT NULL,
 paymentconditions termsofpayment NOT NULL DEFAULT 'prepay',
 FOREIGN KEY(webshopid) REFERENCES webshops(id)
+);
+
+CREATE TABLE customerattributes (
+  customerid INTEGER,
+  name VARCHAR(128),
+  value VARCHAR(128) NOT NULL,
+  PRIMARY KEY (customerid,name),
+  FOREIGN KEY(customerid) REFERENCES customers(id)
 );
 
 CREATE TABLE customerphones (
