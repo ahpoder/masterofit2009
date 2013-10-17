@@ -285,6 +285,13 @@ CREATE TRIGGER update_in_stock_customer
   WHEN (NEW.deliveryid IS NOT NULL AND OLD.deliveryid IS NULL)
   EXECUTE PROCEDURE trigfunc_customer_order();
 
+-- View detailing everything about the customer orders
+CREATE VIEW customerorderview AS 
+SELECT customerid, customerorders.orderid AS orderid, orderdate, cocno, cocdate, invoiceno, invoicedate, paybefore, paid, op.price as amount, customerorders.deliveryid AS deliveryid, deliverydate, freightno, customerorders.netsid AS netsid FROM (SELECT orderid, SUM(price - price*discount/100) price FROM customerorderproducts INNER JOIN pricingplans ON pricingplans.id=customerorderproducts.priceingplanid GROUP BY orderid) op INNER JOIN customerorders ON op.orderid=customerorders.orderid LEFT JOIN customerinvoices ON customerorders.invoiceid=customerinvoices.invoiceno LEFT JOIN customerorderconfirmations ON customerorders.cocid=customerorderconfirmations.cocno LEFT JOIN customerdeliveries ON customerorders.deliveryid=customerdeliveries.deliveryid LEFT JOIN netspayments ON customerorders.netsid=netspayments.netsid;
+
+CREATE VIEW customerorderproductview AS 
+SELECT customerid, customerorderview.orderid AS orderid, orderdate, cocno, cocdate, invoiceno, invoicedate, paybefore, paid, amount, deliveryid, deliverydate, freightno, netsid, productid, count, price, discount FROM customerorderview INNER JOIN customerorderproducts ON customerorderview.orderid=customerorderproducts.orderid INNER JOIN pricingplans ON pricingplans.id=customerorderproducts.priceingplanid;
+ 
 CREATE ROLE WebshopRole;
 CREATE ROLE CustomerRole;
 CREATE ROLE ManufactorerRole;
