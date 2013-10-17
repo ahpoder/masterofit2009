@@ -143,19 +143,19 @@ paymentconditions termsofpayment NOT NULL DEFAULT 'prepay',
 FOREIGN KEY(webshopid) REFERENCES webshops(id)
 );
 
+CREATE TABLE customerphones (
+cid INTEGER,
+phone VARCHAR(32),
+PRIMARY KEY (cid,phone),
+FOREIGN KEY (cid) REFERENCES customers(id)
+);
+
 CREATE TABLE customerattributes (
   customerid INTEGER,
   name VARCHAR(128),
   value VARCHAR(128) NOT NULL,
   PRIMARY KEY (customerid,name),
   FOREIGN KEY(customerid) REFERENCES customers(id)
-);
-
-CREATE TABLE customerphones (
-cid INTEGER,
-phone VARCHAR(32),
-PRIMARY KEY (cid,phone),
-FOREIGN KEY (cid) REFERENCES customers(id)
 );
 
 -- partly for fun and partly because we control the IDs we reverse the dependency and make the ids unique.
@@ -350,7 +350,7 @@ GRANT SELECT,INSERT ON manufactorerorderconfirmations TO GROUP WholesalerRole;
 GRANT SELECT,INSERT ON manufactorerinvoices TO GROUP WholesalerRole;
 GRANT SELECT,INSERT ON manufactorerdeliveries TO GROUP WholesalerRole;
 
--- A simple way to limit some of what the different people may see, is to use a VIEW.
+-- A simple way to limit some of what the different people may see, is to use a VIEW. It is then possible to limit what a given user may see to only what the VIEW exposes, and not the actual tables. E.g. the user can only see the pricing plans that relates to webshopcarries, but not the pricing plans which relates only to manufactorerorders
 
 -- Create dummy users
 CREATE USER WebShop1 WITH PASSWORD 'ws1' IN ROLE WebshopRole;

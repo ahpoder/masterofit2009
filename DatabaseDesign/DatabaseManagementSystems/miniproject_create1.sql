@@ -85,8 +85,10 @@ INSERT INTO webshopcarries SELECT webshopid, productid,wpricingplanid,ppricingpl
 
 -- Create a customer
 BEGIN TRANSACTION;
-INSERT INTO customers (firstname, middlename, sirname, tvmfth, floor, streetletter, streetnumber, streetname, postalcode, region, country, phones) VALUES ('Pete', NULL, 'Johanson', NULL, NULL, NULL, 78, 'Bert and Ernie avenue', 6800, NULL, 'Denmark', NULL);
+INSERT INTO customers (webshopid, firstname, middlename, sirname, tvmfth, floor, streetletter, streetnumber, streetname, postalcode, region, country) SELECT webshopid, 'Pete', NULL, 'Johanson', NULL, NULL, NULL, 78, 'Bert and Ernie avenue', 6800, NULL, 'Denmark' FROM tempidcollection;
 UPDATE tempidcollection SET customerid=LASTVAL();
+INSERT INTO customerphones SELECT customerid, '+4512457865' FROM tempidcollection;
+INSERT INTO customerattributes SELECT customerid, 'Relation','BrotherInLaw' FROM tempidcollection;
 END TRANSACTION;
 
 -- Customer orders a product
@@ -122,7 +124,7 @@ INSERT INTO customerdeliveries (deliverydate, freightno) VALUES (CURRENT_DATE + 
 UPDATE tempidcollection SET cdeliveryid=LASTVAL();
 UPDATE customerorders SET deliveryid=tempidcollection.cdeliveryid FROM customerorders aco INNER JOIN tempidcollection ON aco.orderid=tempidcollection.corderid;
 -- UPDATE products SET instock=instock-1 WHERE pid IN (SELECT productid AS pid FROM tempidcollection);
-UPDATE customerinvoices SET paied=true WHERE invoiceno IN (SELECT cinvoiceid AS invoiceno FROM tempidcollection);
+UPDATE customerinvoices SET paid=true WHERE invoiceno IN (SELECT cinvoiceid AS invoiceno FROM tempidcollection);
 -- WHERE is not needed as there can be only one
 END TRANSACTION;
 
