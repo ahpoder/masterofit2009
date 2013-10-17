@@ -1,4 +1,3 @@
-DROP DATABASE webshoptest1;
 CREATE DATABASE webshoptest1;
 \c webshoptest1
 
@@ -264,3 +263,99 @@ CREATE TRIGGER update_in_stock_customer
   FOR EACH ROW 
   WHEN (NEW.deliveryid IS NOT NULL AND OLD.deliveryid IS NULL)
   EXECUTE PROCEDURE trigfunc_customer_order();
+
+CREATE ROLE WebshopRole;
+CREATE ROLE CustomerRole;
+CREATE ROLE ManufactorerRole;
+CREATE ROLE WholesalerRole;
+
+-- The webshops must be able to see its own data, but not change it.
+GRANT SELECT ON webshops TO GROUP WebshopRole;
+-- The webshops must be able to see which products it carries, and update one of the pricing plans
+GRANT SELECT,UPDATE ON webshopcarries TO GROUP WebshopRole;
+-- The webshops must be able to create, modify and destroy new customers
+GRANT SELECT,INSERT,UPDATE,DELETE ON customers TO GROUP WebshopRole;
+GRANT SELECT,INSERT,UPDATE,DELETE ON customerphones TO GROUP WebshopRole;
+GRANT SELECT,INSERT,UPDATE,DELETE ON customerattributes TO GROUP WebshopRole;
+-- The webshops must be ablet to create customer orders. When the delivery is done and when the money is paid the Wholesaler updates the content.
+GRANT SELECT,INSERT ON customerorders TO GROUP WebshopRole;
+GRANT SELECT,INSERT ON netspayments TO GROUP WebshopRole;
+GRANT SELECT,INSERT ON customerorderproducts TO GROUP WebshopRole;
+GRANT SELECT,INSERT ON customerinvoices TO GROUP WebshopRole;
+GRANT SELECT,INSERT ON customerorderconfirmations TO GROUP WebshopRole;
+GRANT SELECT,INSERT ON customerdeliveries TO GROUP WebshopRole;
+GRANT SELECT,INSERT ON pricingplans TO GROUP WebshopRole;
+GRANT SELECT,INSERT ON quantitydiscounts TO GROUP WebshopRole;
+-- The Webshop mus be able to view the products
+GRANT SELECT ON products TO GROUP WebshopRole;
+GRANT SELECT ON productattributes TO GROUP WebshopRole;
+GRANT SELECT ON productattributerelations TO GROUP WebshopRole;
+ 
+-- The Customer must be able to see its own data but not change it
+GRANT SELECT ON customers TO GROUP CustomerRole;
+GRANT SELECT ON customerphones TO GROUP CustomerRole;
+GRANT SELECT ON customerattributes TO GROUP CustomerRole;
+GRANT SELECT ON customerorders TO GROUP CustomerRole;
+GRANT SELECT ON netspayments TO GROUP CustomerRole;
+GRANT SELECT ON customerorderproducts TO GROUP CustomerRole;
+GRANT SELECT ON customerinvoices TO GROUP CustomerRole;
+GRANT SELECT ON customerorderconfirmations TO GROUP CustomerRole;
+GRANT SELECT ON customerdeliveries TO GROUP CustomerRole;
+GRANT SELECT ON pricingplans TO GROUP CustomerRole;
+GRANT SELECT ON quantitydiscounts TO GROUP CustomerRole;
+GRANT SELECT ON products TO GROUP CustomerRole;
+GRANT SELECT ON productattributes TO GROUP CustomerRole;
+GRANT SELECT ON productattributerelations TO GROUP CustomerRole;
+
+-- The Manufactorer must be able to see its own data and 
+GRANT SELECT ON manufactorer TO GROUP ManufactorerRole;
+GRANT SELECT ON manufactorerproducts TO GROUP ManufactorerRole;
+GRANT SELECT ON manufactorerorders TO GROUP ManufactorerRole;
+GRANT SELECT ON manufactorerorderedproducts TO GROUP ManufactorerRole;
+GRANT SELECT,INSERT ON manufactorerorderconfirmations TO GROUP ManufactorerRole;
+GRANT SELECT,INSERT ON manufactorerinvoices TO GROUP ManufactorerRole;
+GRANT SELECT ON manufactorerdeliveries TO GROUP ManufactorerRole;
+GRANT SELECT ON pricingplans TO GROUP ManufactorerRole;
+GRANT SELECT ON quantitydiscounts TO GROUP ManufactorerRole;
+GRANT SELECT ON products TO GROUP ManufactorerRole;
+GRANT SELECT ON productattributes TO GROUP ManufactorerRole;
+GRANT SELECT ON productattributerelations TO GROUP ManufactorerRole;
+
+-- The Wholesaler has permission to create and update products
+GRANT SELECT,INSERT,UPDATE,DELETE ON products TO GROUP WholesalerRole;
+GRANT SELECT,INSERT,UPDATE,DELETE ON productattributes TO GROUP WholesalerRole;
+GRANT SELECT,INSERT,UPDATE,DELETE ON productattributerelations TO GROUP WholesalerRole;
+-- The wholesaler must be able to the customer delivery and payment status when the product is shipped
+GRANT SELECT,UPDATE ON customerdeliveries TO GROUP WholesalerRole;
+GRANT SELECT,UPDATE ON customerinvoices TO GROUP WholesalerRole;
+-- The Wholesaler should also be able to see the customer
+GRANT SELECT ON customers TO GROUP WholesalerRole;
+GRANT SELECT ON customerphones TO GROUP WholesalerRole;
+GRANT SELECT ON customerattributes TO GROUP WholesalerRole;
+GRANT SELECT ON customerorders TO GROUP WholesalerRole;
+GRANT SELECT ON netspayments TO GROUP WholesalerRole;
+GRANT SELECT ON customerorderproducts TO GROUP WholesalerRole;
+GRANT SELECT ON customerorderconfirmations TO GROUP WholesalerRole;
+-- The wholesaler can create new pricing plans and remove existing.
+GRANT SELECT,INSERT,DELETE ON pricingplans TO GROUP WholesalerRole;
+GRANT SELECT,INSERT,DELETE ON quantitydiscounts TO GROUP WholesalerRole;
+-- The Wholesaler creates new webshops
+GRANT SELECT,INSERT,UPDATE,DELETE ON webshops TO GROUP WholesalerRole;
+GRANT SELECT,INSERT,UPDATE,DELETE ON webshopcarries TO GROUP WholesalerRole;
+GRANT SELECT,INSERT,UPDATE,DELETE ON manufactorer TO GROUP WholesalerRole;
+GRANT SELECT,INSERT,UPDATE,DELETE ON manufactorerproducts TO GROUP WholesalerRole;
+GRANT SELECT,INSERT ON manufactorerorders TO GROUP WholesalerRole;
+GRANT SELECT,INSERT ON manufactorerorderedproducts TO GROUP WholesalerRole;
+GRANT SELECT,INSERT ON manufactorerorderconfirmations TO GROUP WholesalerRole;
+GRANT SELECT,INSERT ON manufactorerinvoices TO GROUP WholesalerRole;
+GRANT SELECT,INSERT ON manufactorerdeliveries TO GROUP WholesalerRole;
+
+-- A simple way to limit some of what the different people may see, is to use a VIEW.
+
+-- Create dummy users
+CREATE USER WebShop1 WITH PASSWORD 'ws1' IN ROLE WebshopRole;
+CREATE USER WebShop2 WITH PASSWORD 'ws2' IN ROLE WebshopRole;
+CREATE USER Manufac1 WITH PASSWORD 'ma1' IN ROLE ManufactorerRole;
+CREATE USER Manufac2 WITH PASSWORD 'ma2' IN ROLE ManufactorerRole;
+CREATE USER WholeSale1 WITH PASSWORD 'ws1' IN ROLE WholesalerRole;
+CREATE USER WholeSale2 WITH PASSWORD 'ws2' IN ROLE WholesalerRole;
