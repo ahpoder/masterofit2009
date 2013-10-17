@@ -158,6 +158,27 @@ CREATE TABLE customerattributes (
   FOREIGN KEY(customerid) REFERENCES customers(id)
 );
 
+-- Special customer-specific discount. The functionality is not used at present, and it wil remain empty.
+-- This uses a unused primary key and custom unique index trick. This is because the unique-ness of the 
+-- columns: customerid,pricingplanid,productid should form the primary key, but as productid may be null 
+-- it cannot be part of the primary key, but it can be part of a unique check. However in postgresql 
+-- the following is allowed: CREATE TABLE test (t INTEGER NULL, UNIQUE(t)); INSERT INTO test (NULL); INSERT INTO test (NULL);
+-- This is because NULL is not nothing, and NULL != NULL (the latter may seem a little counter-intuitive, but it is because NULL 
+-- is neither nothing nor something).
+-- To bypass this we create two seperate unique indexes depending on whether the productid is NULL or not, and then it works.
+CREATE TABLE customerpricingplan (
+  id SERIAL PRIMARY KEY,
+  customerid INTEGER NOT NULL,
+  pricingplanid INTEGER NOT NULL,
+  productid INTEGER NULL
+);
+CREATE UNIQUE INDEX customerpricingplan_3col_uni_idx
+ON customerpricingplan (customerid, pricingplanid, productid)
+WHERE productid IS NOT NULL;
+CREATE UNIQUE INDEX customerpricingplan_2col_uni_idx
+ON customerpricingplan (customerid, pricingplanid)
+WHERE productid IS NULL;
+
 -- partly for fun and partly because we control the IDs we reverse the dependency and make the ids unique.
 
 CREATE TABLE netspayments (
