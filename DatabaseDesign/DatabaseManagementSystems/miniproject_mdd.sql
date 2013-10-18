@@ -170,7 +170,9 @@ CREATE TABLE customerpricingplan (
   id SERIAL PRIMARY KEY,
   customerid INTEGER NOT NULL,
   pricingplanid INTEGER NOT NULL,
-  productid INTEGER NULL
+  productid INTEGER NULL,
+  FOREIGN KEY(customerid) REFERENCES customers(id),
+  FOREIGN KEY (productid) REFERENCES products(pid)
 );
 CREATE UNIQUE INDEX customerpricingplan_3col_uni_idx
 ON customerpricingplan (customerid, pricingplanid, productid)
@@ -286,6 +288,7 @@ CREATE TRIGGER update_in_stock_customer
   EXECUTE PROCEDURE trigfunc_customer_order();
 
 -- View detailing everything about the customer orders
+-- Left join is used as some tables may not contain any entry yet (invlice, delivery) or may never has a matching row (netspayments).
 CREATE VIEW customerorderview AS 
 SELECT customerid, customerorders.orderid AS orderid, orderdate, cocno, cocdate, invoiceno, invoicedate, paybefore, paid, op.price as amount, customerorders.deliveryid AS deliveryid, deliverydate, freightno, customerorders.netsid AS netsid FROM (SELECT orderid, SUM(price - price*discount/100) price FROM customerorderproducts INNER JOIN pricingplans ON pricingplans.id=customerorderproducts.priceingplanid GROUP BY orderid) op INNER JOIN customerorders ON op.orderid=customerorders.orderid LEFT JOIN customerinvoices ON customerorders.invoiceid=customerinvoices.invoiceno LEFT JOIN customerorderconfirmations ON customerorders.cocid=customerorderconfirmations.cocno LEFT JOIN customerdeliveries ON customerorders.deliveryid=customerdeliveries.deliveryid LEFT JOIN netspayments ON customerorders.netsid=netspayments.netsid;
 
