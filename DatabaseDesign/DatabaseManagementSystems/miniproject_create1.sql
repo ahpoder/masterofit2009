@@ -1,5 +1,5 @@
 \c webshoptest1
--- Be adviced that temporary tables are used to ensure that we have the auto generated IDs. Inpractice these IDs would exist in application and not in temporary tables.
+-- Be adviced that temporary tables are used to ensure that we have the auto generated IDs. In practice these IDs would exist in application and not in temporary tables.
 CREATE TEMPORARY TABLE tempidcollection (productid INTEGER NULL, mpricingplanid INTEGER NULL, wpricingplanid INTEGER NULL, ppricingplanid INTEGER NULL, cpricingplanid INTEGER NULL, morderid INTEGER NULL, webshopid INTEGER NULL, customerid INTEGER NULL, corderid INTEGER NULL, ccocid INTEGER NULL, cinvoiceid INTEGER NULL, cdeliveryid INTEGER NULL);
 INSERT INTO tempidcollection VALUES (NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
@@ -67,7 +67,7 @@ UPDATE manufactorerorders SET invoiceid='CPE-INV-00007' WHERE orderid IN (SELECT
 END TRANSACTION;
 
 -- After the product is delivered
--- The 1200 could be extracted from the manufactorerorderedproducts, but we have chosen to enter it directly, but naturally the delivery was confirmed by looking at manufactorerorderedproducts.
+-- the 1200 from the order products are automatically added to the instock value
 BEGIN TRANSACTION;
 INSERT INTO manufactorerdeliveries VALUES ('CN34554345', 'DHL-274622', CURRENT_DATE + integer '13');
 UPDATE manufactorerorders SET freightno='DHL-274622' WHERE orderid IN (SELECT morderid FROM tempidcollection);
@@ -85,7 +85,7 @@ INSERT INTO webshopcarries SELECT webshopid, productid,wpricingplanid,ppricingpl
 
 -- Create a customer
 BEGIN TRANSACTION;
-INSERT INTO customers (webshopid, firstname, middlename, sirname, tvmfth, floor, streetletter, streetnumber, streetname, postalcode, region, country) SELECT webshopid, 'Pete', NULL, 'Johanson', NULL, NULL, NULL, 78, 'Bert and Ernie avenue', 6800, NULL, 'Denmark' FROM tempidcollection;
+INSERT INTO customers (webshopid, firstname, middlename, surname, tvmfth, floor, streetletter, streetnumber, streetname, postalcode, region, country) SELECT webshopid, 'Pete', NULL, 'Johanson', NULL, NULL, NULL, 78, 'Bert and Ernie avenue', 6800, NULL, 'Denmark' FROM tempidcollection;
 UPDATE tempidcollection SET customerid=LASTVAL();
 INSERT INTO customerphones SELECT customerid, '+4512457865' FROM tempidcollection;
 INSERT INTO customerattributes SELECT customerid, 'Relation','BrotherInLaw' FROM tempidcollection;

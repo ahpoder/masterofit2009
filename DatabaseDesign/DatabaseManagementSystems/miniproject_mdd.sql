@@ -27,8 +27,6 @@ FOREIGN KEY (attributename) REFERENCES productattributes(name)
 
 CREATE TYPE termsofdelivery AS ENUM ('abLager', 'SideOfShip', '3month', '14dg', '7dg', '1dg');
 
-CREATE SEQUENCE pricing_plan_seq;
-
 -- if the pricing plans are to be shared it is important that they are immutable (cannot be gauranteed by the DB)
 -- serial is a pseudonum for integer/big so it is possible to use an integer to refecerence it in a foreign key.
 -- should the pricing plan include a currency??? - or do we default to DKK?
@@ -130,7 +128,7 @@ id SERIAL PRIMARY KEY,
 webshopid INTEGER NOT NULL,
 firstname VARCHAR(128) NOT NULL,
 middlename VARCHAR(128) NULL,
-sirname VARCHAR(128) NOT NULL,
+surname VARCHAR(128) NOT NULL,
 tvmfth apartmentlocations NULL,
 floor INTEGER NULL,
 streetletter CHAR(2) NULL,
@@ -140,6 +138,7 @@ postalcode VARCHAR(32) NOT NULL,
 region VARCHAR(64) NULL,
 country countries NOT NULL,
 paymentconditions termsofpayment NOT NULL DEFAULT 'prepay',
+UNIQUE (webshopid, firstname, middlename, surname, tvmfth, floor, streetletter, streetnumber, streetname, postalcode, region, country),
 FOREIGN KEY(webshopid) REFERENCES webshops(id)
 );
 
@@ -338,7 +337,7 @@ GRANT SELECT ON products TO GROUP CustomerRole;
 GRANT SELECT ON productattributes TO GROUP CustomerRole;
 GRANT SELECT ON productattributerelations TO GROUP CustomerRole;
 
--- The Manufactorer must be able to see its own data and 
+-- The Manufactorer must be able to see its own data and insert order confirmations and invoices.
 GRANT SELECT ON manufactorer TO GROUP ManufactorerRole;
 GRANT SELECT ON manufactorerproducts TO GROUP ManufactorerRole;
 GRANT SELECT ON manufactorerorders TO GROUP ManufactorerRole;

@@ -258,7 +258,7 @@ namespace DatabaseContentGenerator
                 webshopcarries.Length -= 1;
 
                 // Create customers
-                var customers = new StringBuilder("SELECT setval('customers_id_seq', " + (startID - 1) + ");INSERT INTO customers (webshopid, firstname, middlename, sirname, tvmfth, floor, streetletter, streetnumber, streetname, postalcode, region, country, paymentconditions) VALUES ");
+                var customers = new StringBuilder("SELECT setval('customers_id_seq', " + (startID - 1) + ");INSERT INTO customers (webshopid, firstname, middlename, surname, tvmfth, floor, streetletter, streetnumber, streetname, postalcode, region, country, paymentconditions) VALUES ");
                 var customerphones = new StringBuilder("SELECT setval('customers_id_seq', " + (startID - 1) + ");INSERT INTO customerphones VALUES ");
                 var webshopcustomers = new Dictionary<int, List<int>>();
 
