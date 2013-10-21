@@ -123,6 +123,7 @@ CREATE TYPE apartmentlocations AS ENUM ('left', 'middle', 'right');
 CREATE TYPE countries AS ENUM ('Denmark', 'England', 'USA');
 
 -- We do not store the city as it may be derived form the postal code and there are lots of online services for that, and that way we do not risk an inconsistency.
+-- The unique below will not catch all the combinations where some of the values are NULL (see customerpricingplan), but due to multiple NULLable attributes creating a full UNIQUE coverage is very complex, and has been postponed (requires a WHERE for all combinations of possible NULL attributes.
 CREATE TABLE customers (
 id SERIAL PRIMARY KEY,
 webshopid INTEGER NOT NULL,

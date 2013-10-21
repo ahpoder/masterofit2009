@@ -71,7 +71,6 @@ END TRANSACTION;
 BEGIN TRANSACTION;
 INSERT INTO manufactorerdeliveries VALUES ('CN34554345', 'DHL-274622', CURRENT_DATE + integer '13');
 UPDATE manufactorerorders SET freightno='DHL-274622' WHERE orderid IN (SELECT morderid FROM tempidcollection);
---UPDATE products SET instock=instock+1200 WHERE pid IN (SELECT productid AS pid FROM tempidcollection);
 END TRANSACTION;
 
 -- create web-shop
