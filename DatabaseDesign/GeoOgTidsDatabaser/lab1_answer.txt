@@ -1,0 +1,14 @@
+1. select id, sid, ST_Area(geom) FROM forests ORDER BY ST_Area(geom) DESC;
+2. select id, sid FROM forests WHERE ST_NumInteriorRing(geom) > 0;
+3. select id, sid, ST_NumInteriorRing(geom) AS nor FROM forests WHERE ST_NumInteriorRing(geom) > 0;
+4. select id, sid, ST_InteriorRingN(geom, ST_NumInteriorRing(geom)) AS nor FROM forests WHERE ST_NumInteriorRing(geom) > 0;
+5. select ST_Area(geom) FROM (WITH allrings AS (select (ST_DumpRings(geom)).geom FROM forests) select * from allrings EXCEPT (select ST_ExteriorRing(geom) FROM forests)) AS innerrings;
+6. select f.id, f.sid FROM forests f, poi p WHERE ST_Intersects(f.geom, p.geom);
+7. select p.id FROM poi p, forests f WHERE ST_Distance(p.geom, f.geom) < 3 AND NOT ST_Intersects(f.geom, p.geom);
+7.1 select p.id FROM poi p, forests f WHERE ST_Distance(p.geom, f.geom) < 3 AND ST_Distance(f.geom, p.geom) > 0;
+8. select p.id FROM poi p, roads r WHERE r.description='One Way' AND ST_Distance(p.geom, r.geom) < 1;
+9. select ST_Length(geom) FROM roads;
+10. SELECT r.description FROM roads r, forests f WHERE ST_Intersects(f.geom, r.geom);
+11. select SUM(ST_Length(r.geom)) FROM roads r, forests f WHERE ST_Contains(r.geom, f.geom); - none of the roads are contained.
+11.1 select SUM(ST_Length(ST_Intersection(r.geom, f.geom))) FROM roads r, forests f;
+
