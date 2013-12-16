@@ -1,0 +1,14 @@
+Exercise 1:
+select * from geometry_columns where f_table_name='spf_geom';
+UpdateGeometrySRID('spf_geom','geom',4326);
+
+Exercise 2:
+select count(*) from spf_geom where NOT ST_IsValid(geom);
+
+Exercise 3:
+
+select ST_AsText(geom) FROM spf_geom where geom && ST_MakeBox2D(ST_Point(9.908674,57.052495), ST_Point(9.909919, 57.052122));
+
+select Count(*) FROM spf_geom where geom && ST_MakeBox2D(ST_Point(9.90,57.00), ST_Point(9.95, 57.02));
+
+Exercise 4:

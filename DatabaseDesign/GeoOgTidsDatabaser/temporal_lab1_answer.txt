@@ -1,0 +1,72 @@
+1. 
+select ename from emp_vt where vte >= 24;
+ ename
+-------
+ Joe
+ Jim
+ Jill
+ Pat
+(4 rows)
+
+2.
+WITH current_emp as (select * from emp_vt where ename in (select ename from emp_vt WHERE vte >= 24)) select ename, salary, vts from current_emp WHERE (vte - vts) IN (select max (vte-vts) from current_emp);
+
+3.
+WITH emp_max as (select ename, max(vte-vts) from emp_vt GROUP BY ename) select emp_max.ename as ename, salary, vts from emp_max INNER JOIN emp_vt ON emp_max.ename = emp_vt.ename where emp_vt.vte >= 24;
+
+4. 
+?
+
+5.
+WITH emp_start as (select ename, min(vts) as estart from emp_vt GROUP BY ename) select emp_start.ename, salary from emp_start INNER JOIN emp_vt ON emp_start.ename=emp_vt.ename where emp_vt.vts=emp_start.estart;
+
+6.
+select * from emp_vt where ename='Pat';
+
+7. 
+select ename, salary from emp_vt where vts <= 10 AND vte >= 10;
+
+8.
+WITH emp_long as (select ename, max(vte-vts) as period FROM emp_vt GROUP BY ename) select emp_vt.ename as ename, salary, period FROM emp_vt INNER JOIN emp_long ON emp_vt.ename=emp_long.ename WHERE (vte-vts)=period;
+
+9.
+select DISTINCT ename from emp_vt where (vts < 18 AND vte >= 12);
+
+10.
+select ename, salary,vts, vte from emp_vt where (vts < 18 AND vte >= 12);
+
+11.
+select count(DISTINCT ename) from emp_vt where (vts < 18 AND vte >= 12);
+
+12.
+select ename, sum(vte-vts) FRoM emp_vt GROUP BY ename;
+
+13.
+select ename, count(distinct salary) FROM emp_vt GROUP BY ename;
+
+14.
+
+
+
+find distance to next and vts and vte
+
+select a.ename, a.vts, a.vte FROM emp_vt a INNER JOIN emp_vt b ON a.ename=b.ename WHERE a.vts>b.vte GROUP BY a.ename,a.vts,a.vte;
+
+WITH holes AS (select a.ename as ename, b.vte as vts, a.vts as vte FROM emp_vt a INNER JOIN emp_vt b ON a.ename=b.ename WHERE a.vts>b.vte) select ename, 
+
+// Find end times with no matching start time and more start times
+select * FROM emp_vt oe where vte NOT IN (select vts as vte FROM emp_vt ie WHERE ie.ename=oe.ename) AND vte NOT IN (select max(vte) as vte FROM emp_vt ie WHERE ie.ename=oe.ename);
+
+// Find start times with no matching end time and more end times
+select * FROM emp_vt oe where vts NOT IN (select vte as vts FROM emp_vt ie WHERE ie.ename=oe.ename) AND vts NOT IN (select min(vts) as vts FROM emp_vt ie WHERE ie.ename=oe.ename);
+
+WITH emp_with_hole AS (select * FROM emp_vt oe where vte NOT IN (select vts as vte FROM emp_vt ie WHERE ie.ename=oe.ename) AND vte NOT IN (select max(vte) as vte FROM emp_vt ie WHERE ie.ename=oe.ename)) select a.vts, a.vte, b.vts, b.vte FROM emp_with_hole a INNER JOIN emp_with_hole b ON a. a.ename=b.ename;
+
+join the two on the 
+
+// employees with holes
+select * FROM emp_vt oe where vte NOT IN (select vts as vte FROM emp_vt ie WHERE ie.ename=oe.ename) AND vte NOT IN (select max(vte) as vte FROM emp_vt ie WHERE ie.ename=oe.ename);
+
+select a.ename, a.vts, a.vte, b.vts, b.vte from emp_vt a INNER JOIN emp_vt b ON a.ename=b.ename AND a.vts=b.vte;
+
+
