@@ -1,0 +1,41 @@
+1:
+distinct-values(/students/student/courses/course/name)
+
+2:
+/students/student/@sid
+
+3:
+/students/student[@sid>4000]/name
+
+4:
+/students/student[(@sid mod 2) = 1]/name
+
+5:
+/students/student[name="Curt"]/courses/course/@abbreviation
+
+6:
+//@*
+
+7:
+/students/student/courses/course[@abbreviation="AD"]/../../name
+
+8:
+/students/student/courses/course[1]/name
+
+9:
+/students/student[name="Benny" or name="Dorit"]/courses/course[last()]/name
+
+10:
+sum(/students/student[name="Anna"]/courses/course/grade/text()) div count(/students/student[name="Anna"]/courses/course/grade)
+
+11:
+/students/student[name="Benny"]/following::node()
+
+12:
+/students/student[name="Benny"]/following-sibling::node()/text()
+
+13:
+/students/student[name="Benny"]/courses/course[@abbreviation="DBS"]/following-sibling::node()
+
+14:
+/students/student[name="Benny"]/courses/course[@abbreviation="DBS"]/preceding-sibling::node()

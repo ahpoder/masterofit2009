@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="bras">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="bra">
+					<xs:simpleType>
+						<xs:restriction base="xs:token">
+							<xs:pattern value="((34|36|38)(AA|A|B|C|D|DD))|(32(AA|A|B|C|D))|(40(A|B|C|D))"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

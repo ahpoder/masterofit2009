@@ -1,0 +1,36 @@
+1:
+/europeDB/country/name
+
+2:
+/europeDB/country[name="Denmark"]//cities/city
+-- double // required as city may be under province (or not)
+
+3:
+distinct-values(/europeDB/country/encompassed/continent)
+
+4:
+/europeDB/country/encompassed[continent="america"]/../name
+
+5:
+/europeDB/country/encompassed[continent="america"]/../name/text()
+
+6:
+/europeDB/country/government[@government="federal republic"]/../name
+
+7:
+/europeDB/country/government[contains(@government,"republic")]/../name
+
+8:
+/europeDB/country[starts-with(name,"G")]/name
+
+9:
+Se 2
+
+10:
+/europeDB/country/encompassed[continent="asia"]/..//cities/city[last()]
+
+11:
+/europeDB/country/languages[count(./language) > 3]/..
+
+12:
+/europeDB/country/provinces[count(province) > 0]/..
